@@ -20,8 +20,8 @@ export const sessionOptions: SessionOptions = {
   ttl: 3600, // 1 hour in seconds
   cookieOptions: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict' as const,
+    secure: process.env.COOKIE_SECURE === 'true',
+    sameSite: 'lax' as const,
     path: '/',
   },
 };
