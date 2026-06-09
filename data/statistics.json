@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "id": "stat-drivers",
+      "label": "Mitra Driver Aktif",
+      "value": 500,
+      "suffix": "+"
+    },
+    {
+      "id": "stat-fleet",
+      "label": "Unit Armada",
+      "value": 350,
+      "suffix": "+"
+    },
+    {
+      "id": "stat-satisfaction",
+      "label": "Kepuasan Mitra",
+      "value": 4.8,
+      "suffix": "/5",
+      "decimals": 1
+    }
+  ]
+}

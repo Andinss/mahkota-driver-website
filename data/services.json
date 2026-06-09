@@ -1,0 +1,44 @@
+{
+  "services": [
+    {
+      "id": "svc-daily",
+      "name": "Sewa Harian",
+      "description": "Rental kendaraan harian untuk fleksibilitas maksimal. Cocok bagi driver yang ingin mencoba tanpa komitmen jangka panjang.",
+      "iconUrl": "/images/services/daily.svg",
+      "iconAlt": "Ikon kalender harian"
+    },
+    {
+      "id": "svc-weekly",
+      "name": "Sewa Mingguan",
+      "description": "Paket mingguan dengan harga lebih hemat. Ideal untuk driver yang sudah rutin beroperasi setiap hari.",
+      "iconUrl": "/images/services/weekly.svg",
+      "iconAlt": "Ikon kalender mingguan"
+    },
+    {
+      "id": "svc-monthly",
+      "name": "Sewa Bulanan",
+      "description": "Komitmen bulanan dengan tarif paling kompetitif. Pilihan terbaik untuk mitra driver jangka panjang.",
+      "iconUrl": "/images/services/monthly.svg",
+      "iconAlt": "Ikon kalender bulanan"
+    }
+  ],
+  "advantages": [
+    {
+      "id": "adv-maintenance",
+      "title": "Perawatan Gratis",
+      "description": "Servis berkala dan perawatan kendaraan ditanggung sepenuhnya oleh Mahkota Drive.",
+      "iconUrl": "/images/services/form.svg",
+      "iconAlt": "Perawatan Gratis"
+    },
+    {
+      "id": "adv-support",
+      "title": "Dukungan 24 Jam",
+      "description": "Tim support siap membantu Anda kapan saja melalui WhatsApp dan telepon."
+    },
+    {
+      "id": "adv-flexible",
+      "title": "Tanpa DP Besar",
+      "description": "Mulai bermitra dengan deposit ringan dan proses administrasi yang mudah."
+    }
+  ]
+}

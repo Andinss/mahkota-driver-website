@@ -1,0 +1,34 @@
+{
+  "vehicles": [
+    {
+      "id": "fleet-1",
+      "name": "Toyota Avanza",
+      "year": 2023,
+      "capacity": 7,
+      "transmission": "matic",
+      "imageUrl": "/images/services/1780724633724-ph5g1q.jpeg"
+    },
+    {
+      "id": "fleet-2",
+      "name": "Daihatsu Xenia",
+      "year": 2022,
+      "capacity": 7,
+      "transmission": "manual"
+    },
+    {
+      "id": "fleet-3",
+      "name": "Toyota Calya",
+      "year": 2023,
+      "capacity": 7,
+      "transmission": "matic"
+    },
+    {
+      "id": "fleet-1780724690615-l1o82x",
+      "name": "Stargezer",
+      "year": 2025,
+      "capacity": 6,
+      "transmission": "matic",
+      "imageUrl": "/images/services/1780724688435-77hexz.jpeg"
+    }
+  ]
+}
