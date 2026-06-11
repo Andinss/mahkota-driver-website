@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 interface IconItem {
   name: string;
@@ -50,7 +49,6 @@ export default function IconPicker({ value, onChange }: IconPickerProps) {
       if (res.ok) {
         const data = await res.json();
         onChange(data.url);
-        // Add to local list
         setIcons((prev) => [...prev, { name: file.name.replace(/\.[^.]+$/, ''), url: data.url }]);
         setShowPicker(false);
       }
@@ -70,7 +68,8 @@ export default function IconPicker({ value, onChange }: IconPickerProps) {
       <div className="flex items-center gap-3 mb-2">
         {value && (
           <div className="h-10 w-10 rounded-md border border-gray-200 flex items-center justify-center bg-gray-50 overflow-hidden">
-            <Image src={value} alt="Selected icon" width={32} height={32} className="h-8 w-8 object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={value} alt="Selected icon" className="h-8 w-8 object-contain" />
           </div>
         )}
         <button
@@ -102,7 +101,8 @@ export default function IconPicker({ value, onChange }: IconPickerProps) {
                     className={`h-12 w-12 rounded-lg border-2 flex items-center justify-center transition-all hover:border-gold ${value === icon.url ? 'border-gold bg-gold/10' : 'border-gray-200 bg-white'}`}
                     title={icon.name}
                   >
-                    <Image src={icon.url} alt={icon.name} width={28} height={28} className="h-7 w-7 object-contain" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={icon.url} alt={icon.name} className="h-7 w-7 object-contain" />
                   </button>
                 ))}
               </div>

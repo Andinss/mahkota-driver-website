@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import Image from 'next/image';
 
 interface PhotoUploadProps {
   value: string;
@@ -18,9 +17,8 @@ export default function PhotoUpload({ value, onChange, category = 'testimonials'
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Client-side validation
-    if (file.size > 2 * 1024 * 1024) {
-      setError('Ukuran file maksimal 2MB.');
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Ukuran file maksimal 5MB.');
       return;
     }
 
@@ -56,14 +54,15 @@ export default function PhotoUpload({ value, onChange, category = 'testimonials'
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Foto <span className="text-gray-400 font-normal">(opsional, maks 2MB)</span>
+        Foto <span className="text-gray-400 font-normal">(opsional, maks 5MB)</span>
       </label>
 
       <div className="flex items-center gap-3">
-        {/* Preview */}
+        {/* Preview — using native img to avoid next/image optimization issues with dynamic uploads */}
         {value && (
           <div className="h-14 w-14 rounded-full border border-gray-200 overflow-hidden shrink-0">
-            <Image src={value} alt="Preview" width={56} height={56} className="h-14 w-14 object-cover" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={value} alt="Preview" className="h-14 w-14 object-cover" />
           </div>
         )}
 

@@ -29,6 +29,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [],
+    // Allow optimizing images from local uploads
+    unoptimized: process.env.NEXT_IMAGE_UNOPTIMIZED === 'true',
+  },
   async headers() {
     return [
       {

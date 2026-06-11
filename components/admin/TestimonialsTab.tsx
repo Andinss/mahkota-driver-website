@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import { TestimonialsData, Testimonial } from '@/types/content';
 import Toast, { ToastType } from './Toast';
 import ConfirmDialog from './ConfirmDialog';
@@ -148,7 +147,8 @@ export default function TestimonialsTab({ data, onSave }: TestimonialsTabProps) 
               {/* Thumbnail */}
               <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
                 {item.photoUrl ? (
-                  <Image src={item.photoUrl} alt={item.name} width={40} height={40} className="h-10 w-10 object-cover" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={item.photoUrl} alt={item.name} className="h-10 w-10 object-cover" />
                 ) : (
                   <span className="text-xs font-bold text-gray-500">
                     {item.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
