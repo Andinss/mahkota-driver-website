@@ -34,13 +34,13 @@ export default function Hero({ contact, playStoreUrl }: HeroProps) {
           </div>
 
           {/* Hero image — right column */}
-          <div className="relative flex items-center justify-center">
+          <div className="relative flex items-center justify-center overflow-hidden">
             <Image
               src={heroImage}
               alt="Armada kendaraan Mahkota Drive siap melayani mitra driver taksi online"
               width={600}
               height={500}
-              className="rounded-lg object-cover"
+              className="rounded-lg object-cover w-full h-auto max-w-[600px] max-h-[500px]"
               priority
             />
           </div>

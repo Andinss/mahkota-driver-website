@@ -29,13 +29,13 @@ export default function Download({ playStoreUrl, appMockupUrl }: DownloadProps) 
           </div>
 
           {/* App Mockup Column */}
-          <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-center lg:justify-end overflow-hidden">
             <Image
               src={mockupSrc}
               alt="Tampilan aplikasi Mahkota Drive di smartphone"
               width={280}
               height={560}
-              className="h-auto w-auto max-w-[280px]"
+              className="h-auto w-auto max-w-[280px] max-h-[560px] object-contain"
               priority={false}
             />
           </div>

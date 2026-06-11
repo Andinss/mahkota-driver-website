@@ -6,29 +6,47 @@
       "year": 2023,
       "capacity": 7,
       "transmission": "matic",
-      "imageUrl": "/images/services/1780724633724-ph5g1q.jpeg"
+      "imageUrl": "/images/services/1781145669201-2dq892.png"
     },
     {
       "id": "fleet-2",
       "name": "Daihatsu Xenia",
       "year": 2022,
       "capacity": 7,
-      "transmission": "manual"
+      "transmission": "manual",
+      "imageUrl": "/images/services/1781145692734-1c0k1z.png"
     },
     {
       "id": "fleet-3",
       "name": "Toyota Calya",
       "year": 2023,
       "capacity": 7,
-      "transmission": "matic"
+      "transmission": "matic",
+      "imageUrl": "/images/services/1781145766986-8szosa.png"
     },
     {
       "id": "fleet-1780724690615-l1o82x",
-      "name": "Stargezer",
+      "name": "Hyundai Stargezer",
       "year": 2025,
       "capacity": 6,
       "transmission": "matic",
-      "imageUrl": "/images/services/1780724688435-77hexz.jpeg"
+      "imageUrl": "/images/services/1781145807462-9vjy0g.webp"
+    },
+    {
+      "id": "fleet-1781145872730-v2zder",
+      "name": "Toyota Fortuner",
+      "year": 2026,
+      "capacity": 7,
+      "transmission": "manual",
+      "imageUrl": "/images/services/1781145871559-d93kmb.png"
+    },
+    {
+      "id": "fleet-1781145937613-mhfy4a",
+      "name": "Toyota Rush",
+      "year": 2026,
+      "capacity": 7,
+      "transmission": "matic",
+      "imageUrl": "/images/services/1781145936498-5ilp5h.png"
     }
   ]
 }

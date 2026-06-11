@@ -1,13 +1,6 @@
 {
   "items": [
     {
-      "id": "testi-1",
-      "name": "Budi Santoso",
-      "photoUrl": null,
-      "quote": "Bergabung dengan Mahkota Drive adalah keputusan terbaik saya. Kendaraan selalu dalam kondisi prima dan dukungan tim sangat responsif.",
-      "rating": 5
-    },
-    {
       "id": "testi-2",
       "name": "Ahmad Hidayat",
       "photoUrl": null,
