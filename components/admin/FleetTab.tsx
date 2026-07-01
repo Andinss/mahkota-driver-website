@@ -133,7 +133,6 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
               {/* Thumbnail */}
               <div className="h-12 w-16 rounded-md overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
                 {vehicle.imageUrl ? (
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={vehicle.imageUrl} alt={vehicle.name} className="h-12 w-16 object-cover" />
                 ) : (
                   <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

@@ -147,7 +147,6 @@ export default function TestimonialsTab({ data, onSave }: TestimonialsTabProps) 
               {/* Thumbnail */}
               <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
                 {item.photoUrl ? (
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.photoUrl} alt={item.name} className="h-10 w-10 object-cover" />
                 ) : (
                   <span className="text-xs font-bold text-gray-500">
