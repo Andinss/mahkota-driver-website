@@ -6,7 +6,8 @@
       "year": 2023,
       "capacity": 7,
       "transmission": "matic",
-      "imageUrl": "/images/services/1781145669201-2dq892.png"
+      "imageUrl": "/images/services/1781145669201-2dq892.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-2",
@@ -22,7 +23,8 @@
       "year": 2023,
       "capacity": 7,
       "transmission": "matic",
-      "imageUrl": "/images/services/1781145766986-8szosa.png"
+      "imageUrl": "/images/services/1781145766986-8szosa.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1780724690615-l1o82x",
@@ -30,7 +32,8 @@
       "year": 2025,
       "capacity": 6,
       "transmission": "matic",
-      "imageUrl": "/images/services/1781145807462-9vjy0g.webp"
+      "imageUrl": "/images/services/1781145807462-9vjy0g.webp",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1781145872730-v2zder",

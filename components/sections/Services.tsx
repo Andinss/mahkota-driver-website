@@ -1,96 +1,48 @@
-import Image from 'next/image';
-import type { ServicesData } from '@/types/content';
+import Icon from "@/components/ui/Icon";
 
-interface ServicesProps {
-  services: ServicesData;
-}
-
-export default function Services({ services }: ServicesProps) {
+export default function Services() {
   return (
-    <div className="bg-gray-50">
-      <div className="section-container section-padding">
-        {/* Section Heading */}
-        <div className="text-center mb-12">
-          <h2 className="heading-secondary text-brand-black">Layanan Kami</h2>
-          <p className="mt-4 text-gray-500 font-body max-w-2xl mx-auto">
-            Pilihan paket sewa kendaraan yang fleksibel untuk kebutuhan Anda sebagai mitra driver
-          </p>
-        </div>
-
-        {/* Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {services.services.map((service) => (
-            <div
-              key={service.id}
-              className="card-light hover:shadow-lg hover:-translate-y-1 transition-all duration-200 coarse-pointer:shadow-lg coarse-pointer:translate-y-0 flex flex-col items-center text-center"
-            >
-              <div className="mb-4 relative w-16 h-16">
-                <Image
-                  src={service.iconUrl}
-                  alt={service.iconAlt}
-                  width={64}
-                  height={64}
-                  className="object-contain"
-                />
-              </div>
-              <h3 className="font-heading text-lg font-bold text-brand-black mb-2">
-                {service.name}
-              </h3>
-              <p className="text-gray-500 font-body text-sm leading-relaxed">
-                {service.description}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Advantages Section */}
-        <div className="mt-12">
-          <h3 className="heading-secondary text-brand-black text-center mb-8">
-            Keunggulan Kami
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {services.advantages.map((advantage) => (
-              <div
-                key={advantage.id}
-                className="flex flex-col items-center text-center p-6"
-              >
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mb-4">
-                  {advantage.iconUrl ? (
-                    <Image
-                      src={advantage.iconUrl}
-                      alt={advantage.iconAlt || advantage.title}
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 object-contain"
-                    />
-                  ) : (
-                    <svg
-                      className="w-6 h-6 text-gold"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  )}
-                </div>
-                <h4 className="font-heading text-base font-bold text-brand-black mb-2">
-                  {advantage.title}
-                </h4>
-                <p className="text-gray-500 font-body text-sm">
-                  {advantage.description}
-                </p>
-              </div>
-            ))}
+    <section className="sec" id="layanan">
+      <div className="w c">
+        <h2>
+          Layanan <span className="y">Kami</span>
+        </h2>
+        <p className="lead">
+          Pilih skema sewa yang paling pas dengan ritme kerja Anda.
+        </p>
+        <div className="g3" style={{ textAlign: "left" }}>
+          <div className="card">
+            <span className="ib">
+              <Icon name="today" />
+            </span>
+            <h3>Sewa Harian</h3>
+            <p>
+              Rental kendaraan harian untuk fleksibilitas maksimal. Cocok bagi
+              driver yang ingin mencoba tanpa komitmen jangka panjang.
+            </p>
+          </div>
+          <div className="card">
+            <span className="ib">
+              <Icon name="date_range" />
+            </span>
+            <h3>Sewa Mingguan</h3>
+            <p>
+              Paket mingguan dengan harga lebih hemat. Ideal untuk driver yang
+              sudah rutin beroperasi setiap hari.
+            </p>
+          </div>
+          <div className="card">
+            <span className="ib">
+              <Icon name="calendar_month" />
+            </span>
+            <h3>Sewa Bulanan</h3>
+            <p>
+              Komitmen bulanan dengan tarif paling kompetitif. Pilihan terbaik
+              untuk mitra driver jangka panjang.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
