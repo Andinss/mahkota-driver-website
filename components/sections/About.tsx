@@ -1,9 +1,17 @@
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
-import StatCounter from "@/components/ui/StatCounter";
-import type { ContactData } from "@/types/content";
+import type { ContactData, StatisticsData } from "@/types/content";
 
-export default function About({ contact }: { contact: ContactData }) {
+export default function About({
+  contact,
+  statistics,
+}: {
+  contact: ContactData;
+  statistics: StatisticsData;
+}) {
+  const stats = statistics.items || [];
+  const points = contact.homeAboutPoints || [];
+
   return (
     <section className="sec sf" id="tentang">
       <div className="w">
@@ -19,23 +27,16 @@ export default function About({ contact }: { contact: ContactData }) {
               Mitra Perjalanan <span className="y">Driver Online.</span>
             </h2>
             <p className="lead">
-              Mahkota Drive menyediakan armada rental yang dirawat berkala
-              dengan skema sewa fleksibel, supaya setiap driver bisa mulai
-              berpenghasilan tanpa harus punya mobil sendiri.
+              {contact.homeAboutText ||
+                "Mahkota Drive menyediakan armada rental yang dirawat berkala..."}
             </p>
             <ul className="ck">
-              <li>
-                <Icon name="check_circle" />
-                Unit dirawat berkala dan siap jalan
-              </li>
-              <li>
-                <Icon name="check_circle" />
-                Sewa harian, mingguan, atau bulanan
-              </li>
-              <li>
-                <Icon name="check_circle" />
-                Kontrak digital, proses cepat
-              </li>
+              {points.map((point, i) => (
+                <li key={i}>
+                  <Icon name="check_circle" />
+                  {point}
+                </li>
+              ))}
             </ul>
             <Link className="btn bd" href="/about">
               Lihat Selengkapnya <Icon name="arrow_forward" />
@@ -43,27 +44,13 @@ export default function About({ contact }: { contact: ContactData }) {
           </div>
         </div>
         <div className="stats">
-          <div className="stat">
-            <b>
-              <StatCounter value={500} />
-            </b>
-            <span className="sx">+</span>
-            <p>Mitra Driver Aktif</p>
-          </div>
-          <div className="stat">
-            <b>
-              <StatCounter value={350} />
-            </b>
-            <span className="sx">+</span>
-            <p>Unit Armada</p>
-          </div>
-          <div className="stat">
-            <b>
-              <StatCounter value={4.8} decimals={1} />
-            </b>
-            <span className="sx">/5</span>
-            <p>Kepuasan Mitra</p>
-          </div>
+          {stats.map((stat) => (
+            <div className="stat" key={stat.id}>
+              <b>{stat.value}</b>
+              <span className="sx">{stat.suffix}</span>
+              <p>{stat.label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

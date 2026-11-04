@@ -11,8 +11,10 @@ export default async function TentangPage() {
       <div className="w">
         <AboutHero contact={content.contact} />
         <AboutBody contact={content.contact} />
-        <AboutCommitment />
-        {/* Ini komponen kotak kuningnya */}
+        <AboutCommitment
+          contact={content.contact}
+          statistics={content.statistics}
+        />
         <AboutCTA fleet={content.fleet} />
       </div>
     </div>

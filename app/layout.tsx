@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { readAllContent } from "@/lib/content";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import LayoutWrapper from "@/components/layout/LayoutWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -16,11 +15,8 @@ export const metadata: Metadata = {
   description:
     "Sewa mobil harian, mingguan, atau bulanan untuk driver taksi online. Servis ditanggung, dukungan 24 jam, tanpa DP besar.",
   icons: {
-    icon: [
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: "/apple-touch-icon.png",
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
   },
 };
 
@@ -40,9 +36,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <Navbar />
-        {children}
-        <Footer contact={content.contact} />
+        <LayoutWrapper contact={content.contact}>{children}</LayoutWrapper>
       </body>
     </html>
   );

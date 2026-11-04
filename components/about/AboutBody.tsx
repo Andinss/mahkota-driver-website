@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import Icon from "@/components/ui/Icon";
+import type { ContactData } from "@/types/content";
 
-export default function AboutBody({ contact }: { contact: any }) {
+export default function AboutBody({ contact }: { contact: ContactData }) {
   const ref = useRef<HTMLDivElement>(null);
+  const paragraphs = contact.aboutParagraphs || [];
 
   useEffect(() => {
     if (!ref.current) return;
@@ -27,29 +29,11 @@ export default function AboutBody({ contact }: { contact: any }) {
   return (
     <div ref={ref} className="pgb">
       <div className="pgt">
-        <p className="rv">
-          Mahkota Drive adalah penyedia jasa rental armada kendaraan terpercaya
-          yang dirancang khusus untuk para supir taksi online di Indonesia. Kami
-          memahami bahwa memiliki kendaraan sendiri bukan syarat utama untuk
-          meraih penghasilan — yang Anda butuhkan adalah akses ke armada
-          berkualitas dengan biaya sewa yang terjangkau.
-        </p>
-        <p className="rv" style={{ "--d": 1 } as React.CSSProperties}>
-          Dengan pilihan skema sewa harian, mingguan, dan bulanan, kami
-          memberikan fleksibilitas penuh bagi mitra driver untuk menjalankan
-          aktivitas di platform ride-hailing favorit mereka. Seluruh unit armada
-          kami dirawat secara berkala demi kenyamanan dan keselamatan di jalan.
-        </p>
-        <p className="rv" style={{ "--d": 2 } as React.CSSProperties}>
-          Kami percaya akses ke kendaraan yang layak tidak harus mahal. Karena
-          itu perawatan berkala, dukungan darurat, dan kontrak yang transparan
-          menjadi standar untuk setiap mitra.
-        </p>
-        <p className="rv" style={{ "--d": 3 } as React.CSSProperties}>
-          Bergabunglah bersama ratusan mitra driver yang telah mempercayakan
-          perjalanan karier mereka kepada Mahkota Drive dan rasakan kemudahan
-          bermitra bersama kami.
-        </p>
+        {paragraphs.map((text, i) => (
+          <p key={i} className="rv" style={{ "--d": i } as React.CSSProperties}>
+            {text}
+          </p>
+        ))}
       </div>
       <aside className="pga rv" style={{ "--d": 2 } as React.CSSProperties}>
         <ul className="ck">

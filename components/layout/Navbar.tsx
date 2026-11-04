@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { id: "tentang", label: "Tentang" },
   { id: "layanan", label: "Layanan" },
   { id: "armada", label: "Armada" },
+  { id: "testimoni", label: "Testimoni" }, // <-- TAMBAHKAN
   { id: "bergabung", label: "Cara Bergabung" },
   { id: "kontak", label: "Kontak" },
 ];

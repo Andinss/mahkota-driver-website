@@ -4,6 +4,7 @@ import About from "@/components/sections/About";
 import Services from "@/components/sections/Services";
 import WhyUs from "@/components/sections/WhyUs";
 import Fleet from "@/components/sections/Fleet";
+import Testimonials from "@/components/sections/Testimonials"; // Import baru
 import Steps from "@/components/sections/Steps";
 import Contact from "@/components/sections/Contact";
 
@@ -12,11 +13,15 @@ export default async function Home() {
   return (
     <main id="top">
       <Hero fleet={content.fleet} />
-      <About contact={content.contact} />
-      <Services />
-      <WhyUs />
+      <About contact={content.contact} statistics={content.statistics} />
+      <Services services={content.services} />
+      <WhyUs services={content.services} />
       <Fleet fleet={content.fleet} />
-      <Steps />
+
+      {/* TAMBAHKAN INI */}
+      <Testimonials testimonials={content.testimonials} />
+
+      <Steps registration={content.registration} />
       <Contact contact={content.contact} />
     </main>
   );

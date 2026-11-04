@@ -1,6 +1,9 @@
 import Icon from "@/components/ui/Icon";
+import type { ServicesData } from "@/types/content";
 
-export default function WhyUs() {
+export default function WhyUs({ services }: { services: ServicesData }) {
+  const advantages = services.advantages || [];
+
   return (
     <section className="sec sf why2">
       <div className="w wy">
@@ -10,54 +13,34 @@ export default function WhyUs() {
             Kenapa Memilih <span className="y">Mahkota Drive?</span>
           </h2>
           <p className="lead">
-            Empat alasan ratusan mitra driver mempercayakan armada mereka kepada
-            kami.
+            Beberapa alasan ratusan mitra driver mempercayakan armada mereka
+            kepada kami.
           </p>
-          <a className="btn bd" href="/#kontak">
+          <a className="btn bd" href="#kontak">
             Daftar Sekarang <Icon name="arrow_forward" />
           </a>
         </div>
         <ol className="wyr">
-          <li>
-            <span className="wi">
-              <Icon name="sell" />
-            </span>
-            <div>
-              <b>Perawatan Gratis</b>
-              <small>Servis berkala ditanggung</small>
-            </div>
-            <span className="wn">01</span>
-          </li>
-          <li>
-            <span className="wi">
-              <Icon name="support_agent" />
-            </span>
-            <div>
-              <b>Dukungan 24 Jam</b>
-              <small>Bantuan darurat di jalan</small>
-            </div>
-            <span className="wn">02</span>
-          </li>
-          <li>
-            <span className="wi">
-              <Icon name="payments" />
-            </span>
-            <div>
-              <b>Tanpa DP Besar</b>
-              <small>Mulai dengan ringan</small>
-            </div>
-            <span className="wn">03</span>
-          </li>
-          <li>
-            <span className="wi">
-              <Icon name="draw" />
-            </span>
-            <div>
-              <b>Kontrak Digital</b>
-              <small>Tanda tangan dari HP</small>
-            </div>
-            <span className="wn">04</span>
-          </li>
+          {advantages.map((item, index) => (
+            <li key={item.id}>
+              <span className="wi">
+                {item.iconUrl ? (
+                  <img
+                    src={item.iconUrl}
+                    alt={item.iconAlt || item.title}
+                    className="w-8 h-8 object-contain"
+                  />
+                ) : (
+                  <Icon name="sell" />
+                )}
+              </span>
+              <div>
+                <b>{item.title}</b>
+                <small>{item.description}</small>
+              </div>
+              <span className="wn">0{index + 1}</span>
+            </li>
+          ))}
         </ol>
       </div>
     </section>

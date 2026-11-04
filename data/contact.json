@@ -6,7 +6,36 @@
     "instagram": "https://instagram.com/mahkotadrive",
     "facebook": "https://facebook.com/mahkotadrive"
   },
-  "heroDescription": "Mahkota Drive adalah penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia. Kami memahami bahwa memiliki kendaraan sendiri bukan syarat utama untuk meraih penghasilan — yang Anda butuhkan adalah akses ke armada berkualitas dengan biaya sewa yang terjangkau. Dengan pilihan skema sewa harian, mingguan, dan bulanan, kami memberikan fleksibilitas penuh bagi mitra driver untuk menjalankan aktivitas di platform ride-hailing favorit mereka. Seluruh unit armada kami dirawat secara berkala demi kenyamanan dan keselamatan di jalan. Bergabunglah bersama ratusan mitra driver yang telah mempercayakan perjalanan karier mereka kepada Mahkota Drive dan rasakan kemudahan bermitra bersama kami.",
+  "heroDescription": "Mahkota Drive adalah penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia. Kami memahami bahwa memiliki kendaraan sendiri bukan syarat utama untuk meraih penghasilan.",
   "heroImageUrl": "/images/services/1781146086637-y4y9aw.jpg",
-  "appMockupUrl": "/images/services/1781146178245-qn26yu.png"
+  "appMockupUrl": "/images/services/1781146178245-qn26yu.png",
+  "homeAboutText": "Mahkota Drive menyediakan armada rental yang dirawat berkala dengan skema sewa fleksibel, supaya setiap driver bisa mulai berpenghasilan tanpa harus punya mobil sendiri.",
+  "homeAboutPoints": [
+    "Unit dirawat berkala dan siap jalan",
+    "Sewa harian, mingguan, atau bulanan",
+    "Kontrak digital, proses cepat"
+  ],
+  "aboutParagraphs": [
+    "Mahkota Drive adalah penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia. Kami memahami bahwa memiliki kendaraan sendiri bukan syarat utama untuk meraih penghasilan — yang Anda butuhkan adalah akses ke armada berkualitas dengan biaya sewa yang terjangkau.",
+    "Dengan pilihan skema sewa harian, mingguan, dan bulanan, kami memberikan fleksibilitas penuh bagi mitra driver untuk menjalankan aktivitas di platform ride-hailing favorit mereka. Seluruh unit armada kami dirawat secara berkala demi kenyamanan dan keselamatan di jalan.",
+    "Kami percaya akses ke kendaraan yang layak tidak harus mahal. Karena itu perawatan berkala, dukungan darurat, dan kontrak yang transparan menjadi standar untuk setiap mitra.",
+    "Bergabunglah bersama ratusan mitra driver yang telah mempercayakan perjalanan karier mereka kepada Mahkota Drive dan rasakan kemudahan bermitra bersama kami."
+  ],
+  "commitments": [
+    {
+      "title": "Perawatan Berkala",
+      "description": "Seluruh unit dirawat secara berkala demi kenyamanan dan keselamatan di jalan.",
+      "icon": "build"
+    },
+    {
+      "title": "Dukungan Darurat",
+      "description": "Bantuan tersedia saat Anda membutuhkannya, sehingga Anda bisa fokus narik.",
+      "icon": "support_agent"
+    },
+    {
+      "title": "Kontrak Transparan",
+      "description": "Perjanjian sewa yang jelas, ditandatangani digital dengan proses yang cepat.",
+      "icon": "draw"
+    }
+  ]
 }

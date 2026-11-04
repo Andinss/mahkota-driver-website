@@ -101,33 +101,46 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#F6F5F1",
-        surf: "#ffffff",
-        ink: "#101B2D",
-        mu: "#5E6878",
-        ln: "#E3E0D6",
+        // PALET WARNA EMAS & HITAM
+        bg: "#FBF7EF", // Background putih tulang
+        surf: "#FFFFFF", // Surface putih
+        ink: "#1C1C1F", // Teks Hitam Pekat
+        mu: "#6B6B6B", // Abu-abu
+        ln: "#E8E2D2", // Garis border krem
         y: {
-          DEFAULT: "#F0B82C",
-          light: "#F6C84F",
-          dark: "#D69B0C",
+          DEFAULT: "#A9822E", // EMAS UTAMA
+          light: "#C9A354", // Emas terang
+          dark: "#8A691F", // Emas gelap
         },
-        navy: "#101B2D",
-        nc: "#1B2A42",
-        // Alias untuk Admin Panel
+        navy: "#1C1C1F", // Hitam untuk section gelap (Armada, Footer)
+        nc: "#2A2A2E",
         gold: {
-          DEFAULT: "#F0B82C",
-          light: "#F6C84F",
-          dark: "#D69B0C",
+          DEFAULT: "#A9822E",
+          light: "#C9A354",
+          dark: "#8A691F",
         },
         brand: {
-          black: "#101B2D",
-          dark: "#1B2A42",
-          card: "#25364F",
+          black: "#1C1C1F",
+          dark: "#2A2A2E",
+          card: "#3A3A3E",
         },
       },
       fontFamily: {
         heading: ["var(--font-inter)", "system-ui", "sans-serif"],
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        sm: "0 1px 2px 0 rgba(28, 28, 31, 0.05)",
+        DEFAULT:
+          "0 4px 6px -1px rgba(28, 28, 31, 0.05), 0 2px 4px -1px rgba(28, 28, 31, 0.03)",
+        md: "0 10px 15px -3px rgba(28, 28, 31, 0.05), 0 4px 6px -2px rgba(28, 28, 31, 0.025)",
+        lg: "0 20px 25px -5px rgba(28, 28, 31, 0.05), 0 10px 10px -5px rgba(28, 28, 31, 0.02)",
+        xl: "0 25px 50px -12px rgba(28, 28, 31, 0.1)",
+      },
+      borderRadius: {
+        "2xl": "1rem",
+        "3xl": "1.5rem",
+        "4xl": "2rem",
       },
     },
   },
