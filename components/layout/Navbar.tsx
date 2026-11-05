@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { id: "tentang", label: "Tentang" },
   { id: "layanan", label: "Layanan" },
   { id: "armada", label: "Armada" },
-  { id: "testimoni", label: "Testimoni" }, // <-- TAMBAHKAN
+  { id: "testimoni", label: "Testimoni" },
   { id: "bergabung", label: "Cara Bergabung" },
   { id: "kontak", label: "Kontak" },
 ];
@@ -21,7 +21,6 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Kalau bukan di halaman home, jangan highlight apa-apa (atau bisa highlight "Tentang" kalau di /about)
     if (pathname !== "/") {
       setActive(pathname === "/about" ? "tentang-page" : "");
       return;
@@ -34,13 +33,11 @@ export default function Navbar() {
         return;
       }
 
-      // Cek section yang sedang berada di viewport
       let current = "";
       for (const item of NAV_ITEMS) {
         const el = document.getElementById(item.id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          // Jika bagian atas section sudah lewat 45% layar dan bawahnya masih di viewport
           if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 0) {
             current = item.id;
           }
@@ -87,7 +84,7 @@ export default function Navbar() {
             </ul>
           </nav>
 
-          <Link className="btn bd sm" href="/#kontak">
+          <Link className="btn by sm text-white" href="/#kontak">
             Daftar Sekarang <Icon name="arrow_forward" />
           </Link>
 
@@ -116,7 +113,7 @@ export default function Navbar() {
           </Link>
         ))}
         <Link
-          className="btn by"
+          className="btn by text-white"
           href="/#kontak"
           onClick={() => setMobileMenuOpen(false)}
         >

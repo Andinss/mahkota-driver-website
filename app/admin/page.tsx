@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/services/1781145669201-2dq892.png" // Ganti dengan gambar mobil transparan atau hero image Anda
+          src="/images/services/1781145669201-2dq892.png"
           alt="Mahkota Drive Background"
           className="w-full h-full object-cover opacity-20 blur-sm scale-105"
         />

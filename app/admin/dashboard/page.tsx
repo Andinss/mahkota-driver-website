@@ -55,7 +55,6 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  // Password Modal State
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",

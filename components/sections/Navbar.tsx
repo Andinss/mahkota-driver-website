@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 const NAV_LINKS = [
-  { href: '#tentang-kami', label: 'Tentang Kami' },
-  { href: '#layanan', label: 'Layanan' },
-  { href: '#katalog-armada', label: 'Armada' },
-  { href: '#statistik', label: 'Statistik' },
-  { href: '#testimoni', label: 'Testimoni' },
-  { href: '#cara-daftar', label: 'Cara Daftar' },
-  { href: '#unduh-aplikasi', label: 'Unduh Aplikasi' },
+  { href: "#tentang-kami", label: "Tentang Kami" },
+  { href: "#layanan", label: "Layanan" },
+  { href: "#katalog-armada", label: "Armada" },
+  { href: "#statistik", label: "Statistik" },
+  { href: "#testimoni", label: "Testimoni" },
+  { href: "#cara-daftar", label: "Cara Daftar" },
+  { href: "#unduh-aplikasi", label: "Unduh Aplikasi" },
 ];
 
 export default function Navbar() {
@@ -26,8 +26,8 @@ export default function Navbar() {
     // Check initial scroll position
     handleScroll();
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close mobile menu on resize to desktop
@@ -38,8 +38,8 @@ export default function Navbar() {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const closeMobileMenu = useCallback(() => {
@@ -51,8 +51,8 @@ export default function Navbar() {
       aria-label="Navigasi Utama"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled || mobileMenuOpen
-          ? 'bg-brand-black shadow-lg shadow-black/20'
-          : 'bg-transparent'
+          ? "bg-brand-black shadow-lg shadow-black/20"
+          : "bg-transparent"
       }`}
     >
       <div className="section-container">
@@ -98,7 +98,9 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
-            aria-label={mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+            aria-label={
+              mobileMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"
+            }
             className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md text-white/80 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold md:hidden"
           >
             {mobileMenuOpen ? (
@@ -142,7 +144,7 @@ export default function Navbar() {
       <div
         id="mobile-menu"
         className={`overflow-hidden transition-all duration-300 md:hidden ${
-          mobileMenuOpen ? 'max-h-96 border-t border-white/10' : 'max-h-0'
+          mobileMenuOpen ? "max-h-96 border-t border-white/10" : "max-h-0"
         }`}
         aria-hidden={!mobileMenuOpen}
       >

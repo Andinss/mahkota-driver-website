@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { readAllContent } from '@/lib/content';
+import { NextResponse } from "next/server";
+import { readAllContent } from "@/lib/content";
 
 /**
  * GET /api/content
@@ -11,10 +11,10 @@ export async function GET() {
     const content = await readAllContent();
     return NextResponse.json(content);
   } catch (error) {
-    console.error('Failed to read content:', error);
+    console.error("Failed to read content:", error);
     return NextResponse.json(
-      { error: 'Failed to load content' },
-      { status: 500 }
+      { error: "Failed to load content" },
+      { status: 500 },
     );
   }
 }

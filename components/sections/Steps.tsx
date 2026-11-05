@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Icon from "@/components/ui/Icon";
 import type { RegistrationData } from "@/types/content";
 
 export default function Steps({

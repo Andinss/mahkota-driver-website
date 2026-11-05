@@ -4,7 +4,6 @@ import { useState } from "react";
 import { ContactData } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import PhotoUpload from "./PhotoUpload";
-import Icon from "@/components/ui/Icon";
 
 interface ContactTabProps {
   data: ContactData;
@@ -12,21 +11,17 @@ interface ContactTabProps {
 }
 
 export default function ContactTab({ data, onSave }: ContactTabProps) {
-  // ... (state yang sudah ada sebelumnya)
   const [whatsappUrl, setWhatsappUrl] = useState(data.whatsappUrl);
   const [phone, setPhone] = useState(data.phone);
   const [address, setAddress] = useState(data.address);
   const [instagram, setInstagram] = useState(data.socialMedia.instagram ?? "");
   const [facebook, setFacebook] = useState(data.socialMedia.facebook ?? "");
   const [heroImageUrl, setHeroImageUrl] = useState(data.heroImageUrl ?? "");
-
-  // STATE BARU
   const [homeAboutText, setHomeAboutText] = useState(data.homeAboutText ?? "");
   const [aboutParagraphs, setAboutParagraphs] = useState(
     data.aboutParagraphs?.join("\n\n") ?? "",
   );
   const [commitments, setCommitments] = useState(data.commitments ?? []);
-
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{
     message: string;
@@ -48,7 +43,6 @@ export default function ContactTab({ data, onSave }: ContactTabProps) {
         },
         heroImageUrl: heroImageUrl.trim() || undefined,
         homeAboutText: homeAboutText.trim(),
-        // Pisahkan kembali berdasarkan 2 enter
         aboutParagraphs: aboutParagraphs
           .split("\n\n")
           .map((p) => p.trim())

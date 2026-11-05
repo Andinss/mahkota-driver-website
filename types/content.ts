@@ -23,14 +23,13 @@ export interface ContactData {
   phone: string;
   address: string;
   socialMedia: {
-    instagram: string | null;
-    facebook: string | null;
+    instagram: string;
+    facebook: string;
   };
   heroDescription?: string;
   heroImageUrl?: string;
   appMockupUrl?: string;
 
-  // TAMBAHAN BARU UNTUK 100% DINAMIS
   homeAboutText?: string;
   homeAboutPoints?: string[];
   aboutParagraphs?: string[];

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState } from "react";
+import Image from "next/image";
 
 interface AvatarProps {
   name: string;
@@ -13,9 +13,9 @@ export default function Avatar({ name, photoUrl, size = 48 }: AvatarProps) {
   const [imgError, setImgError] = useState(false);
 
   const initials = name
-    .split(' ')
+    .split(" ")
     .map((word) => word[0])
-    .join('')
+    .join("")
     .slice(0, 2)
     .toUpperCase();
 
@@ -37,10 +37,7 @@ export default function Avatar({ name, photoUrl, size = 48 }: AvatarProps) {
           onError={() => setImgError(true)}
         />
       ) : (
-        <span
-          className="select-none"
-          style={{ fontSize: size * 0.375 }}
-        >
+        <span className="select-none" style={{ fontSize: size * 0.375 }}>
           {initials}
         </span>
       )}

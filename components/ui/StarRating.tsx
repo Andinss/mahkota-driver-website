@@ -14,7 +14,7 @@ export default function StarRating({ rating }: StarRatingProps) {
       {stars.map((filled, i) => (
         <svg
           key={i}
-          className={`h-5 w-5 ${filled ? 'text-gold' : 'text-gray-600'}`}
+          className={`h-5 w-5 ${filled ? "text-gold" : "text-gray-600"}`}
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"

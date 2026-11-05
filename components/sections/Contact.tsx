@@ -57,7 +57,9 @@ export default function Contact({ contact }: { contact: ContactData }) {
             </div>
             <a
               className="kti w2"
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                contact.address,
+              )}`}
               target="_blank"
               rel="noopener"
             >

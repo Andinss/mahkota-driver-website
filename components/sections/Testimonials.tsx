@@ -9,7 +9,6 @@ export default function Testimonials({
   const items = testimonials.items || [];
   if (items.length === 0) return null;
 
-  // Section ini TIDAK memakai 'sf' (putih) agar selang-seling dengan section Armada (biru)
   return (
     <section className="sec" id="testimoni">
       <div className="w">

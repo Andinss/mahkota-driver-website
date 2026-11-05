@@ -101,28 +101,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // PALET WARNA EMAS & HITAM
-        bg: "#FBF7EF", // Background putih tulang
-        surf: "#FFFFFF", // Surface putih
-        ink: "#1C1C1F", // Teks Hitam Pekat
-        mu: "#6B6B6B", // Abu-abu
-        ln: "#E8E2D2", // Garis border krem
+        bg: "#FBF7EF",
+        surf: "#FFFFFF",
+        ink: "#1C1C1F",
+        mu: "#6B6B6B",
+        ln: "#E8E2D2",
         y: {
-          DEFAULT: "#A9822E", // EMAS UTAMA
-          light: "#C9A354", // Emas terang
-          dark: "#8A691F", // Emas gelap
+          DEFAULT: "#A9822E",
+          light: "#C9A354",
+          dark: "#8A691F",
         },
-        navy: "#1C1C1F", // Hitam untuk section gelap (Armada, Footer)
-        nc: "#2A2A2E",
+        navy: "#1A1A1A",
+        nc: "#242424",
         gold: {
           DEFAULT: "#A9822E",
           light: "#C9A354",
           dark: "#8A691F",
         },
         brand: {
-          black: "#1C1C1F",
-          dark: "#2A2A2E",
-          card: "#3A3A3E",
+          black: "#1A1A1A",
+          dark: "#242424",
+          card: "#333333",
         },
       },
       fontFamily: {

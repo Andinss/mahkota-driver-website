@@ -25,7 +25,10 @@ const rateLimitMap = new Map<string, RateLimitEntry>();
  * @param ip - The client IP address
  * @returns `allowed: true` if under the limit, or `allowed: false` with `retryAfter` in seconds
  */
-export function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
+export function checkRateLimit(ip: string): {
+  allowed: boolean;
+  retryAfter?: number;
+} {
   const now = Date.now();
 
   // Clean up expired entries

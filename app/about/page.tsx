@@ -6,8 +6,9 @@ import AboutCTA from "@/components/about/AboutCTA";
 
 export default async function TentangPage() {
   const content = await readAllContent();
+
   return (
-    <div className="pg">
+    <div className="pg bg-white">
       <div className="w">
         <AboutHero contact={content.contact} />
         <AboutBody contact={content.contact} />

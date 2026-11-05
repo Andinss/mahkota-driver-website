@@ -15,7 +15,6 @@ export default function LayoutWrapper({
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
 
-  // Jika di halaman admin, jangan tampilkan Navbar & Footer publik
   if (isAdmin) {
     return <>{children}</>;
   }

@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import type { RegistrationData } from '@/types/content';
+import Image from "next/image";
+import type { RegistrationData } from "@/types/content";
 
 interface RegistrationProps {
   registration: RegistrationData;
@@ -15,7 +15,8 @@ export default function Registration({ registration }: RegistrationProps) {
         <div className="text-center mb-12">
           <h2 className="heading-secondary text-brand-black">Cara Bergabung</h2>
           <p className="mt-4 text-gray-500 font-body max-w-2xl mx-auto">
-            Proses pendaftaran yang mudah dan cepat untuk menjadi mitra driver Mahkota Drive
+            Proses pendaftaran yang mudah dan cepat untuk menjadi mitra driver
+            Mahkota Drive
           </p>
         </div>
 
@@ -81,9 +82,16 @@ export default function Registration({ registration }: RegistrationProps) {
 
               {/* Vertical connector with arrow — aligned under the icon */}
               {index < sortedSteps.length - 1 && (
-                <div className="flex flex-col items-center w-12" aria-hidden="true">
+                <div
+                  className="flex flex-col items-center w-12"
+                  aria-hidden="true"
+                >
                   <div className="w-0.5 h-4 bg-gold/40" />
-                  <svg className="w-3 h-3 text-gold/60" fill="currentColor" viewBox="0 0 12 12">
+                  <svg
+                    className="w-3 h-3 text-gold/60"
+                    fill="currentColor"
+                    viewBox="0 0 12 12"
+                  >
                     <path d="M6 9L1.5 4.5h9L6 9z" />
                   </svg>
                 </div>
@@ -110,7 +118,10 @@ export default function Registration({ registration }: RegistrationProps) {
               />
             </svg>
             <span>
-              Estimasi waktu: <strong className="text-brand-black">~{registration.estimateMinutes} menit</strong>
+              Estimasi waktu:{" "}
+              <strong className="text-brand-black">
+                ~{registration.estimateMinutes} menit
+              </strong>
             </span>
           </p>
         </div>

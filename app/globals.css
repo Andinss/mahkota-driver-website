@@ -4,18 +4,17 @@
 
 @layer base {
   :root {
-    /* PALET WARNA EMAS (NOIR / GOLD) */
-    --bg: #fbf7ef; /* Putih tulang */
-    --surf: #ffffff; /* Putih bersih */
-    --ink: #1c1c1f; /* Hitam */
-    --mu: #6b6b6b; /* Abu-abu */
-    --ln: #e8e2d2; /* Garis krem */
+    --bg: #fbf7ef;
+    --surf: #ffffff;
+    --ink: #1c1c1f;
+    --mu: #6b6b6b;
+    --ln: #e8e2d2;
 
-    --y: #a9822e; /* EMAS UTAMA */
-    --yt: #8a691f; /* EMAS HOVER */
+    --y: #a9822e;
+    --yt: #8a691f;
 
-    --navy: #1c1c1f; /* Hitam untuk background gelap */
-    --nc: #2a2a2e;
+    --navy: #1a1a1a;
+    --nc: #242424;
     --btn: #1c1c1f;
     --bt: #ffffff;
     --sky: rgba(28, 28, 31, 0.11);
@@ -128,8 +127,9 @@ header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--hb);
+  background: var(--navy);
   backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--y);
 }
 .nb {
   display: flex;
@@ -150,16 +150,17 @@ header {
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
+  color: #ffffff;
 }
 .lg b i {
   font-style: normal;
-  color: var(--yt);
+  color: var(--y);
 }
 .lg small {
   display: block;
   font-size: 0.58rem;
   letter-spacing: 0.3em;
-  color: var(--mu);
+  color: #a9b4c6;
   margin-top: 3px;
 }
 nav ul {
@@ -176,7 +177,7 @@ nav ul a {
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 500;
-  color: var(--mu);
+  color: #a9b4c6;
   transition: color 0.2s;
 }
 nav ul a::after {
@@ -186,13 +187,13 @@ nav ul a::after {
   right: 0;
   bottom: 0;
   height: 2px;
-  background: var(--ink);
+  background: var(--y);
   transform: scaleX(0);
   transition: transform 0.25s;
 }
 nav ul a:hover,
 nav ul a.on {
-  color: var(--ink);
+  color: #ffffff;
 }
 nav ul a.on::after,
 nav ul a:hover::after {
@@ -204,7 +205,7 @@ nav ul a:hover::after {
   height: 44px;
   border: 0;
   background: none;
-  color: var(--ink);
+  color: #ffffff;
   cursor: pointer;
   place-items: center;
 }
@@ -256,10 +257,14 @@ nav ul a:hover::after {
 }
 .by {
   background: var(--y);
-  color: #1c1c1f;
+  color: #ffffff;
 }
 .by:hover {
-  background: var(--y-light);
+  background: #c9a354;
+  box-shadow: 0 8px 20px -8px rgba(169, 130, 46, 0.5);
+}
+header .btn.by {
+  color: #ffffff !important;
 }
 .sm {
   min-height: 44px;
