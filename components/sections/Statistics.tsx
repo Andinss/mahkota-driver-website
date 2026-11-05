@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { CountUp } from 'countup.js';
-import type { StatisticsData } from '@/types/content';
+import { useEffect, useRef } from "react";
+import { CountUp } from "countup.js";
+import type { StatisticsData } from "@/types/content";
 
 interface StatisticsProps {
   statistics: StatisticsData;
@@ -26,7 +26,7 @@ export default function Statistics({ statistics }: StatisticsProps) {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     observer.observe(section);
@@ -66,10 +66,7 @@ export default function Statistics({ statistics }: StatisticsProps) {
   }
 
   return (
-    <div
-      ref={sectionRef}
-      className="bg-brand-black"
-    >
+    <div ref={sectionRef} className="bg-brand-black">
       <div className="section-container section-padding">
         <div className="flex flex-wrap justify-center gap-8 md:flex-nowrap md:justify-around">
           {statistics.items.map((item, index) => (
@@ -78,7 +75,9 @@ export default function Statistics({ statistics }: StatisticsProps) {
               className="flex flex-col items-center text-center"
             >
               <span
-                ref={(el) => { countUpRefs.current[index] = el; }}
+                ref={(el) => {
+                  countUpRefs.current[index] = el;
+                }}
                 className="text-gold font-heading text-4xl font-bold md:text-5xl lg:text-6xl"
                 aria-label={`${item.label}: ${formatValue(item.value, item.decimals)}${item.suffix}`}
               >

@@ -1,25 +1,24 @@
-// app/api/admin/icons/route.ts
-// GET /api/admin/icons — List available service icons
-
-import { NextResponse } from 'next/server';
-import { isAuthenticated } from '@/lib/auth';
-import { readdir } from 'fs/promises';
-import path from 'path';
+import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
+import { readdir } from "fs/promises";
+import path from "path";
 
 export async function GET() {
   const authenticated = await isAuthenticated();
   if (!authenticated) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const iconsDir = path.join(process.cwd(), 'public/images/services');
+    const iconsDir = path.join(process.cwd(), "public/images/services");
     const files = await readdir(iconsDir);
 
     const icons = files
-      .filter((f) => f.endsWith('.svg') || f.endsWith('.png') || f.endsWith('.webp'))
+      .filter(
+        (f) => f.endsWith(".svg") || f.endsWith(".png") || f.endsWith(".webp"),
+      )
       .map((f) => ({
-        name: f.replace(/\.[^.]+$/, ''),
+        name: f.replace(/\.[^.]+$/, ""),
         url: `/images/services/${f}`,
       }));
 

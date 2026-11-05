@@ -1,52 +1,76 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { ServicesData, Service, Advantage } from '@/types/content';
-import Toast, { ToastType } from './Toast';
-import ConfirmDialog from './ConfirmDialog';
-import IconPicker from './IconPicker';
+import { useState, useEffect, useCallback } from "react";
+import { ServicesData, Service, Advantage } from "@/types/content";
+import Toast, { ToastType } from "./Toast";
+import ConfirmDialog from "./ConfirmDialog";
+import IconPicker from "./IconPicker";
+import Icon from "@/components/ui/Icon";
 
 interface ServicesTabProps {
   data: ServicesData;
   onSave: (data: ServicesData) => Promise<void>;
 }
 
-interface ServiceForm { name: string; description: string; iconUrl: string; iconAlt: string; }
-interface AdvantageForm { title: string; description: string; iconUrl: string; iconAlt: string; }
+interface ServiceForm {
+  name: string;
+  description: string;
+  iconUrl: string;
+  iconAlt: string;
+}
+interface AdvantageForm {
+  title: string;
+  description: string;
+  iconUrl: string;
+  iconAlt: string;
+}
+type SubTab = "layanan" | "keunggulan";
+type ModalType = "service" | "advantage" | null;
 
-type SubTab = 'layanan' | 'keunggulan';
-type ModalType = 'service' | 'advantage' | null;
-
-const emptyServiceForm: ServiceForm = { name: '', description: '', iconUrl: '', iconAlt: '' };
-const emptyAdvantageForm: AdvantageForm = { title: '', description: '', iconUrl: '', iconAlt: '' };
+const emptyServiceForm: ServiceForm = {
+  name: "",
+  description: "",
+  iconUrl: "",
+  iconAlt: "",
+};
+const emptyAdvantageForm: AdvantageForm = {
+  title: "",
+  description: "",
+  iconUrl: "",
+  iconAlt: "",
+};
 
 export default function ServicesTab({ data, onSave }: ServicesTabProps) {
   const [services, setServices] = useState<Service[]>(data.services);
   const [advantages, setAdvantages] = useState<Advantage[]>(data.advantages);
   const [saving, setSaving] = useState(false);
-  const [activeSubTab, setActiveSubTab] = useState<SubTab>('layanan');
-
-  // Modal
+  const [activeSubTab, setActiveSubTab] = useState<SubTab>("layanan");
   const [modalType, setModalType] = useState<ModalType>(null);
   const [serviceForm, setServiceForm] = useState<ServiceForm>(emptyServiceForm);
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
-  const [advantageForm, setAdvantageForm] = useState<AdvantageForm>(emptyAdvantageForm);
-  const [editingAdvantageId, setEditingAdvantageId] = useState<string | null>(null);
+  const [advantageForm, setAdvantageForm] =
+    useState<AdvantageForm>(emptyAdvantageForm);
+  const [editingAdvantageId, setEditingAdvantageId] = useState<string | null>(
+    null,
+  );
   const [formError, setFormError] = useState<string | null>(null);
-
-  // Toast
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
-
-  // Confirm
-  const [confirmDelete, setConfirmDelete] = useState<{ type: 'service' | 'advantage'; id: string; name: string } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: ToastType;
+  } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{
+    type: "service" | "advantage";
+    id: string;
+    name: string;
+  } | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && modalType) closeModal();
+      if (e.key === "Escape" && modalType) closeModal();
     }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [modalType]);
 
   function closeModal() {
@@ -57,119 +81,235 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
     setAdvantageForm(emptyAdvantageForm);
     setFormError(null);
   }
+  const showToast = useCallback((message: string, type: ToastType) => {
+    setToast({ message, type });
+  }, []);
 
-  const showToast = useCallback((message: string, type: ToastType) => { setToast({ message, type }); }, []);
-
-  async function persistData(updatedServices: Service[], updatedAdvantages: Advantage[]) {
+  async function persistData(
+    updatedServices: Service[],
+    updatedAdvantages: Advantage[],
+  ) {
     setSaving(true);
     try {
-      await onSave({ services: updatedServices, advantages: updatedAdvantages });
+      await onSave({
+        services: updatedServices,
+        advantages: updatedAdvantages,
+      });
       setServices(updatedServices);
       setAdvantages(updatedAdvantages);
       return true;
     } catch {
-      showToast('Gagal menyimpan data.', 'error');
+      showToast("Gagal menyimpan data.", "error");
       return false;
     } finally {
       setSaving(false);
     }
   }
 
-  // --- Service ---
-  function handleAddService() { setEditingServiceId(null); setServiceForm(emptyServiceForm); setModalType('service'); setFormError(null); }
-  function handleEditService(item: Service) { setEditingServiceId(item.id); setServiceForm({ name: item.name, description: item.description, iconUrl: item.iconUrl, iconAlt: item.iconAlt }); setModalType('service'); setFormError(null); }
+  function handleAddService() {
+    setEditingServiceId(null);
+    setServiceForm(emptyServiceForm);
+    setModalType("service");
+    setFormError(null);
+  }
+  function handleEditService(item: Service) {
+    setEditingServiceId(item.id);
+    setServiceForm({
+      name: item.name,
+      description: item.description,
+      iconUrl: item.iconUrl,
+      iconAlt: item.iconAlt,
+    });
+    setModalType("service");
+    setFormError(null);
+  }
   function handleDeleteServiceClick(item: Service) {
-    if (services.length <= 3) { showToast('Minimal 3 layanan diperlukan.', 'error'); return; }
-    setConfirmDelete({ type: 'service', id: item.id, name: item.name });
+    if (services.length <= 3) {
+      showToast("Minimal 3 layanan diperlukan.", "error");
+      return;
+    }
+    setConfirmDelete({ type: "service", id: item.id, name: item.name });
   }
 
   async function handleSubmitService(e: React.FormEvent) {
     e.preventDefault();
-    if (!serviceForm.name.trim()) { setFormError('Nama layanan tidak boleh kosong.'); return; }
+    if (!serviceForm.name.trim()) {
+      setFormError("Nama layanan tidak boleh kosong.");
+      return;
+    }
     const service: Service = {
-      id: editingServiceId || `svc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      name: serviceForm.name.trim(), description: serviceForm.description.trim(),
-      iconUrl: serviceForm.iconUrl.trim(), iconAlt: serviceForm.iconAlt.trim() || serviceForm.name.trim(),
+      id:
+        editingServiceId ||
+        `svc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      name: serviceForm.name.trim(),
+      description: serviceForm.description.trim(),
+      iconUrl: serviceForm.iconUrl.trim(),
+      iconAlt: serviceForm.iconAlt.trim() || serviceForm.name.trim(),
     };
-    const updated = editingServiceId ? services.map((s) => (s.id === editingServiceId ? service : s)) : [...services, service];
+    const updated = editingServiceId
+      ? services.map((s) => (s.id === editingServiceId ? service : s))
+      : [...services, service];
     const success = await persistData(updated, advantages);
-    if (success) { showToast(editingServiceId ? 'Layanan berhasil diperbarui.' : 'Layanan berhasil ditambahkan.', 'success'); closeModal(); }
+    if (success) {
+      showToast(
+        editingServiceId ? "Layanan diperbarui." : "Layanan ditambahkan.",
+        "success",
+      );
+      closeModal();
+    }
   }
 
-  // --- Advantage ---
-  function handleAddAdvantage() { setEditingAdvantageId(null); setAdvantageForm(emptyAdvantageForm); setModalType('advantage'); setFormError(null); }
-  function handleEditAdvantage(item: Advantage) { setEditingAdvantageId(item.id); setAdvantageForm({ title: item.title, description: item.description, iconUrl: (item as Advantage & { iconUrl?: string }).iconUrl || '', iconAlt: (item as Advantage & { iconAlt?: string }).iconAlt || '' }); setModalType('advantage'); setFormError(null); }
+  function handleAddAdvantage() {
+    setEditingAdvantageId(null);
+    setAdvantageForm(emptyAdvantageForm);
+    setModalType("advantage");
+    setFormError(null);
+  }
+  function handleEditAdvantage(item: Advantage) {
+    setEditingAdvantageId(item.id);
+    setAdvantageForm({
+      title: item.title,
+      description: item.description,
+      iconUrl: (item as any).iconUrl || "",
+      iconAlt: (item as any).iconAlt || "",
+    });
+    setModalType("advantage");
+    setFormError(null);
+  }
   function handleDeleteAdvantageClick(item: Advantage) {
-    if (advantages.length <= 3) { showToast('Minimal 3 keunggulan diperlukan.', 'error'); return; }
-    setConfirmDelete({ type: 'advantage', id: item.id, name: item.title });
+    if (advantages.length <= 3) {
+      showToast("Minimal 3 keunggulan diperlukan.", "error");
+      return;
+    }
+    setConfirmDelete({ type: "advantage", id: item.id, name: item.title });
   }
 
   async function handleSubmitAdvantage(e: React.FormEvent) {
     e.preventDefault();
-    if (!advantageForm.title.trim()) { setFormError('Judul keunggulan tidak boleh kosong.'); return; }
+    if (!advantageForm.title.trim()) {
+      setFormError("Judul keunggulan tidak boleh kosong.");
+      return;
+    }
     const advantage = {
-      id: editingAdvantageId || `adv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      id:
+        editingAdvantageId ||
+        `adv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       title: advantageForm.title.trim(),
       description: advantageForm.description.trim(),
       iconUrl: advantageForm.iconUrl.trim(),
       iconAlt: advantageForm.iconAlt.trim() || advantageForm.title.trim(),
     } as Advantage;
-    const updated = editingAdvantageId ? advantages.map((a) => (a.id === editingAdvantageId ? advantage : a)) : [...advantages, advantage];
+    const updated = editingAdvantageId
+      ? advantages.map((a) => (a.id === editingAdvantageId ? advantage : a))
+      : [...advantages, advantage];
     const success = await persistData(services, updated);
-    if (success) { showToast(editingAdvantageId ? 'Keunggulan berhasil diperbarui.' : 'Keunggulan berhasil ditambahkan.', 'success'); closeModal(); }
+    if (success) {
+      showToast(
+        editingAdvantageId
+          ? "Keunggulan diperbarui."
+          : "Keunggulan ditambahkan.",
+        "success",
+      );
+      closeModal();
+    }
   }
 
-  // --- Confirm Delete ---
   async function handleConfirmDelete() {
     if (!confirmDelete) return;
     setDeleting(true);
     let success = false;
-    if (confirmDelete.type === 'service') {
-      const updated = services.filter((s) => s.id !== confirmDelete.id);
-      success = await persistData(updated, advantages);
+    if (confirmDelete.type === "service") {
+      success = await persistData(
+        services.filter((s) => s.id !== confirmDelete.id),
+        advantages,
+      );
     } else {
-      const updated = advantages.filter((a) => a.id !== confirmDelete.id);
-      success = await persistData(services, updated);
+      success = await persistData(
+        services,
+        advantages.filter((a) => a.id !== confirmDelete.id),
+      );
     }
     setDeleting(false);
     setConfirmDelete(null);
-    if (success) showToast(`${confirmDelete.type === 'service' ? 'Layanan' : 'Keunggulan'} berhasil dihapus.`, 'success');
+    if (success)
+      showToast(
+        `${confirmDelete.type === "service" ? "Layanan" : "Keunggulan"} dihapus.`,
+        "success",
+      );
   }
 
   return (
     <div className="p-6 space-y-6">
-      {/* Sub-Tab Navigation */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-ln">
         <div className="flex -mb-px">
-          <button type="button" onClick={() => setActiveSubTab('layanan')} className={`py-2.5 px-4 text-sm font-medium border-b-2 transition-colors ${activeSubTab === 'layanan' ? 'border-gold text-gold' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`} role="tab" aria-selected={activeSubTab === 'layanan'}>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab("layanan")}
+            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${activeSubTab === "layanan" ? "border-y text-ink" : "border-transparent text-mu hover:text-ink"}`}
+          >
             Layanan ({services.length})
           </button>
-          <button type="button" onClick={() => setActiveSubTab('keunggulan')} className={`py-2.5 px-4 text-sm font-medium border-b-2 transition-colors ${activeSubTab === 'keunggulan' ? 'border-gold text-gold' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`} role="tab" aria-selected={activeSubTab === 'keunggulan'}>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab("keunggulan")}
+            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${activeSubTab === "keunggulan" ? "border-y text-ink" : "border-transparent text-mu hover:text-ink"}`}
+          >
             Keunggulan ({advantages.length})
           </button>
         </div>
       </div>
 
-      {/* Layanan */}
-      {activeSubTab === 'layanan' && (
+      {activeSubTab === "layanan" && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">Layanan <span className="text-sm font-normal text-gray-500">({services.length} item, minimal 3)</span></h2>
-            <button type="button" onClick={handleAddService} disabled={saving} className="px-4 py-2 text-sm bg-gold text-brand-black rounded-lg font-medium hover:bg-gold-light transition-colors disabled:opacity-50">+ Tambah Layanan</button>
+            <h2 className="text-lg font-bold text-ink">
+              Layanan{" "}
+              <span className="text-sm font-normal text-mu">
+                ({services.length} item)
+              </span>
+            </h2>
+            <button
+              type="button"
+              onClick={handleAddService}
+              disabled={saving}
+              className="btn bd sm"
+            >
+              <Icon name="add" /> Tambah Layanan
+            </button>
           </div>
           <div className="space-y-3">
             {services.map((service) => (
-              <div key={service.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-medium text-sm text-gray-900">{service.name}</span>
-                    {service.description && <p className="text-sm text-gray-600 mt-1 line-clamp-2">{service.description}</p>}
-                    <p className="text-xs text-gray-400 mt-1">{service.iconUrl || '(tanpa ikon)'}</p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button type="button" onClick={() => handleEditService(service)} disabled={saving} className="px-3 py-1.5 text-xs text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors disabled:opacity-50">Edit</button>
-                    <button type="button" onClick={() => handleDeleteServiceClick(service)} disabled={saving || services.length <= 3} className="px-3 py-1.5 text-xs text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">Hapus</button>
-                  </div>
+              <div
+                key={service.id}
+                className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
+              >
+                <div className="flex-1 min-w-0">
+                  <span className="font-semibold text-sm text-ink">
+                    {service.name}
+                  </span>
+                  {service.description && (
+                    <p className="text-sm text-mu mt-1 line-clamp-2">
+                      {service.description}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleEditService(service)}
+                    disabled={saving}
+                    className="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors disabled:opacity-50"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteServiceClick(service)}
+                    disabled={saving || services.length <= 3}
+                    className="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors disabled:opacity-30"
+                  >
+                    Hapus
+                  </button>
                 </div>
               </div>
             ))}
@@ -177,25 +317,57 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
         </section>
       )}
 
-      {/* Keunggulan */}
-      {activeSubTab === 'keunggulan' && (
+      {activeSubTab === "keunggulan" && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">Keunggulan <span className="text-sm font-normal text-gray-500">({advantages.length} item, minimal 3)</span></h2>
-            <button type="button" onClick={handleAddAdvantage} disabled={saving} className="px-4 py-2 text-sm bg-gold text-brand-black rounded-lg font-medium hover:bg-gold-light transition-colors disabled:opacity-50">+ Tambah Keunggulan</button>
+            <h2 className="text-lg font-bold text-ink">
+              Keunggulan{" "}
+              <span className="text-sm font-normal text-mu">
+                ({advantages.length} item)
+              </span>
+            </h2>
+            <button
+              type="button"
+              onClick={handleAddAdvantage}
+              disabled={saving}
+              className="btn bd sm"
+            >
+              <Icon name="add" /> Tambah Keunggulan
+            </button>
           </div>
           <div className="space-y-3">
             {advantages.map((advantage) => (
-              <div key={advantage.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-medium text-sm text-gray-900">{advantage.title}</span>
-                    {advantage.description && <p className="text-sm text-gray-600 mt-1">{advantage.description}</p>}
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button type="button" onClick={() => handleEditAdvantage(advantage)} disabled={saving} className="px-3 py-1.5 text-xs text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors disabled:opacity-50">Edit</button>
-                    <button type="button" onClick={() => handleDeleteAdvantageClick(advantage)} disabled={saving || advantages.length <= 3} className="px-3 py-1.5 text-xs text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">Hapus</button>
-                  </div>
+              <div
+                key={advantage.id}
+                className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
+              >
+                <div className="flex-1 min-w-0">
+                  <span className="font-semibold text-sm text-ink">
+                    {advantage.title}
+                  </span>
+                  {advantage.description && (
+                    <p className="text-sm text-mu mt-1">
+                      {advantage.description}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleEditAdvantage(advantage)}
+                    disabled={saving}
+                    className="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors disabled:opacity-50"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteAdvantageClick(advantage)}
+                    disabled={saving || advantages.length <= 3}
+                    className="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors disabled:opacity-30"
+                  >
+                    Hapus
+                  </button>
                 </div>
               </div>
             ))}
@@ -203,83 +375,194 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
         </section>
       )}
 
-      {/* Service Modal */}
-      {modalType === 'service' && (
+      {modalType === "service" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
-          <div className="relative w-full max-w-lg bg-white rounded-xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-gray-900">{editingServiceId ? 'Edit Layanan' : 'Tambah Layanan Baru'}</h3>
-            {formError && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{formError}</div>}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={closeModal}
+          />
+          <div className="relative w-full max-w-lg bg-surf rounded-2xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-bold text-ink">
+              {editingServiceId ? "Edit Layanan" : "Tambah Layanan"}
+            </h3>
+            {formError && (
+              <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+                {formError}
+              </div>
+            )}
             <form onSubmit={handleSubmitService} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Layanan <span className="text-red-500">*</span></label>
-                <input type="text" value={serviceForm.name} onChange={(e) => setServiceForm({ ...serviceForm, name: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" placeholder="Nama layanan" autoFocus />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Nama Layanan <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={serviceForm.name}
+                  onChange={(e) =>
+                    setServiceForm({ ...serviceForm, name: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
+                  autoFocus
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi <span className="text-gray-400 font-normal">({serviceForm.description.length}/150)</span></label>
-                <textarea value={serviceForm.description} onChange={(e) => setServiceForm({ ...serviceForm, description: e.target.value.slice(0, 150) })} maxLength={150} rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent resize-none" placeholder="Deskripsi singkat (maks 150 karakter)" />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Deskripsi
+                </label>
+                <textarea
+                  value={serviceForm.description}
+                  onChange={(e) =>
+                    setServiceForm({
+                      ...serviceForm,
+                      description: e.target.value.slice(0, 150),
+                    })
+                  }
+                  maxLength={150}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
+                />
               </div>
+              <IconPicker
+                value={serviceForm.iconUrl}
+                onChange={(url) =>
+                  setServiceForm({ ...serviceForm, iconUrl: url })
+                }
+              />
               <div>
-                <IconPicker value={serviceForm.iconUrl} onChange={(url) => setServiceForm({ ...serviceForm, iconUrl: url })} />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Icon Alt Text
+                </label>
+                <input
+                  type="text"
+                  value={serviceForm.iconAlt}
+                  onChange={(e) =>
+                    setServiceForm({ ...serviceForm, iconAlt: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
+                />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Icon Alt Text</label>
-                <input type="text" value={serviceForm.iconAlt} onChange={(e) => setServiceForm({ ...serviceForm, iconAlt: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" placeholder="Deskripsi ikon" />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button type="button" onClick={closeModal} disabled={saving} className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50">Batal</button>
-                <button type="submit" disabled={saving} className="px-4 py-2 bg-gold text-brand-black text-sm rounded-lg font-medium hover:bg-gold-light transition-colors disabled:opacity-50">{saving ? 'Menyimpan...' : editingServiceId ? 'Perbarui' : 'Tambahkan'}</button>
+              <div className="flex justify-end gap-3 pt-4 border-t border-ln">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="btn bo sm"
+                >
+                  Batal
+                </button>
+                <button type="submit" disabled={saving} className="btn bd sm">
+                  {saving ? "Menyimpan..." : "Simpan"}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Advantage Modal */}
-      {modalType === 'advantage' && (
+      {modalType === "advantage" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
-          <div className="relative w-full max-w-lg bg-white rounded-xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-gray-900">{editingAdvantageId ? 'Edit Keunggulan' : 'Tambah Keunggulan Baru'}</h3>
-            {formError && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{formError}</div>}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={closeModal}
+          />
+          <div className="relative w-full max-w-lg bg-surf rounded-2xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-bold text-ink">
+              {editingAdvantageId ? "Edit Keunggulan" : "Tambah Keunggulan"}
+            </h3>
+            {formError && (
+              <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+                {formError}
+              </div>
+            )}
             <form onSubmit={handleSubmitAdvantage} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Judul <span className="text-red-500">*</span></label>
-                <input type="text" value={advantageForm.title} onChange={(e) => setAdvantageForm({ ...advantageForm, title: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" placeholder="Judul keunggulan" autoFocus />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Judul <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={advantageForm.title}
+                  onChange={(e) =>
+                    setAdvantageForm({
+                      ...advantageForm,
+                      title: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
+                  autoFocus
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi <span className="text-gray-400 font-normal">({advantageForm.description.length}/100)</span></label>
-                <textarea value={advantageForm.description} onChange={(e) => setAdvantageForm({ ...advantageForm, description: e.target.value.slice(0, 100) })} maxLength={100} rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent resize-none" placeholder="Deskripsi singkat (maks 100 karakter)" />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Deskripsi
+                </label>
+                <textarea
+                  value={advantageForm.description}
+                  onChange={(e) =>
+                    setAdvantageForm({
+                      ...advantageForm,
+                      description: e.target.value.slice(0, 100),
+                    })
+                  }
+                  maxLength={100}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
+                />
               </div>
+              <IconPicker
+                value={advantageForm.iconUrl}
+                onChange={(url) =>
+                  setAdvantageForm({ ...advantageForm, iconUrl: url })
+                }
+              />
               <div>
-                <IconPicker value={advantageForm.iconUrl} onChange={(url) => setAdvantageForm({ ...advantageForm, iconUrl: url })} />
+                <label className="block text-sm font-medium text-ink mb-1">
+                  Icon Alt Text
+                </label>
+                <input
+                  type="text"
+                  value={advantageForm.iconAlt}
+                  onChange={(e) =>
+                    setAdvantageForm({
+                      ...advantageForm,
+                      iconAlt: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
+                />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Icon Alt Text</label>
-                <input type="text" value={advantageForm.iconAlt} onChange={(e) => setAdvantageForm({ ...advantageForm, iconAlt: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" placeholder="Deskripsi ikon" />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button type="button" onClick={closeModal} disabled={saving} className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50">Batal</button>
-                <button type="submit" disabled={saving} className="px-4 py-2 bg-gold text-brand-black text-sm rounded-lg font-medium hover:bg-gold-light transition-colors disabled:opacity-50">{saving ? 'Menyimpan...' : editingAdvantageId ? 'Perbarui' : 'Tambahkan'}</button>
+              <div className="flex justify-end gap-3 pt-4 border-t border-ln">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="btn bo sm"
+                >
+                  Batal
+                </button>
+                <button type="submit" disabled={saving} className="btn bd sm">
+                  {saving ? "Menyimpan..." : "Simpan"}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Confirm Delete */}
       {confirmDelete && (
         <ConfirmDialog
-          title={`Hapus ${confirmDelete.type === 'service' ? 'Layanan' : 'Keunggulan'}`}
-          message={`Apakah Anda yakin ingin menghapus "${confirmDelete.name}"? Tindakan ini tidak dapat dibatalkan.`}
+          title={`Hapus ${confirmDelete.type === "service" ? "Layanan" : "Keunggulan"}`}
+          message={`Hapus "${confirmDelete.name}"?`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setConfirmDelete(null)}
           loading={deleting}
         />
       )}
-
-      {/* Toast */}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

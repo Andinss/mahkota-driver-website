@@ -1,115 +1,163 @@
-'use client';
+"use client";
 
-import { useState, type FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import Icon from "@/components/ui/Icon";
 
-/**
- * Admin login page.
- * Renders a centered login form that authenticates against POST /api/admin/login.
- * On success, redirects to /admin/dashboard.
- * On failure, displays appropriate error messages.
- */
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
-        router.push('/admin/dashboard');
+        router.push("/admin/dashboard");
         return;
       }
 
       if (response.status === 429) {
-        setError('Terlalu banyak percobaan login. Silakan coba lagi nanti.');
+        setError("Terlalu banyak percobaan login. Silakan coba lagi nanti.");
       } else if (response.status === 401) {
-        setError('Username atau password salah.');
+        setError("Username atau password salah.");
       } else {
         const data = await response.json().catch(() => null);
-        setError(data?.error || 'Terjadi kesalahan. Silakan coba lagi.');
+        setError(data?.error || "Terjadi kesalahan. Silakan coba lagi.");
       }
     } catch {
-      setError('Tidak dapat terhubung ke server. Periksa koneksi Anda.');
+      setError("Tidak dapat terhubung ke server. Periksa koneksi Anda.");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-black px-4">
-      <div className="w-full max-w-md rounded-xl bg-brand-dark p-8 shadow-lg">
-        <h1 className="mb-6 text-center font-heading text-2xl font-bold text-gold">
-          Admin Login
-        </h1>
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-navy">
+      {/* Background Image & Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/services/1781145669201-2dq892.png"
+          alt="Mahkota Drive Background"
+          className="w-full h-full object-cover opacity-20 blur-sm scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-transparent"></div>
+        {/* Dekorasi Lingkaran Kuning */}
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-y/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-y/10 rounded-full blur-3xl"></div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label
-              htmlFor="username"
-              className="mb-1 block text-sm font-medium text-gray-300"
-            >
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              autoComplete="username"
-              disabled={isLoading}
-              className="w-full rounded-lg border border-gray-600 bg-brand-card px-4 py-2.5 text-white placeholder-gray-500 transition-colors focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold disabled:opacity-50"
-              placeholder="Masukkan username"
+      {/* Form Container */}
+      <div className="relative z-10 w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-y mb-4 shadow-lg shadow-y/30">
+            <img
+              src="/images/logo.png"
+              alt="Logo"
+              className="h-10 w-10 object-contain"
             />
           </div>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            Mahkota<span className="text-yt">Drive</span>
+          </h1>
+          <p className="text-gray-400 mt-2 font-medium">Panel Administrator</p>
+        </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-1 block text-sm font-medium text-gray-300"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
+        {/* Glass Card */}
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-semibold text-gray-200 mb-2"
+              >
+                Username
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Icon name="person" className="text-[20px]" />
+                </div>
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  autoComplete="username"
+                  disabled={isLoading}
+                  className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-y focus:border-transparent transition-all disabled:opacity-50"
+                  placeholder="Masukkan username"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-200 mb-2"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Icon name="lock" className="text-[20px]" />
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  disabled={isLoading}
+                  className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-y focus:border-transparent transition-all disabled:opacity-50"
+                  placeholder="Masukkan password"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-xl flex items-start gap-2 text-sm text-red-200">
+                <Icon name="error" className="text-[20px] shrink-0" />
+                <p>{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
               disabled={isLoading}
-              className="w-full rounded-lg border border-gray-600 bg-brand-card px-4 py-2.5 text-white placeholder-gray-500 transition-colors focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold disabled:opacity-50"
-              placeholder="Masukkan password"
-            />
-          </div>
+              className="w-full flex items-center justify-center gap-2 mt-2 py-4 bg-y text-navy rounded-xl font-bold text-base hover:bg-y-light transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-y/20"
+            >
+              {isLoading ? "Memproses..." : "Masuk Dashboard"}
+              {!isLoading && (
+                <Icon name="arrow_forward" className="text-[20px]" />
+              )}
+            </button>
+          </form>
+        </div>
 
-          {error && (
-            <p role="alert" className="text-sm text-red-400">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full rounded-lg bg-gold px-4 py-2.5 font-semibold text-brand-black transition-colors hover:bg-gold-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold disabled:cursor-not-allowed disabled:opacity-50"
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <a
+            href="/"
+            className="text-sm font-medium text-gray-400 hover:text-y transition-colors flex items-center justify-center gap-2"
           >
-            {isLoading ? 'Memproses...' : 'Login'}
-          </button>
-        </form>
+            <Icon name="arrow_back" className="text-[16px]" /> Kembali ke
+            Website
+          </a>
+        </div>
       </div>
     </div>
   );

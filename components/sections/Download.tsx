@@ -1,13 +1,16 @@
-import Image from 'next/image';
-import PlayStoreButton from '@/components/ui/PlayStoreButton';
+import Image from "next/image";
+import PlayStoreButton from "@/components/ui/PlayStoreButton";
 
 interface DownloadProps {
   playStoreUrl: string;
   appMockupUrl?: string;
 }
 
-export default function Download({ playStoreUrl, appMockupUrl }: DownloadProps) {
-  const mockupSrc = appMockupUrl || '/images/app-mockup.webp';
+export default function Download({
+  playStoreUrl,
+  appMockupUrl,
+}: DownloadProps) {
+  const mockupSrc = appMockupUrl || "/images/app-mockup.webp";
 
   return (
     <div className="bg-brand-dark">

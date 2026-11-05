@@ -1,66 +1,89 @@
-// types/content.ts
-// TypeScript interfaces for all content data categories
-
-export interface StatisticItem {
-  id: string;
-  label: string; // 1–30 karakter
-  value: number; // integer ≥ 0 atau float 1.0–5.0
-  suffix: string;
-  decimals?: number;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string; // non-kosong
-  description?: string; // e.g. "Driver Gojek Jakarta"
-  photoUrl: string | null;
-  quote: string; // non-kosong
-  rating: number; // integer 1–5
-}
-
-export interface Service {
-  id: string;
-  name: string;
-  description: string; // ≤ 150 karakter
-  iconUrl: string;
-  iconAlt: string; // non-kosong
-}
-
-export interface Advantage {
-  id: string;
-  title: string;
-  description: string; // ≤ 100 karakter
-  iconUrl?: string;
-  iconAlt?: string;
-}
-
+// ============================================
+// Fleet (Armada)
+// ============================================
 export interface FleetVehicle {
   id: string;
-  name: string;       // nama/tipe kendaraan
-  year: number;        // tahun kendaraan
-  capacity: number;    // kapasitas penumpang
-  transmission: 'manual' | 'matic';
+  name: string;
+  year: number;
+  capacity: number;
+  transmission: "manual" | "matic";
   imageUrl?: string;
+  isBestSeller?: boolean;
 }
 
 export interface FleetData {
   vehicles: FleetVehicle[];
 }
 
-export interface RegistrationStep {
+// ============================================
+// Contact (General)
+// ============================================
+export interface ContactData {
+  whatsappUrl: string;
+  phone: string;
+  address: string;
+  socialMedia: {
+    instagram: string;
+    facebook: string;
+  };
+  heroDescription?: string;
+  heroImageUrl?: string;
+  appMockupUrl?: string;
+
+  homeAboutText?: string;
+  homeAboutPoints?: string[];
+  aboutParagraphs?: string[];
+  commitments?: { title: string; description: string; icon: string }[];
+}
+
+// ============================================
+// Statistics
+// ============================================
+export interface StatisticItem {
   id: string;
-  order: number; // unik
-  title: string; // non-kosong
-  description: string; // non-kosong
-  iconUrl: string;
+  label: string;
+  value: number;
+  suffix: string;
+  decimals?: number;
 }
 
 export interface StatisticsData {
   items: StatisticItem[];
 }
 
+// ============================================
+// Testimonials
+// ============================================
+export interface Testimonial {
+  id: string;
+  name: string;
+  description?: string;
+  quote: string;
+  rating: number;
+  photoUrl: string | null;
+}
+
 export interface TestimonialsData {
   items: Testimonial[];
+}
+
+// ============================================
+// Services & Advantages
+// ============================================
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  iconUrl: string;
+  iconAlt: string;
+}
+
+export interface Advantage {
+  id: string;
+  title: string;
+  description: string;
+  iconUrl?: string;
+  iconAlt?: string;
 }
 
 export interface ServicesData {
@@ -68,26 +91,27 @@ export interface ServicesData {
   advantages: Advantage[];
 }
 
+// ============================================
+// Registration (Cara Daftar)
+// ============================================
+export interface RegistrationStep {
+  id: string;
+  order: number;
+  title: string;
+  description: string;
+  iconUrl: string;
+}
+
 export interface RegistrationData {
   steps: RegistrationStep[];
-  estimateMinutes: number; // 5–15
+  estimateMinutes: number;
   formUrl: string;
   playStoreUrl: string;
 }
 
-export interface ContactData {
-  whatsappUrl: string;
-  phone: string;
-  address: string;
-  socialMedia: {
-    instagram: string | null;
-    facebook: string | null;
-  };
-  heroDescription?: string;
-  heroImageUrl?: string;
-  appMockupUrl?: string;
-}
-
+// ============================================
+// All Content (Gabungan)
+// ============================================
 export interface AllContent {
   statistics: StatisticsData;
   testimonials: TestimonialsData;

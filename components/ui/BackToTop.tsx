@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -10,17 +10,17 @@ export default function BackToTop() {
       setVisible(window.scrollY > 300);
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     // Check initial position
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -29,8 +29,8 @@ export default function BackToTop() {
       aria-label="Kembali ke atas"
       className={`fixed bottom-6 right-6 z-50 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gold text-brand-black shadow-lg transition-all duration-300 hover:bg-gold-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${
         visible
-          ? 'translate-y-0 opacity-100'
-          : 'pointer-events-none translate-y-4 opacity-0'
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-4 opacity-0"
       }`}
     >
       <svg

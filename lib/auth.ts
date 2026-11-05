@@ -1,5 +1,9 @@
-import { getIronSession, type SessionOptions, type IronSession } from 'iron-session';
-import { cookies } from 'next/headers';
+import {
+  getIronSession,
+  type SessionOptions,
+  type IronSession,
+} from "iron-session";
+import { cookies } from "next/headers";
 
 /**
  * Session data interface for admin authentication.
@@ -15,14 +19,16 @@ export interface SessionData {
  * Cookie is httpOnly, secure in production, sameSite strict, TTL 1 hour.
  */
 export const sessionOptions: SessionOptions = {
-  password: process.env.SESSION_SECRET || 'fallback-secret-for-development-only-min-32-chars!!',
-  cookieName: 'mahkota-drive-admin-session',
+  password:
+    process.env.SESSION_SECRET ||
+    "fallback-secret-for-development-only-min-32-chars!!",
+  cookieName: "mahkota-drive-admin-session",
   ttl: 3600, // 1 hour in seconds
   cookieOptions: {
     httpOnly: true,
-    secure: process.env.COOKIE_SECURE === 'true',
-    sameSite: 'lax' as const,
-    path: '/',
+    secure: process.env.COOKIE_SECURE === "true",
+    sameSite: "lax" as const,
+    path: "/",
   },
 };
 
@@ -32,7 +38,10 @@ export const sessionOptions: SessionOptions = {
  */
 export async function getSession(): Promise<IronSession<SessionData>> {
   const cookieStore = await cookies();
-  const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+  const session = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions,
+  );
   return session;
 }
 

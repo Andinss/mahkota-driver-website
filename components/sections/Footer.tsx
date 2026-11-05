@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import type { ContactData } from '@/types/content';
-import PlayStoreButton from '@/components/ui/PlayStoreButton';
+import Image from "next/image";
+import type { ContactData } from "@/types/content";
+import PlayStoreButton from "@/components/ui/PlayStoreButton";
 
 interface FooterProps {
   contact: ContactData;
@@ -28,7 +28,8 @@ export default function Footer({ contact }: FooterProps) {
               </span>
             </div>
             <p className="text-sm text-gray-400">
-              Solusi rental armada kendaraan terpercaya untuk mitra driver taksi online.
+              Solusi rental armada kendaraan terpercaya untuk mitra driver taksi
+              online.
             </p>
           </div>
 
@@ -144,7 +145,8 @@ export default function Footer({ contact }: FooterProps) {
               Unduh Aplikasi
             </h3>
             <p className="text-sm text-gray-400">
-              Dapatkan aplikasi Mahkota Drive untuk kemudahan akses layanan kami.
+              Dapatkan aplikasi Mahkota Drive untuk kemudahan akses layanan
+              kami.
             </p>
             <PlayStoreButton url="https://play.google.com/store/apps/details?id=com.mahkotadrive.app" />
           </div>

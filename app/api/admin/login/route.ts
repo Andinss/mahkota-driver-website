@@ -7,12 +7,16 @@
  * - Sets encrypted session cookie on success
  */
 
-import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import fs from 'fs/promises';
-import path from 'path';
-import { getSession } from '@/lib/auth';
-import { checkRateLimit, recordFailedAttempt, resetRateLimit } from '@/lib/rate-limit';
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import fs from "fs/promises";
+import path from "path";
+import { getSession } from "@/lib/auth";
+import {
+  checkRateLimit,
+  recordFailedAttempt,
+  resetRateLimit,
+} from "@/lib/rate-limit";
 
 interface AdminConfig {
   username: string;
@@ -21,21 +25,21 @@ interface AdminConfig {
 
 export async function POST(request: Request): Promise<NextResponse> {
   // 1. Get IP from request headers
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  const ip = forwardedFor?.split(',')[0]?.trim() || realIp || 'unknown';
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const realIp = request.headers.get("x-real-ip");
+  const ip = forwardedFor?.split(",")[0]?.trim() || realIp || "unknown";
 
   // 2. Check rate limit
   const rateLimitResult = checkRateLimit(ip);
   if (!rateLimitResult.allowed) {
     return NextResponse.json(
-      { error: 'Terlalu banyak percobaan login. Silakan coba lagi nanti.' },
+      { error: "Terlalu banyak percobaan login. Silakan coba lagi nanti." },
       {
         status: 429,
         headers: {
-          'Retry-After': String(rateLimitResult.retryAfter || 900),
+          "Retry-After": String(rateLimitResult.retryAfter || 900),
         },
-      }
+      },
     );
   }
 
@@ -45,8 +49,8 @@ export async function POST(request: Request): Promise<NextResponse> {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: 'Request body tidak valid.' },
-      { status: 400 }
+      { error: "Request body tidak valid." },
+      { status: 400 },
     );
   }
 
@@ -54,34 +58,37 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   if (!username || !password) {
     return NextResponse.json(
-      { error: 'Username dan password wajib diisi.' },
-      { status: 400 }
+      { error: "Username dan password wajib diisi." },
+      { status: 400 },
     );
   }
 
   // 4. Read admin config
   let adminConfig: AdminConfig;
   try {
-    const configPath = path.join(process.cwd(), 'config', 'admin.json');
-    const configData = await fs.readFile(configPath, 'utf-8');
+    const configPath = path.join(process.cwd(), "config", "admin.json");
+    const configData = await fs.readFile(configPath, "utf-8");
     adminConfig = JSON.parse(configData);
   } catch {
     return NextResponse.json(
-      { error: 'Konfigurasi server error.' },
-      { status: 500 }
+      { error: "Konfigurasi server error." },
+      { status: 500 },
     );
   }
 
   // 5. Compare username and password
   const usernameMatch = username === adminConfig.username;
-  const passwordMatch = await bcrypt.compare(password, adminConfig.passwordHash);
+  const passwordMatch = await bcrypt.compare(
+    password,
+    adminConfig.passwordHash,
+  );
 
   if (!usernameMatch || !passwordMatch) {
     // Record failed attempt for rate limiting
     recordFailedAttempt(ip);
     return NextResponse.json(
-      { error: 'Username atau password salah.' },
-      { status: 401 }
+      { error: "Username atau password salah." },
+      { status: 401 },
     );
   }
 
@@ -95,7 +102,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   resetRateLimit(ip);
 
   return NextResponse.json(
-    { message: 'Login berhasil.', username },
-    { status: 200 }
+    { message: "Login berhasil.", username },
+    { status: 200 },
   );
 }

@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { getSession } from '@/lib/auth';
+import { NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
 
 /**
  * POST /api/admin/logout
@@ -11,12 +11,12 @@ export async function POST() {
     const session = await getSession();
     session.destroy();
 
-    return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
-  } catch (error) {
-    console.error('Logout failed:', error);
     return NextResponse.json(
-      { error: 'Logout failed' },
-      { status: 500 }
+      { message: "Logged out successfully" },
+      { status: 200 },
     );
+  } catch (error) {
+    console.error("Logout failed:", error);
+    return NextResponse.json({ error: "Logout failed" }, { status: 500 });
   }
 }
