@@ -7,7 +7,7 @@
     "facebook": "https://facebook.com/mahkotadrive"
   },
   "heroDescription": "Penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia.",
-  "heroImageUrl": "/images/hero-bg.webp",
+  "heroImageUrl": "/images/services/1794310442070-4jfsig.png",
   "appMockupUrl": "/images/app-mockup.webp",
   "homeAboutText": "Kami memahami tantangan menjadi driver online. Karena itu, Mahkota Drive hadir sebagai mitra terpercaya dengan 3 jaminan utama: armada prima yang selalu siap jalan, layanan siaga 24/7, dan skema setoran yang meringankan.",
   "homeAboutPoints": [
@@ -36,5 +36,15 @@
       "description": "Skema pembayaran transparan tanpa biaya tersembunyi.",
       "icon": "wallet"
     }
+  ],
+  "heroHeadlines": [
+    "Narik Online\nTanpa Beli\nMobil.",
+    "Servis Bayar,\nSiap Jalan\nSetiap Hari.",
+    "Daftar Cepat,\nMulai Narik\nHari Ini."
+  ],
+  "heroSubheadlines": [
+    "Sewa armada harian, mingguan, atau bulanan. Langsung siap jalan.",
+    "Perawatan dan bantuan darurat kami yang urus, Anda fokus narik.",
+    "Isi formulir, tanda tangan digital, lalu ambil kunci."
   ]
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image"; // Pastikan import Image
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
@@ -10,25 +11,17 @@ import {
   CustomerSupportIcon,
   Money03Icon,
 } from "@hugeicons/core-free-icons";
-import type { FleetData } from "@/types/content";
+import type { FleetData, ContactData } from "@/types/content"; // Tambah ContactData
 
-const SLIDES = [
-  {
-    t: ["Narik Online", "Tanpa Beli", "Mobil."],
-    s: "Sewa armada harian, mingguan, atau bulanan. Langsung siap jalan.",
-  },
-  {
-    t: ["Servis Gratis,", "Siap Jalan", "Setiap Hari."],
-    s: "Perawatan dan bantuan darurat kami yang urus, Anda fokus narik.",
-  },
-  {
-    t: ["Daftar Cepat,", "Mulai Narik", "Hari Ini."],
-    s: "Isi formulir, tanda tangan digital, lalu ambil kunci.",
-  },
-];
-
-export default function Hero({ fleet }: { fleet: FleetData }) {
+export default function Hero({
+  fleet,
+  contact,
+}: {
+  fleet: FleetData;
+  contact: ContactData;
+}) {
   const [activeSlide, setActiveSlide] = useState(0);
+
   const vehicles =
     fleet.vehicles.length > 0
       ? fleet.vehicles.slice(0, 3)
@@ -59,6 +52,24 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
           },
         ];
 
+  // Mengambil data dari JSON (fallback jika kosong)
+  const rawHeadlines = contact?.heroHeadlines || [
+    "Narik Online\nTanpa Beli\nMobil.",
+    "Servis Gratis,\nSiap Jalan\nSetiap Hari.",
+    "Daftar Cepat,\nMulai Narik\nHari Ini.",
+  ];
+  const rawSubheadlines = contact?.heroSubheadlines || [
+    "Sewa armada harian, mingguan, atau bulanan. Langsung siap jalan.",
+    "Perawatan dan bantuan darurat kami yang urus, Anda fokus narik.",
+    "Isi formulir, tanda tangan digital, lalu ambil kunci.",
+  ];
+
+  // Memecah string berdasarkan enter (\n) agar sesuai layout 3 baris
+  const slides = rawHeadlines.map((headline, idx) => ({
+    t: headline.split("\n").slice(0, 3), // Maksimal 3 baris
+    s: rawSubheadlines[idx] || "",
+  }));
+
   useEffect(() => {
     const timer = setInterval(() => setActiveSlide((p) => (p + 1) % 3), 6500);
     return () => clearInterval(timer);
@@ -68,7 +79,7 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
     <section className="hero" aria-roledescription="carousel">
       <div className="w hg">
         <div className="txs">
-          {SLIDES.map((slide, idx) => (
+          {slides.map((slide, idx) => (
             <div key={idx} className={`tx ${activeSlide === idx ? "on" : ""}`}>
               <h1>
                 <span className="ln">
@@ -81,11 +92,13 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
                     {slide.t[1]}
                   </span>
                 </span>
-                <span className="ln y">
-                  <span style={{ "--i": 2 } as React.CSSProperties}>
-                    {slide.t[2]}
+                {slide.t[2] && (
+                  <span className="ln y">
+                    <span style={{ "--i": 2 } as React.CSSProperties}>
+                      {slide.t[2]}
+                    </span>
                   </span>
-                </span>
+                )}
               </h1>
               <p className="sub">{slide.s}</p>
               <div className="cta">
@@ -102,6 +115,8 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
             </div>
           ))}
         </div>
+
+        {/* ... (Sisa kode stgs, trio, ctl SAMA PERSIS seperti sebelumnya) ... */}
         <div className="stgs">
           {vehicles.map((car, idx) => (
             <div
@@ -125,7 +140,14 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
                 <rect x="252" y="64" width="22" height="96" />
               </svg>
               {car.imageUrl && (
-                <img className="carimg" src={car.imageUrl} alt={car.name} />
+                <div className="relative w-full h-full absolute inset-0">
+                  <Image
+                    src={car.imageUrl}
+                    alt={car.name}
+                    fill
+                    className="carimg" // Class CSS lama tetap dipakai
+                  />
+                </div>
               )}
               <div className="ch">
                 <span className="ms">

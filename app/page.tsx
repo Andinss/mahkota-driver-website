@@ -12,7 +12,7 @@ export default async function Home() {
   const content = await readAllContent();
   return (
     <main id="top">
-      <Hero fleet={content.fleet} />
+      <Hero fleet={content.fleet} contact={content.contact} />
       <About contact={content.contact} statistics={content.statistics} />
       <Services services={content.services} />
       <WhyUs services={content.services} />

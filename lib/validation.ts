@@ -35,7 +35,6 @@ export const testimonialsSchema = z.object({
 });
 
 // Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 100 chars)
-// Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 100 chars)
 export const servicesSchema = z.object({
   services: z
     .array(
@@ -117,6 +116,9 @@ export const contactSchema = z.object({
       }),
     )
     .optional(),
+  // --- VALIDASI UNTUK HERO DINAMIS ---
+  heroHeadlines: z.array(z.string()).optional(),
+  heroSubheadlines: z.array(z.string()).optional(),
 });
 
 // Fleet schema: array of vehicles
@@ -131,6 +133,10 @@ export const fleetSchema = z.object({
         transmission: z.enum(["manual", "matic"]),
         imageUrl: z.string().optional(),
         isBestSeller: z.boolean().optional(),
+        price: z.number().min(0).optional(),
+        joinFee: z.number().min(0).optional(),
+        description: z.string().optional(),
+        features: z.array(z.string()).optional(),
       }),
     )
     .min(1),

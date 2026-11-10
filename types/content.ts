@@ -42,6 +42,10 @@ export interface ContactData {
   homeAboutPoints?: string[];
   aboutParagraphs?: string[];
   commitments?: { title: string; description: string; icon: string }[];
+
+  // --- TAMBAHAN UNTUK HERO DINAMIS ---
+  heroHeadlines?: string[];
+  heroSubheadlines?: string[];
 }
 
 // ============================================
