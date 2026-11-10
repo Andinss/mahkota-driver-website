@@ -3,26 +3,82 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowRight01Icon,
+  ArrowUpRight01Icon,
+  Cancel01Icon,
+  Menu01Icon,
+} from "@hugeicons/core-free-icons";
 
+// Href sekarang bersih: pakai "#" untuk section, dan "/" untuk halaman
 const NAV_ITEMS = [
-  { id: "top", label: "Beranda" },
-  { id: "tentang", label: "Tentang" },
-  { id: "layanan", label: "Layanan" },
-  { id: "armada", label: "Armada" },
-  { id: "testimoni", label: "Testimoni" },
-  { id: "bergabung", label: "Cara Bergabung" },
-  { id: "kontak", label: "Kontak" },
+  { id: "top", label: "Beranda", href: "/" },
+  { id: "tentang", label: "Tentang", href: "/about" },
+  { id: "layanan", label: "Layanan", href: "#layanan" },
+  { id: "keunggulan", label: "Keunggulan", href: "#keunggulan" },
+  { id: "armada", label: "Armada", href: "#armada" },
+  { id: "bergabung", label: "Bergabung", href: "#bergabung" },
+  { id: "testimoni", label: "Testimoni", href: "#testimoni" },
+  { id: "faq", label: "FAQ", href: "/faq" },
+  { id: "kontak", label: "Kontak", href: "#kontak" },
 ];
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [active, setActive] = useState("top");
+  const [active, setActive] = useState("");
   const pathname = usePathname();
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    setMobileMenuOpen(false);
+
+    // JIKA MENU ADALAH SEBUAH SECTION (Berawalan #)
+    if (href.startsWith("#")) {
+      // Jika sedang tidak di Beranda, paksa pindah ke Beranda dulu
+      if (pathname !== "/") {
+        window.location.href = "/" + href;
+      } else {
+        // Jika sudah di Beranda, scroll mulus
+        e.preventDefault();
+        const el = document.getElementById(href.replace("#", ""));
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.history.pushState(null, "", href);
+          setActive(href.replace("#", ""));
+        }
+      }
+      return;
+    }
+
+    // JIKA MENU ADALAH HALAMAN (About / FAQ)
+    // Biarkan Next.js Link yang menangani secara default
+    if (href !== "/") {
+      setActive(href.replace("/", ""));
+    } else {
+      setActive("top");
+    }
+  };
+
   useEffect(() => {
+    // 1. Deteksi jika user membuka URL ber-hash secara langsung (misal /#armada)
+    if (pathname === "/" && window.location.hash) {
+      const hash = window.location.hash.replace("#", "");
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActive(hash);
+        }
+      }, 200);
+    }
+
+    // 2. Highlight menu saat scroll (hanya di halaman Beranda)
     if (pathname !== "/") {
-      setActive(pathname === "/about" ? "tentang-page" : "");
+      const item = NAV_ITEMS.find((i) => i.href === pathname);
+      setActive(item ? item.id : "");
       return;
     }
 
@@ -35,13 +91,20 @@ export default function Navbar() {
 
       let current = "";
       for (const item of NAV_ITEMS) {
-        const el = document.getElementById(item.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 0) {
-            current = item.id;
+        // Hanya cek menu yang berawalan #
+        if (item.href.startsWith("#")) {
+          const id = item.href.replace("#", "");
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 0) {
+              current = item.id;
+            }
           }
         }
+      }
+      if (window.innerHeight + scrollY >= document.body.offsetHeight - 50) {
+        current = "kontak";
       }
       if (current) setActive(current);
     };
@@ -54,18 +117,22 @@ export default function Navbar() {
   return (
     <>
       <header>
-        <div className="w nb">
-          <Link className="lg" href="/">
+        <div className="nb px-4 md:px-8 lg:px-12 max-w-none">
+          <Link
+            className="lg shrink-0"
+            href="/"
+            onClick={(e) => handleNavClick(e, "/")}
+          >
             <img
               src="/images/logo.png"
               alt="Mahkota Drive"
-              className="h-[38px] w-[38px] object-contain"
+              className="h-[34px] w-[34px] object-contain"
             />
             <span>
-              <b>
+              <b className="text-[1.2rem]">
                 Mahkota<i>Drive</i>
               </b>
-              <small>RENTAL ARMADA</small>
+              <small className="text-[0.5rem]">RENTAL ARMADA</small>
             </span>
           </Link>
 
@@ -74,7 +141,8 @@ export default function Navbar() {
               {NAV_ITEMS.map((item) => (
                 <li key={item.id}>
                   <Link
-                    href={`/#${item.id}`}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
                     className={active === item.id ? "on" : ""}
                   >
                     {item.label}
@@ -84,8 +152,15 @@ export default function Navbar() {
             </ul>
           </nav>
 
-          <Link className="btn by sm text-white" href="/#kontak">
-            Daftar Sekarang <Icon name="arrow_forward" />
+          <Link
+            className="btn by sm text-white shrink-0"
+            href="#kontak"
+            onClick={(e) => handleNavClick(e, "#kontak")}
+          >
+            Daftar Sekarang{" "}
+            <span className="ms">
+              <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+            </span>
           </Link>
 
           <button
@@ -94,10 +169,12 @@ export default function Navbar() {
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <Icon
-              name={mobileMenuOpen ? "close" : "menu"}
-              className="text-[30px]"
-            />
+            <span className="ms text-[30px]">
+              <HugeiconsIcon
+                icon={mobileMenuOpen ? Cancel01Icon : Menu01Icon}
+                size="1em"
+              />
+            </span>
           </button>
         </div>
       </header>
@@ -106,18 +183,25 @@ export default function Navbar() {
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.id}
-            href={`/#${item.id}`}
-            onClick={() => setMobileMenuOpen(false)}
+            href={item.href}
+            onClick={(e) => handleNavClick(e, item.href)}
+            className={active === item.id ? "text-y" : ""}
           >
-            {item.label} <Icon name="north_east" />
+            {item.id === "bergabung" ? "Cara Bergabung" : item.label}{" "}
+            <span className="ms">
+              <HugeiconsIcon icon={ArrowUpRight01Icon} size="1em" />
+            </span>
           </Link>
         ))}
         <Link
           className="btn by text-white"
-          href="/#kontak"
-          onClick={() => setMobileMenuOpen(false)}
+          href="#kontak"
+          onClick={(e) => handleNavClick(e, "#kontak")}
         >
-          Daftar Sekarang <Icon name="arrow_forward" />
+          Daftar Sekarang{" "}
+          <span className="ms">
+            <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+          </span>
         </Link>
       </div>
     </>

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
 import { ContactData } from "@/types/content";
 
 export default function LayoutWrapper({
@@ -24,6 +25,7 @@ export default function LayoutWrapper({
       <Navbar />
       <main>{children}</main>
       <Footer contact={contact} />
+      <FloatingWhatsApp />
     </>
   );
 }

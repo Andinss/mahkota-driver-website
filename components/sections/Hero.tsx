@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowRight01Icon,
+  ArrowLeft01Icon,
+  Car01Icon,
+  Wrench01Icon,
+  CustomerSupportIcon,
+  Money03Icon,
+} from "@hugeicons/core-free-icons";
 import type { FleetData } from "@/types/content";
 
 const SLIDES = [
@@ -82,7 +90,10 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
               <p className="sub">{slide.s}</p>
               <div className="cta">
                 <a className="btn bd" href="/#kontak">
-                  Daftar Sekarang <Icon name="arrow_forward" />
+                  Daftar Sekarang{" "}
+                  <span className="ms">
+                    <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+                  </span>
                 </a>
                 <a className="btn bo" href="/#armada">
                   Lihat Armada
@@ -117,7 +128,9 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
                 <img className="carimg" src={car.imageUrl} alt={car.name} />
               )}
               <div className="ch">
-                <Icon name="directions_car" />
+                <span className="ms">
+                  <HugeiconsIcon icon={Car01Icon} size="1em" />
+                </span>
                 <div>
                   <small>Tipe mobil</small>
                   <b className="capitalize">{car.transmission}</b>
@@ -128,19 +141,25 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
         </div>
         <div className="trio">
           <div>
-            <Icon name="build" />
+            <span className="ms">
+              <HugeiconsIcon icon={Wrench01Icon} size="1em" />
+            </span>
             <span>
               Servis Gratis<small>Perawatan ditanggung</small>
             </span>
           </div>
           <div>
-            <Icon name="support_agent" />
+            <span className="ms">
+              <HugeiconsIcon icon={CustomerSupportIcon} size="1em" />
+            </span>
             <span>
               Dukungan 24 Jam<small>Bantuan di jalan</small>
             </span>
           </div>
           <div>
-            <Icon name="payments" />
+            <span className="ms">
+              <HugeiconsIcon icon={Money03Icon} size="1em" />
+            </span>
             <span>
               Tanpa DP Besar<small>Mulai lebih ringan</small>
             </span>
@@ -166,13 +185,17 @@ export default function Hero({ fleet }: { fleet: FleetData }) {
               onClick={() => setActiveSlide((p) => (p - 1 + 3) % 3)}
               aria-label="Slide sebelumnya"
             >
-              <Icon name="arrow_back" />
+              <span className="ms">
+                <HugeiconsIcon icon={ArrowLeft01Icon} size="1em" />
+              </span>
             </button>
             <button
               onClick={() => setActiveSlide((p) => (p + 1) % 3)}
               aria-label="Slide berikutnya"
             >
-              <Icon name="arrow_forward" />
+              <span className="ms">
+                <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+              </span>
             </button>
           </div>
         </div>

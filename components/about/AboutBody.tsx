@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  CheckmarkCircle02Icon,
+  ArrowRight01Icon,
+} from "@hugeicons/core-free-icons";
 import type { ContactData } from "@/types/content";
 
 export default function AboutBody({ contact }: { contact: ContactData }) {
@@ -38,17 +42,29 @@ export default function AboutBody({ contact }: { contact: ContactData }) {
       <aside className="pga rv" style={{ "--d": 2 } as React.CSSProperties}>
         <ul className="ck">
           <li>
-            <Icon name="check_circle" /> Unit dirawat berkala dan siap jalan
+            <span className="ms">
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size="1em" />
+            </span>{" "}
+            Unit dirawat berkala dan siap jalan
           </li>
           <li>
-            <Icon name="check_circle" /> Sewa harian, mingguan, atau bulanan
+            <span className="ms">
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size="1em" />
+            </span>{" "}
+            Sewa harian, mingguan, atau bulanan
           </li>
           <li>
-            <Icon name="check_circle" /> Kontrak digital, proses cepat
+            <span className="ms">
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size="1em" />
+            </span>{" "}
+            Kontrak digital, proses cepat
           </li>
         </ul>
         <a className="btn bd" href="/#kontak" style={{ width: "100%" }}>
-          Daftar Sekarang <Icon name="arrow_forward" />
+          Daftar Sekarang{" "}
+          <span className="ms">
+            <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+          </span>
         </a>
       </aside>
     </div>

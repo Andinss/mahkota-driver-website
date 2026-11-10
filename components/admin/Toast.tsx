@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  CheckmarkCircle02Icon,
+  AlertCircleIcon,
+  Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 
 export type ToastType = "success" | "error";
 
@@ -23,43 +29,16 @@ export default function Toast({
   }, [onClose, duration]);
 
   const bgColor = type === "success" ? "bg-green-600" : "bg-red-600";
-  const icon =
-    type === "success" ? (
-      <svg
-        className="h-5 w-5 shrink-0"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ) : (
-      <svg
-        className="h-5 w-5 shrink-0"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-        />
-      </svg>
-    );
+  const icon = type === "success" ? CheckmarkCircle02Icon : AlertCircleIcon;
 
   return (
     <div className="fixed top-4 right-4 z-[100] animate-slide-in">
       <div
         className={`${bgColor} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 min-w-[280px] max-w-md`}
       >
-        {icon}
+        <span className="ms text-[20px] shrink-0">
+          <HugeiconsIcon icon={icon} size="1em" />
+        </span>
         <span className="text-sm font-medium flex-1">{message}</span>
         <button
           type="button"
@@ -67,19 +46,9 @@ export default function Toast({
           className="shrink-0 p-1 hover:bg-white/20 rounded transition-colors"
           aria-label="Tutup notifikasi"
         >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <span className="ms text-[16px]">
+            <HugeiconsIcon icon={Cancel01Icon} size="1em" />
+          </span>
         </button>
       </div>
     </div>

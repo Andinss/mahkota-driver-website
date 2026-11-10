@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Icon from "@/components/ui/Icon";
 import type { ServicesData } from "@/types/content";
 
@@ -17,16 +19,9 @@ export default function Services({ services }: { services: ServicesData }) {
         <div className="g3" style={{ textAlign: "left" }}>
           {items.map((item) => (
             <div key={item.id} className="card">
+              {/* text-white dihapus, kembali normal */}
               <span className="ib">
-                {item.iconUrl ? (
-                  <img
-                    src={item.iconUrl}
-                    alt={item.iconAlt || item.name}
-                    className="w-8 h-8 object-contain"
-                  />
-                ) : (
-                  <Icon name="today" />
-                )}
+                <Icon name={item.icon ?? "today"} className="text-[30px]" />
               </span>
               <h3>{item.name}</h3>
               <p>{item.description}</p>
@@ -35,7 +30,9 @@ export default function Services({ services }: { services: ServicesData }) {
                 className="inline-flex gap-1.5 items-center mt-4 font-semibold text-navy hover:text-yt transition-colors"
               >
                 Pilih skema ini{" "}
-                <Icon name="arrow_forward" className="text-[20px]" />
+                <span className="ms text-[20px]">
+                  <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+                </span>
               </Link>
             </div>
           ))}

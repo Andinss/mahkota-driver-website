@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { TestimonialsData, Testimonial } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import ConfirmDialog from "./ConfirmDialog";
 import PhotoUpload from "./PhotoUpload";
-import Icon from "@/components/ui/Icon";
 
 interface TestimonialsTabProps {
   data: TestimonialsData;
@@ -165,7 +166,10 @@ export default function TestimonialsTab({
           disabled={saving}
           className="btn bd sm"
         >
-          <Icon name="add" /> Tambah
+          <span className="ms">
+            <HugeiconsIcon icon={Add01Icon} size="1em" />
+          </span>{" "}
+          Tambah
         </button>
       </div>
 
@@ -183,7 +187,9 @@ export default function TestimonialsTab({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Icon name="person" className="text-mu text-2xl" />
+                <span className="ms text-mu text-2xl">
+                  <HugeiconsIcon icon={UserIcon} size="1em" />
+                </span>
               )}
             </div>
             <div className="flex-1 min-w-0">

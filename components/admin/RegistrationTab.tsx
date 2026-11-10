@@ -1,10 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Add01Icon,
+  ArrowUp01Icon,
+  ArrowDown01Icon,
+} from "@hugeicons/core-free-icons";
 import { RegistrationData, RegistrationStep } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import ConfirmDialog from "./ConfirmDialog";
-import IconPicker from "./IconPicker";
+import HugeiconPicker from "./HugeiconPicker";
 import Icon from "@/components/ui/Icon";
 
 interface RegistrationTabProps {
@@ -15,9 +21,10 @@ interface RegistrationTabProps {
 interface StepForm {
   title: string;
   description: string;
-  iconUrl: string;
+  icon: string;
 }
-const emptyStepForm: StepForm = { title: "", description: "", iconUrl: "" };
+
+const emptyStepForm: StepForm = { title: "", description: "", icon: "" };
 
 export default function RegistrationTab({
   data,
@@ -56,6 +63,7 @@ export default function RegistrationTab({
     setStepForm(emptyStepForm);
     setFormError(null);
   }
+
   const showToast = useCallback((message: string, type: ToastType) => {
     setToast({ message, type });
   }, []);
@@ -95,16 +103,18 @@ export default function RegistrationTab({
     setShowModal(true);
     setFormError(null);
   }
+
   function handleEditStep(item: RegistrationStep) {
     setEditingStepId(item.id);
     setStepForm({
       title: item.title,
       description: item.description,
-      iconUrl: item.iconUrl,
+      icon: item.icon ?? "",
     });
     setShowModal(true);
     setFormError(null);
   }
+
   function handleDeleteStepClick(item: RegistrationStep) {
     if (steps.length <= 3) {
       showToast("Minimal 3 langkah.", "error");
@@ -134,6 +144,8 @@ export default function RegistrationTab({
       setFormError("Deskripsi tidak boleh kosong.");
       return;
     }
+    const finalIcon = stepForm.icon.trim() || undefined;
+
     let updatedSteps: RegistrationStep[];
     if (editingStepId) {
       updatedSteps = steps.map((s) =>
@@ -142,7 +154,7 @@ export default function RegistrationTab({
               ...s,
               title: stepForm.title.trim(),
               description: stepForm.description.trim(),
-              iconUrl: stepForm.iconUrl.trim() || s.iconUrl,
+              icon: finalIcon,
             }
           : s,
       );
@@ -156,7 +168,7 @@ export default function RegistrationTab({
           order: maxOrder + 1,
           title: stepForm.title.trim(),
           description: stepForm.description.trim(),
-          iconUrl: stepForm.iconUrl.trim() || "/images/services/form.svg",
+          icon: finalIcon,
         },
       ];
     }
@@ -233,7 +245,10 @@ export default function RegistrationTab({
               disabled={saving}
               className="btn bd sm"
             >
-              <Icon name="add" /> Tambah Langkah
+              <span className="ms">
+                <HugeiconsIcon icon={Add01Icon} size="1em" />
+              </span>{" "}
+              Tambah Langkah
             </button>
           )}
         </div>
@@ -243,18 +258,27 @@ export default function RegistrationTab({
               key={step.id}
               className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
             >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-y text-navy text-xs font-bold">
-                    {step.order}
-                  </span>
-                  <span className="font-semibold text-sm text-ink">
-                    {step.title}
-                  </span>
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="h-10 w-10 rounded-lg border border-ln bg-surf flex items-center justify-center shrink-0">
+                  {step.icon ? (
+                    <Icon name={step.icon} className="text-[20px]" />
+                  ) : (
+                    <span className="text-xs text-mu">—</span>
+                  )}
                 </div>
-                <p className="text-sm text-mu ml-8 line-clamp-2">
-                  {step.description}
-                </p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-y text-navy text-xs font-bold">
+                      {step.order}
+                    </span>
+                    <span className="font-semibold text-sm text-ink">
+                      {step.title}
+                    </span>
+                  </div>
+                  <p className="text-sm text-mu ml-8 line-clamp-2">
+                    {step.description}
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button
@@ -263,7 +287,9 @@ export default function RegistrationTab({
                   disabled={index === 0 || saving}
                   className="p-1.5 text-mu hover:bg-surf rounded-md disabled:opacity-30"
                 >
-                  <Icon name="arrow_upward" className="text-[18px]" />
+                  <span className="ms text-[18px]">
+                    <HugeiconsIcon icon={ArrowUp01Icon} size="1em" />
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -271,7 +297,9 @@ export default function RegistrationTab({
                   disabled={index === steps.length - 1 || saving}
                   className="p-1.5 text-mu hover:bg-surf rounded-md disabled:opacity-30"
                 >
-                  <Icon name="arrow_downward" className="text-[18px]" />
+                  <span className="ms text-[18px]">
+                    <HugeiconsIcon icon={ArrowDown01Icon} size="1em" />
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -389,10 +417,14 @@ export default function RegistrationTab({
                   className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
                 />
               </div>
-              <IconPicker
-                value={stepForm.iconUrl}
-                onChange={(url) => setStepForm({ ...stepForm, iconUrl: url })}
+
+              <HugeiconPicker
+                value={stepForm.icon}
+                onChange={(key) => setStepForm({ ...stepForm, icon: key })}
+                label="Icon Langkah"
+                helperText="Pilih ikon bawaan Hugeicons."
               />
+
               <div className="flex justify-end gap-3 pt-4 border-t border-ln">
                 <button
                   type="button"

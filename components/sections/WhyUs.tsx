@@ -1,3 +1,5 @@
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Icon from "@/components/ui/Icon";
 import type { ServicesData } from "@/types/content";
 
@@ -5,7 +7,7 @@ export default function WhyUs({ services }: { services: ServicesData }) {
   const advantages = services.advantages || [];
 
   return (
-    <section className="sec sf why2">
+    <section className="sec sf why2" id="keunggulan">
       <div className="w wy">
         <div className="wyl">
           <p className="ey">Keunggulan</p>
@@ -17,22 +19,17 @@ export default function WhyUs({ services }: { services: ServicesData }) {
             kepada kami.
           </p>
           <a className="btn bd" href="#kontak">
-            Daftar Sekarang <Icon name="arrow_forward" />
+            Daftar Sekarang{" "}
+            <span className="ms">
+              <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+            </span>
           </a>
         </div>
         <ol className="wyr">
           {advantages.map((item, index) => (
             <li key={item.id}>
               <span className="wi">
-                {item.iconUrl ? (
-                  <img
-                    src={item.iconUrl}
-                    alt={item.iconAlt || item.title}
-                    className="w-8 h-8 object-contain"
-                  />
-                ) : (
-                  <Icon name="sell" />
-                )}
+                <Icon name={item.icon ?? "sell"} />
               </span>
               <div>
                 <b>{item.title}</b>

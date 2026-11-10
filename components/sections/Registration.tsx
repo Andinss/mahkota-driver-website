@@ -1,4 +1,6 @@
-import Image from "next/image";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowDown01Icon, Clock01Icon } from "@hugeicons/core-free-icons";
+import Icon from "@/components/ui/Icon";
 import type { RegistrationData } from "@/types/content";
 
 interface RegistrationProps {
@@ -11,7 +13,6 @@ export default function Registration({ registration }: RegistrationProps) {
   return (
     <div className="bg-gray-50">
       <div className="section-container section-padding">
-        {/* Section Heading */}
         <div className="text-center mb-12">
           <h2 className="heading-secondary text-brand-black">Cara Bergabung</h2>
           <p className="mt-4 text-gray-500 font-body max-w-2xl mx-auto">
@@ -20,19 +21,15 @@ export default function Registration({ registration }: RegistrationProps) {
           </p>
         </div>
 
-        {/* Steps — Desktop: horizontal with connectors */}
+        {/* Desktop */}
         <div className="hidden lg:flex items-stretch justify-center mb-12">
           {sortedSteps.map((step, index) => (
             <div key={step.id} className="flex items-stretch">
-              {/* Step Card */}
               <div className="flex flex-col items-center text-center w-44">
                 <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mb-3">
-                  <Image
-                    src={step.iconUrl}
-                    alt={step.title}
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 object-contain"
+                  <Icon
+                    name={step.icon ?? "assignment"}
+                    className="text-[28px] text-yt"
                   />
                 </div>
                 <h3 className="font-heading text-sm font-bold text-brand-black mb-1">
@@ -42,8 +39,6 @@ export default function Registration({ registration }: RegistrationProps) {
                   {step.description}
                 </p>
               </div>
-
-              {/* Connector line between steps */}
               {index < sortedSteps.length - 1 && (
                 <div className="flex items-center px-2" aria-hidden="true">
                   <div className="w-10 h-0.5 bg-gold/40 relative">
@@ -55,19 +50,15 @@ export default function Registration({ registration }: RegistrationProps) {
           ))}
         </div>
 
-        {/* Steps — Mobile/Tablet: vertical with connectors */}
+        {/* Mobile */}
         <div className="lg:hidden space-y-0 mb-12">
           {sortedSteps.map((step, index) => (
             <div key={step.id}>
-              {/* Step */}
               <div className="flex items-start gap-4 py-4">
                 <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
-                  <Image
-                    src={step.iconUrl}
-                    alt={step.title}
-                    width={28}
-                    height={28}
-                    className="w-7 h-7 object-contain"
+                  <Icon
+                    name={step.icon ?? "assignment"}
+                    className="text-[24px] text-yt"
                   />
                 </div>
                 <div className="flex-1 pt-1">
@@ -79,44 +70,26 @@ export default function Registration({ registration }: RegistrationProps) {
                   </p>
                 </div>
               </div>
-
-              {/* Vertical connector with arrow — aligned under the icon */}
               {index < sortedSteps.length - 1 && (
                 <div
                   className="flex flex-col items-center w-12"
                   aria-hidden="true"
                 >
                   <div className="w-0.5 h-4 bg-gold/40" />
-                  <svg
-                    className="w-3 h-3 text-gold/60"
-                    fill="currentColor"
-                    viewBox="0 0 12 12"
-                  >
-                    <path d="M6 9L1.5 4.5h9L6 9z" />
-                  </svg>
+                  <span className="ms text-[12px] text-gold/60">
+                    <HugeiconsIcon icon={ArrowDown01Icon} size="1em" />
+                  </span>
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        {/* Estimate Time */}
         <div className="text-center mb-8">
           <p className="text-gray-500 font-body text-sm inline-flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gold"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <span className="ms text-[20px] text-gold">
+              <HugeiconsIcon icon={Clock01Icon} size="1em" />
+            </span>
             <span>
               Estimasi waktu:{" "}
               <strong className="text-brand-black">
@@ -126,11 +99,10 @@ export default function Registration({ registration }: RegistrationProps) {
           </p>
         </div>
 
-        {/* CTA Button */}
         <div className="text-center">
           <a
             href={registration.formUrl}
-            className="btn-primary"
+            className="btn bg-gold text-brand-black hover:bg-gold-light"
             target="_blank"
             rel="noopener noreferrer"
           >

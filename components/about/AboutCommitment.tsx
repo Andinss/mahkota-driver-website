@@ -48,6 +48,7 @@ export default function AboutCommitment({
               style={{ "--d": index } as React.CSSProperties}
             >
               <span className="kn">0{index + 1}</span>
+              {/* text-white dihapus */}
               <span className="ib">
                 <Icon name={item.icon} />
               </span>

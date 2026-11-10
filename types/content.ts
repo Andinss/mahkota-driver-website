@@ -9,6 +9,14 @@ export interface FleetVehicle {
   transmission: "manual" | "matic";
   imageUrl?: string;
   isBestSeller?: boolean;
+  /** Harga sewa harian (dalam Rupiah, angka saja) */
+  price?: number;
+  /** Biaya join fee / deposit (dalam Rupiah, angka saja) */
+  joinFee?: number;
+  /** Deskripsi singkat / solusi untuk driver */
+  description?: string;
+  /** List keunggulan spesifik mobil */
+  features?: string[];
 }
 
 export interface FleetData {
@@ -74,16 +82,18 @@ export interface Service {
   id: string;
   name: string;
   description: string;
-  iconUrl: string;
   iconAlt: string;
+  /** Hugeicons key (see ICON_MAP in components/ui/Icon.tsx). */
+  icon?: string;
 }
 
 export interface Advantage {
   id: string;
   title: string;
   description: string;
-  iconUrl?: string;
   iconAlt?: string;
+  /** Hugeicons key (see ICON_MAP in components/ui/Icon.tsx). */
+  icon?: string;
 }
 
 export interface ServicesData {
@@ -99,7 +109,8 @@ export interface RegistrationStep {
   order: number;
   title: string;
   description: string;
-  iconUrl: string;
+  /** Hugeicons key (see ICON_MAP). */
+  icon?: string;
 }
 
 export interface RegistrationData {

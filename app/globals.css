@@ -59,19 +59,22 @@
     display: block;
     max-width: 100%;
   }
+  /* Icon wrapper (Hugeicons SVG). Size is controlled by font-size, SVG = 1em. */
   .ms {
-    font-family: "Material Symbols Outlined";
-    font-weight: 300;
-    font-style: normal;
     font-size: 24px;
     line-height: 1;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 1em;
-    overflow: hidden;
-    white-space: nowrap;
-    font-feature-settings: "liga";
+    height: 1em;
+    flex-shrink: 0;
     vertical-align: middle;
-    -webkit-font-smoothing: antialiased;
+  }
+  .ms svg {
+    display: block;
+    width: 1em;
+    height: 1em;
   }
 }
 
@@ -131,18 +134,21 @@ header {
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--y);
 }
+/* Update .nb untuk Full Width */
 .nb {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 76px;
   gap: 16px;
+  width: 100%;
 }
 .lg {
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
+  flex-shrink: 0;
 }
 .lg b {
   display: block;
@@ -163,7 +169,14 @@ header {
   color: #a9b4c6;
   margin-top: 3px;
 }
-nav ul {
+
+/* Update Nav & Ul untuk memenuhi ruang tengah */
+header nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+header nav ul {
   display: flex;
   gap: 34px;
   list-style: none;
@@ -175,10 +188,11 @@ nav ul a {
   display: block;
   padding: 8px 0;
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: #a9b4c6;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 nav ul a::after {
   content: "";
@@ -273,6 +287,7 @@ header .btn.by {
 }
 
 /* Hero & Carousel */
+/* ... (SISA CSS LAINNYA TETAP SAMA SEPERTI SEBELUMNYA) ... */
 .hero {
   padding: clamp(20px, 4vw, 48px) 0 clamp(48px, 6vw, 80px);
 }
@@ -571,7 +586,6 @@ h1 .ln span {
 .ck .ms {
   color: var(--yt);
   font-size: 24px;
-  font-variation-settings: "FILL" 1;
 }
 .stats {
   display: grid;
@@ -873,7 +887,9 @@ h1 .ln span {
 }
 .bs .ms {
   font-size: 15px;
-  font-variation-settings: "FILL" 1;
+}
+.bs .ms svg path {
+  fill: currentColor;
 }
 .cf {
   display: flex;

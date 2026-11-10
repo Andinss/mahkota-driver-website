@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Alert02Icon } from "@hugeicons/core-free-icons";
 
 interface ConfirmDialogProps {
   title: string;
@@ -38,7 +39,9 @@ export default function ConfirmDialog({
       />
       <div className="relative w-full max-w-sm bg-surf rounded-2xl shadow-xl p-6 space-y-4 border border-ln">
         <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-red-50 text-red-500">
-          <Icon name="warning" className="text-2xl" />
+          <span className="ms text-2xl">
+            <HugeiconsIcon icon={Alert02Icon} size="1em" />
+          </span>
         </div>
         <div className="text-center">
           <h3 className="text-lg font-bold text-ink">{title}</h3>

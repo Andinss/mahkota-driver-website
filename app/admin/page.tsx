@@ -2,7 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  UserIcon,
+  LockIcon,
+  AlertCircleIcon,
+  ArrowRight01Icon,
+  ArrowLeft01Icon,
+} from "@hugeicons/core-free-icons";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -45,7 +52,6 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-navy">
-      {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/services/1781145669201-2dq892.png"
@@ -53,14 +59,11 @@ export default function AdminLoginPage() {
           className="w-full h-full object-cover opacity-20 blur-sm scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-transparent"></div>
-        {/* Dekorasi Lingkaran Kuning */}
         <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-y/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-y/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Form Container */}
       <div className="relative z-10 w-full max-w-md">
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-y mb-4 shadow-lg shadow-y/30">
             <img
@@ -75,7 +78,6 @@ export default function AdminLoginPage() {
           <p className="text-gray-400 mt-2 font-medium">Panel Administrator</p>
         </div>
 
-        {/* Glass Card */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -87,7 +89,9 @@ export default function AdminLoginPage() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <Icon name="person" className="text-[20px]" />
+                  <span className="ms text-[20px]">
+                    <HugeiconsIcon icon={UserIcon} size="1em" />
+                  </span>
                 </div>
                 <input
                   id="username"
@@ -112,7 +116,9 @@ export default function AdminLoginPage() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <Icon name="lock" className="text-[20px]" />
+                  <span className="ms text-[20px]">
+                    <HugeiconsIcon icon={LockIcon} size="1em" />
+                  </span>
                 </div>
                 <input
                   id="password"
@@ -130,7 +136,9 @@ export default function AdminLoginPage() {
 
             {error && (
               <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-xl flex items-start gap-2 text-sm text-red-200">
-                <Icon name="error" className="text-[20px] shrink-0" />
+                <span className="ms text-[20px] shrink-0">
+                  <HugeiconsIcon icon={AlertCircleIcon} size="1em" />
+                </span>
                 <p>{error}</p>
               </div>
             )}
@@ -142,20 +150,23 @@ export default function AdminLoginPage() {
             >
               {isLoading ? "Memproses..." : "Masuk Dashboard"}
               {!isLoading && (
-                <Icon name="arrow_forward" className="text-[20px]" />
+                <span className="ms text-[20px]">
+                  <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+                </span>
               )}
             </button>
           </form>
         </div>
 
-        {/* Footer */}
         <div className="mt-8 text-center">
           <a
             href="/"
             className="text-sm font-medium text-gray-400 hover:text-y transition-colors flex items-center justify-center gap-2"
           >
-            <Icon name="arrow_back" className="text-[16px]" /> Kembali ke
-            Website
+            <span className="ms text-[16px]">
+              <HugeiconsIcon icon={ArrowLeft01Icon} size="1em" />
+            </span>{" "}
+            Kembali ke Website
           </a>
         </div>
       </div>

@@ -35,6 +35,7 @@ export const testimonialsSchema = z.object({
 });
 
 // Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 100 chars)
+// Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 100 chars)
 export const servicesSchema = z.object({
   services: z
     .array(
@@ -42,8 +43,8 @@ export const servicesSchema = z.object({
         id: z.string(),
         name: z.string().min(1),
         description: z.string().max(150),
-        iconUrl: z.string(),
         iconAlt: z.string().min(1),
+        icon: z.string().optional(),
       }),
     )
     .min(3),
@@ -53,8 +54,8 @@ export const servicesSchema = z.object({
         id: z.string(),
         title: z.string().min(1),
         description: z.string().max(100),
-        iconUrl: z.string().optional(),
         iconAlt: z.string().optional(),
+        icon: z.string().optional(),
       }),
     )
     .min(3),
@@ -70,7 +71,7 @@ export const registrationSchema = z
           order: z.number().int(),
           title: z.string().min(1),
           description: z.string().min(1),
-          iconUrl: z.string(),
+          icon: z.string().optional(),
         }),
       )
       .min(3)
@@ -104,6 +105,18 @@ export const contactSchema = z.object({
   heroDescription: z.string().optional(),
   heroImageUrl: z.string().optional(),
   appMockupUrl: z.string().optional(),
+  homeAboutText: z.string().optional(),
+  homeAboutPoints: z.array(z.string()).optional(),
+  aboutParagraphs: z.array(z.string()).optional(),
+  commitments: z
+    .array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        icon: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 // Fleet schema: array of vehicles
@@ -117,6 +130,7 @@ export const fleetSchema = z.object({
         capacity: z.number().int().min(1).max(20),
         transmission: z.enum(["manual", "matic"]),
         imageUrl: z.string().optional(),
+        isBestSeller: z.boolean().optional(),
       }),
     )
     .min(1),
@@ -159,7 +173,9 @@ export function validateCategory(
   category: string,
   data: unknown,
 ): ValidationResult {
-  const schema = schemas[category];
+  const schema = Object.prototype.hasOwnProperty.call(schemas, category)
+    ? schemas[category]
+    : undefined;
 
   if (!schema) {
     return {

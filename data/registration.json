@@ -3,33 +3,33 @@
     {
       "id": "step-1",
       "order": 1,
-      "title": "Isi Formulir Online",
-      "description": "Lengkapi data diri Anda melalui formulir pendaftaran online kami.",
-      "iconUrl": "/images/services/form.svg"
+      "title": "Isi Formulir",
+      "description": "Isi data diri dan pilih armada yang diinginkan.",
+      "icon": "assignment"
     },
     {
       "id": "step-2",
       "order": 2,
-      "title": "Verifikasi Dokumen",
-      "description": "Unggah KTP, SIM, dan dokumen pendukung untuk proses verifikasi.",
-      "iconUrl": "/images/services/verify.svg"
+      "title": "Verifikasi Data",
+      "description": "Tim kami memverifikasi data Anda via WhatsApp.",
+      "icon": "check_circle"
     },
     {
       "id": "step-3",
       "order": 3,
       "title": "Tanda Tangan Kontrak",
-      "description": "Tinjau dan tandatangani perjanjian sewa kendaraan secara digital.",
-      "iconUrl": "/images/services/contract.svg"
+      "description": "Tanda tangan kontrak digital tanpa perlu datang ke kantor.",
+      "icon": "draw"
     },
     {
       "id": "step-4",
       "order": 4,
-      "title": "Ambil Kendaraan",
-      "description": "Datang ke pool kami untuk serah terima kendaraan dan mulai beroperasi.",
-      "iconUrl": "/images/services/car.svg"
+      "title": "Ambil Kunci & Mulai Narik",
+      "description": "Ambil kunci di lokasi yang ditentukan dan mulai beroperasi.",
+      "icon": "directions_car"
     }
   ],
   "estimateMinutes": 10,
-  "formUrl": "https://forms.mahkotadrive.com/daftar",
-  "playStoreUrl": "https://play.google.com/store/apps/details?id=com.mahkotadrive.app"
+  "formUrl": "https://forms.gle/...",
+  "playStoreUrl": "https://play.google.com/store/apps/details?id=..."
 }

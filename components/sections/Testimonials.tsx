@@ -1,5 +1,6 @@
+import { HugeiconsIcon } from "@hugeicons/react";
+import { StarIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import type { TestimonialsData } from "@/types/content";
-import Icon from "@/components/ui/Icon";
 
 export default function Testimonials({
   testimonials,
@@ -30,11 +31,12 @@ export default function Testimonials({
             >
               <div className="flex gap-1 text-y mb-4">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Icon
+                  <span
                     key={i}
-                    name={i < item.rating ? "star" : "star_border"}
-                    className="text-[18px]"
-                  />
+                    className={`ms text-[18px] ${i < item.rating ? "text-y" : "text-ln"}`}
+                  >
+                    <HugeiconsIcon icon={StarIcon} size="1em" />
+                  </span>
                 ))}
               </div>
               <p className="text-ink leading-relaxed italic mb-6 flex-1">
@@ -79,7 +81,9 @@ export default function Testimonials({
               className="inline-flex items-center gap-2 text-sm font-bold text-ink hover:text-yt transition-colors"
             >
               Lihat semua testimoni{" "}
-              <Icon name="arrow_forward" className="text-[18px]" />
+              <span className="ms text-[18px]">
+                <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+              </span>
             </a>
           </div>
         )}

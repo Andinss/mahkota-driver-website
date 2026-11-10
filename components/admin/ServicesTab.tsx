@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { ServicesData, Service, Advantage } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import ConfirmDialog from "./ConfirmDialog";
-import IconPicker from "./IconPicker";
+import HugeiconPicker from "./HugeiconPicker";
 import Icon from "@/components/ui/Icon";
 
 interface ServicesTabProps {
@@ -15,29 +17,32 @@ interface ServicesTabProps {
 interface ServiceForm {
   name: string;
   description: string;
-  iconUrl: string;
   iconAlt: string;
+  icon: string;
 }
+
 interface AdvantageForm {
   title: string;
   description: string;
-  iconUrl: string;
   iconAlt: string;
+  icon: string;
 }
+
 type SubTab = "layanan" | "keunggulan";
 type ModalType = "service" | "advantage" | null;
 
 const emptyServiceForm: ServiceForm = {
   name: "",
   description: "",
-  iconUrl: "",
   iconAlt: "",
+  icon: "",
 };
+
 const emptyAdvantageForm: AdvantageForm = {
   title: "",
   description: "",
-  iconUrl: "",
   iconAlt: "",
+  icon: "",
 };
 
 export default function ServicesTab({ data, onSave }: ServicesTabProps) {
@@ -81,6 +86,7 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
     setAdvantageForm(emptyAdvantageForm);
     setFormError(null);
   }
+
   const showToast = useCallback((message: string, type: ToastType) => {
     setToast({ message, type });
   }, []);
@@ -112,17 +118,19 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
     setModalType("service");
     setFormError(null);
   }
+
   function handleEditService(item: Service) {
     setEditingServiceId(item.id);
     setServiceForm({
       name: item.name,
       description: item.description,
-      iconUrl: item.iconUrl,
       iconAlt: item.iconAlt,
+      icon: item.icon ?? "",
     });
     setModalType("service");
     setFormError(null);
   }
+
   function handleDeleteServiceClick(item: Service) {
     if (services.length <= 3) {
       showToast("Minimal 3 layanan diperlukan.", "error");
@@ -143,8 +151,8 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
         `svc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       name: serviceForm.name.trim(),
       description: serviceForm.description.trim(),
-      iconUrl: serviceForm.iconUrl.trim(),
       iconAlt: serviceForm.iconAlt.trim() || serviceForm.name.trim(),
+      icon: serviceForm.icon.trim() || undefined,
     };
     const updated = editingServiceId
       ? services.map((s) => (s.id === editingServiceId ? service : s))
@@ -165,17 +173,19 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
     setModalType("advantage");
     setFormError(null);
   }
+
   function handleEditAdvantage(item: Advantage) {
     setEditingAdvantageId(item.id);
     setAdvantageForm({
       title: item.title,
       description: item.description,
-      iconUrl: (item as any).iconUrl || "",
-      iconAlt: (item as any).iconAlt || "",
+      iconAlt: item.iconAlt ?? "",
+      icon: item.icon ?? "",
     });
     setModalType("advantage");
     setFormError(null);
   }
+
   function handleDeleteAdvantageClick(item: Advantage) {
     if (advantages.length <= 3) {
       showToast("Minimal 3 keunggulan diperlukan.", "error");
@@ -190,15 +200,15 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
       setFormError("Judul keunggulan tidak boleh kosong.");
       return;
     }
-    const advantage = {
+    const advantage: Advantage = {
       id:
         editingAdvantageId ||
         `adv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       title: advantageForm.title.trim(),
       description: advantageForm.description.trim(),
-      iconUrl: advantageForm.iconUrl.trim(),
       iconAlt: advantageForm.iconAlt.trim() || advantageForm.title.trim(),
-    } as Advantage;
+      icon: advantageForm.icon.trim() || undefined,
+    };
     const updated = editingAdvantageId
       ? advantages.map((a) => (a.id === editingAdvantageId ? advantage : a))
       : [...advantages, advantage];
@@ -245,14 +255,22 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
           <button
             type="button"
             onClick={() => setActiveSubTab("layanan")}
-            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${activeSubTab === "layanan" ? "border-y text-ink" : "border-transparent text-mu hover:text-ink"}`}
+            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
+              activeSubTab === "layanan"
+                ? "border-y text-ink"
+                : "border-transparent text-mu hover:text-ink"
+            }`}
           >
             Layanan ({services.length})
           </button>
           <button
             type="button"
             onClick={() => setActiveSubTab("keunggulan")}
-            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${activeSubTab === "keunggulan" ? "border-y text-ink" : "border-transparent text-mu hover:text-ink"}`}
+            className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
+              activeSubTab === "keunggulan"
+                ? "border-y text-ink"
+                : "border-transparent text-mu hover:text-ink"
+            }`}
           >
             Keunggulan ({advantages.length})
           </button>
@@ -274,7 +292,10 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
               disabled={saving}
               className="btn bd sm"
             >
-              <Icon name="add" /> Tambah Layanan
+              <span className="ms">
+                <HugeiconsIcon icon={Add01Icon} size="1em" />
+              </span>{" "}
+              Tambah Layanan
             </button>
           </div>
           <div className="space-y-3">
@@ -283,15 +304,24 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
                 key={service.id}
                 className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
               >
-                <div className="flex-1 min-w-0">
-                  <span className="font-semibold text-sm text-ink">
-                    {service.name}
-                  </span>
-                  {service.description && (
-                    <p className="text-sm text-mu mt-1 line-clamp-2">
-                      {service.description}
-                    </p>
-                  )}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="h-10 w-10 rounded-lg border border-ln bg-surf flex items-center justify-center shrink-0">
+                    {service.icon ? (
+                      <Icon name={service.icon} className="text-[20px]" />
+                    ) : (
+                      <span className="text-xs text-mu">—</span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <span className="font-semibold text-sm text-ink">
+                      {service.name}
+                    </span>
+                    {service.description && (
+                      <p className="text-sm text-mu mt-1 line-clamp-2">
+                        {service.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
@@ -332,7 +362,10 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
               disabled={saving}
               className="btn bd sm"
             >
-              <Icon name="add" /> Tambah Keunggulan
+              <span className="ms">
+                <HugeiconsIcon icon={Add01Icon} size="1em" />
+              </span>{" "}
+              Tambah Keunggulan
             </button>
           </div>
           <div className="space-y-3">
@@ -341,15 +374,24 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
                 key={advantage.id}
                 className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
               >
-                <div className="flex-1 min-w-0">
-                  <span className="font-semibold text-sm text-ink">
-                    {advantage.title}
-                  </span>
-                  {advantage.description && (
-                    <p className="text-sm text-mu mt-1">
-                      {advantage.description}
-                    </p>
-                  )}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="h-10 w-10 rounded-lg border border-ln bg-surf flex items-center justify-center shrink-0">
+                    {advantage.icon ? (
+                      <Icon name={advantage.icon} className="text-[20px]" />
+                    ) : (
+                      <span className="text-xs text-mu">—</span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <span className="font-semibold text-sm text-ink">
+                      {advantage.title}
+                    </span>
+                    {advantage.description && (
+                      <p className="text-sm text-mu mt-1">
+                        {advantage.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
@@ -422,12 +464,16 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
                   className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
                 />
               </div>
-              <IconPicker
-                value={serviceForm.iconUrl}
-                onChange={(url) =>
-                  setServiceForm({ ...serviceForm, iconUrl: url })
+
+              <HugeiconPicker
+                value={serviceForm.icon}
+                onChange={(key) =>
+                  setServiceForm({ ...serviceForm, icon: key })
                 }
+                label="Icon Layanan"
+                helperText="Pilih ikon bawaan Hugeicons."
               />
+
               <div>
                 <label className="block text-sm font-medium text-ink mb-1">
                   Icon Alt Text
@@ -508,12 +554,16 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
                   className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
                 />
               </div>
-              <IconPicker
-                value={advantageForm.iconUrl}
-                onChange={(url) =>
-                  setAdvantageForm({ ...advantageForm, iconUrl: url })
+
+              <HugeiconPicker
+                value={advantageForm.icon}
+                onChange={(key) =>
+                  setAdvantageForm({ ...advantageForm, icon: key })
                 }
+                label="Icon Keunggulan"
+                helperText="Pilih ikon bawaan Hugeicons."
               />
+
               <div>
                 <label className="block text-sm font-medium text-ink mb-1">
                   Icon Alt Text
@@ -549,7 +599,9 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
 
       {confirmDelete && (
         <ConfirmDialog
-          title={`Hapus ${confirmDelete.type === "service" ? "Layanan" : "Keunggulan"}`}
+          title={`Hapus ${
+            confirmDelete.type === "service" ? "Layanan" : "Keunggulan"
+          }`}
           message={`Hapus "${confirmDelete.name}"?`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setConfirmDelete(null)}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Upload01Icon } from "@hugeicons/core-free-icons";
 
 interface IconItem {
   name: string;
@@ -117,7 +118,9 @@ export default function IconPicker({ value, onChange }: IconPickerProps) {
               </div>
               <div className="border-t border-ln pt-3 mt-3">
                 <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-blue-600 hover:text-blue-800">
-                  <Icon name="upload" className="text-[18px]" />
+                  <span className="ms text-[18px]">
+                    <HugeiconsIcon icon={Upload01Icon} size="1em" />
+                  </span>
                   {uploading ? "Mengunggah..." : "Upload icon baru"}
                   <input
                     type="file"

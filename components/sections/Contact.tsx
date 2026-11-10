@@ -1,8 +1,15 @@
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Chat01Icon,
+  Call02Icon,
+  CustomerSupportIcon,
+  Location01Icon,
+  Share08Icon,
+} from "@hugeicons/core-free-icons";
 import type { ContactData } from "@/types/content";
 
 const getWaLink = (text: string) =>
-  `https://wa.me/6281234567890?text=${encodeURIComponent(text)}`;
+  `https://wa.me/6289531536509?text=${encodeURIComponent(text)}`;
 
 export default function Contact({ contact }: { contact: ContactData }) {
   return (
@@ -26,7 +33,9 @@ export default function Contact({ contact }: { contact: ContactData }) {
               target="_blank"
               rel="noopener"
             >
-              <Icon name="chat" />
+              <span className="ms">
+                <HugeiconsIcon icon={Chat01Icon} size="1em" />
+              </span>
               <span>
                 <b>Chat langsung via WhatsApp</b>
                 <small>Hubungi kami sekarang</small>
@@ -39,7 +48,9 @@ export default function Contact({ contact }: { contact: ContactData }) {
               href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
             >
               <span className="ib">
-                <Icon name="call" />
+                <span className="ms">
+                  <HugeiconsIcon icon={Call02Icon} size="1em" />
+                </span>
               </span>
               <span>
                 <small>Telepon / WhatsApp</small>
@@ -48,7 +59,9 @@ export default function Contact({ contact }: { contact: ContactData }) {
             </a>
             <div className="kti">
               <span className="ib">
-                <Icon name="support_agent" />
+                <span className="ms">
+                  <HugeiconsIcon icon={CustomerSupportIcon} size="1em" />
+                </span>
               </span>
               <span>
                 <small>Dukungan 24 Jam</small>
@@ -57,23 +70,25 @@ export default function Contact({ contact }: { contact: ContactData }) {
             </div>
             <a
               className="kti w2"
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                contact.address,
-              )}`}
+              href="https://maps.app.goo.gl/izQsC3bPk5BJGp177"
               target="_blank"
               rel="noopener"
             >
               <span className="ib">
-                <Icon name="location_on" />
+                <span className="ms">
+                  <HugeiconsIcon icon={Location01Icon} size="1em" />
+                </span>
               </span>
               <span>
-                <small>Alamat</small>
+                <small>Alamat (Klik untuk buka Maps)</small>
                 <b>{contact.address}</b>
               </span>
             </a>
             <div className="kti w2">
               <span className="ib">
-                <Icon name="share" />
+                <span className="ms">
+                  <HugeiconsIcon icon={Share08Icon} size="1em" />
+                </span>
               </span>
               <span>
                 <small>Media sosial</small>

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Car01Icon } from "@hugeicons/core-free-icons";
 import { FleetData, FleetVehicle } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import ConfirmDialog from "./ConfirmDialog";
 import PhotoUpload from "./PhotoUpload";
-import Icon from "@/components/ui/Icon";
 
 interface FleetTabProps {
   data: FleetData;
@@ -165,7 +166,10 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
           disabled={saving}
           className="btn bd sm"
         >
-          <Icon name="add" /> Tambah Armada
+          <span className="ms">
+            <HugeiconsIcon icon={Add01Icon} size="1em" />
+          </span>{" "}
+          Tambah Armada
         </button>
       </div>
 
@@ -183,7 +187,9 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Icon name="directions_car" className="text-3xl text-mu" />
+                <span className="ms text-3xl text-mu">
+                  <HugeiconsIcon icon={Car01Icon} size="1em" />
+                </span>
               )}
             </div>
             <div className="flex-1 min-w-0">

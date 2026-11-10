@@ -8,7 +8,7 @@ export default function PlayStoreButton({ url }: PlayStoreButtonProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="btn-primary inline-flex items-center gap-2 min-h-[44px] min-w-[44px]"
+      className="btn bg-gold text-brand-black inline-flex items-center gap-2 min-h-[44px] min-w-[44px] hover:bg-gold-light"
       aria-label="Unduh di Google Play"
     >
       <svg

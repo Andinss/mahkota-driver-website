@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { AllContent } from "@/types/content";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import StatisticsTab from "@/components/admin/StatisticsTab";
@@ -10,7 +12,6 @@ import ServicesTab from "@/components/admin/ServicesTab";
 import FleetTab from "@/components/admin/FleetTab";
 import RegistrationTab from "@/components/admin/RegistrationTab";
 import ContactTab from "@/components/admin/ContactTab";
-import Icon from "@/components/ui/Icon";
 
 type TabKey =
   | "statistics"
@@ -157,17 +158,17 @@ export default function AdminDashboardPage() {
 
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-ln border-t-y"></div>
-          <p className="text-mu font-medium">Memuat data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-yellow-600"></div>
+          <p className="text-gray-500 font-medium">Memuat data...</p>
         </div>
       </div>
     );
 
   if (error && !content)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <p className="text-red-500 mb-4 font-medium">{error}</p>
           <button onClick={() => window.location.reload()} className="btn bd">
@@ -178,7 +179,8 @@ export default function AdminDashboardPage() {
     );
 
   return (
-    <div className="min-h-screen bg-bg flex font-body">
+    // Gunakan flex-row dan h-screen agar mengunci layout
+    <div className="flex flex-row h-screen w-full bg-gray-50 overflow-hidden font-sans">
       <AdminSidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -187,14 +189,15 @@ export default function AdminDashboardPage() {
         isLoggingOut={loggingOut}
       />
 
-      <main className="flex-1 flex flex-col min-w-0">
+      {/* Konten Kanan */}
+      <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="h-20 bg-surf border-b border-ln flex items-center justify-between px-6 lg:px-10 shrink-0 sticky top-0 z-30">
+        <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-6 lg:px-10 shrink-0">
           <div className="pl-12 md:pl-0">
-            <h1 className="text-xl md:text-2xl font-extrabold text-ink tracking-tight">
+            <h1 className="text-xl md:text-2xl font-extrabold text-black tracking-tight">
               {TAB_TITLES[activeTab].title}
             </h1>
-            <p className="text-xs md:text-sm text-mu font-medium mt-0.5">
+            <p className="text-xs md:text-sm text-gray-500 font-medium mt-0.5">
               {TAB_TITLES[activeTab].desc}
             </p>
           </div>
@@ -203,17 +206,20 @@ export default function AdminDashboardPage() {
             <a
               href="/"
               target="_blank"
-              className="hidden sm:flex items-center gap-2 text-sm font-semibold text-mu hover:text-ink transition-colors bg-bg px-4 py-2 rounded-full"
+              className="hidden sm:flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-black transition-colors bg-gray-100 px-4 py-2 rounded-full"
             >
-              <Icon name="open_in_new" className="text-[18px]" /> Lihat Website
+              <span className="ms text-[18px]">
+                <HugeiconsIcon icon={LinkSquare02Icon} size="1em" />
+              </span>{" "}
+              Lihat Website
             </a>
-            <div className="h-9 w-9 rounded-full bg-y text-navy flex items-center justify-center font-bold text-sm shadow-sm ml-2">
+            <div className="h-9 w-9 rounded-full bg-yellow-600 text-white flex items-center justify-center font-bold text-sm shadow-sm ml-2">
               A
             </div>
           </div>
         </header>
 
-        {/* Content Area */}
+        {/* Area Konten (Scrollable) */}
         <div className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10">
           <div className="max-w-5xl mx-auto">
             {error && (
@@ -222,7 +228,7 @@ export default function AdminDashboardPage() {
               </div>
             )}
 
-            <div className="bg-surf rounded-[32px] shadow-sm border border-ln overflow-hidden min-h-[500px]">
+            <div className="bg-white rounded-[32px] shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
               {content && activeTab === "statistics" && (
                 <StatisticsTab
                   data={content.statistics}
@@ -262,17 +268,16 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
-      {/* Modal Password */}
       {showPasswordModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setShowPasswordModal(false)}
           />
-          <div className="relative w-full max-w-md bg-surf rounded-[32px] shadow-2xl p-8 border border-ln">
-            <h3 className="text-xl font-extrabold text-ink mb-6">
+          <div className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl p-8 border border-gray-200">
+            <h3 className="text-xl font-extrabold text-black mb-6">
               Ubah Password
             </h3>
             {passwordError && (
@@ -287,7 +292,7 @@ export default function AdminDashboardPage() {
             )}
             <form onSubmit={handleChangePassword} className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
+                <label className="block text-sm font-semibold text-black mb-2">
                   Password Lama
                 </label>
                 <input
@@ -299,11 +304,11 @@ export default function AdminDashboardPage() {
                       currentPassword: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-ln rounded-xl text-sm focus:ring-2 focus:ring-y outline-none bg-bg transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-600 outline-none bg-gray-50 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
+                <label className="block text-sm font-semibold text-black mb-2">
                   Password Baru
                 </label>
                 <input
@@ -315,11 +320,11 @@ export default function AdminDashboardPage() {
                       newPassword: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-ln rounded-xl text-sm focus:ring-2 focus:ring-y outline-none bg-bg transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-600 outline-none bg-gray-50 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-ink mb-2">
+                <label className="block text-sm font-semibold text-black mb-2">
                   Konfirmasi Password
                 </label>
                 <input
@@ -331,21 +336,21 @@ export default function AdminDashboardPage() {
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-ln rounded-xl text-sm focus:ring-2 focus:ring-y outline-none bg-bg transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-600 outline-none bg-gray-50 transition-all"
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="btn bo"
+                  className="px-6 py-3 font-bold text-gray-500 hover:text-black transition-colors"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={passwordSaving}
-                  className="btn bd"
+                  className="px-6 py-3 font-bold bg-yellow-600 text-white rounded-full hover:bg-yellow-700 transition-colors disabled:opacity-50"
                 >
                   {passwordSaving ? "Menyimpan..." : "Simpan"}
                 </button>

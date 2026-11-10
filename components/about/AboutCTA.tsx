@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Icon from "@/components/ui/Icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import type { FleetData } from "@/types/content";
 
 export default function AboutCTA({ fleet }: { fleet: FleetData }) {
@@ -39,7 +40,10 @@ export default function AboutCTA({ fleet }: { fleet: FleetData }) {
         </p>
         <div className="cta" style={{ opacity: 1, marginTop: 26 }}>
           <a className="btn bd" href="/#kontak">
-            Daftar Sekarang <Icon name="arrow_forward" />
+            Daftar Sekarang{" "}
+            <span className="ms">
+              <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+            </span>
           </a>
           <a className="btn bo" href="/#armada">
             Lihat Armada

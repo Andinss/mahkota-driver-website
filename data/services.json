@@ -4,41 +4,52 @@
       "id": "svc-daily",
       "name": "Sewa Harian",
       "description": "Rental kendaraan harian untuk fleksibilitas maksimal. Cocok bagi driver yang ingin mencoba tanpa komitmen jangka panjang.",
-      "iconUrl": "/images/services/daily.svg",
-      "iconAlt": "Ikon kalender harian"
+      "iconAlt": "Ikon kalender harian",
+      "icon": "calendar_day"
     },
     {
       "id": "svc-weekly",
       "name": "Sewa Mingguan",
       "description": "Paket mingguan dengan harga lebih hemat. Ideal untuk driver yang sudah rutin beroperasi setiap hari.",
-      "iconUrl": "/images/services/weekly.svg",
-      "iconAlt": "Ikon kalender mingguan"
+      "iconAlt": "Ikon kalender mingguan",
+      "icon": "calendar_week"
     },
     {
       "id": "svc-monthly",
       "name": "Sewa Bulanan",
       "description": "Komitmen bulanan dengan tarif paling kompetitif. Pilihan terbaik untuk mitra driver jangka panjang.",
-      "iconUrl": "/images/services/monthly.svg",
-      "iconAlt": "Ikon kalender bulanan"
+      "iconAlt": "Ikon kalender bulanan",
+      "icon": "calendar_month"
     }
   ],
   "advantages": [
     {
-      "id": "adv-maintenance",
-      "title": "Perawatan Gratis",
-      "description": "Servis berkala dan perawatan kendaraan ditanggung sepenuhnya oleh Mahkota Drive.",
-      "iconUrl": "/images/services/form.svg",
-      "iconAlt": "Perawatan Gratis"
+      "id": "adv-1",
+      "title": "Setoran Paling Ringan",
+      "description": "Mulai dari Rp 200 ribuan per hari tanpa potongan. Hitungan transparan, sisa penghasilan sepenuhnya milik Anda.",
+      "iconAlt": "Setoran Ringan",
+      "icon": "wallet"
     },
     {
-      "id": "adv-support",
-      "title": "Dukungan 24 Jam",
-      "description": "Tim support siap membantu Anda kapan saja melalui WhatsApp dan telepon."
+      "id": "adv-2",
+      "title": "Akses Bandara & Argo Besar",
+      "description": "Dukungan penuh untuk mengambil orderan bandara dan rute argo besar lainnya agar penghasilan maksimal.",
+      "iconAlt": "Akses Bandara",
+      "icon": "north_east"
     },
     {
-      "id": "adv-flexible",
-      "title": "Tanpa DP Besar",
-      "description": "Mulai bermitra dengan deposit ringan dan proses administrasi yang mudah."
+      "id": "adv-3",
+      "title": "Proses Anti Ribet",
+      "description": "Cukup KTP + SIM A + Deposit. Tanpa BI Checking, tanpa antre panjang. Unit langsung bisa dibawa.",
+      "iconAlt": "Proses Cepat",
+      "icon": "check_circle"
+    },
+    {
+      "id": "adv-4",
+      "title": "Unit Siap Narik",
+      "description": "Armada terawat, nyaman, dan wangi. Dijamin aman dan andal untuk menemani mobilitas harian Anda.",
+      "iconAlt": "Unit Siap",
+      "icon": "directions_car"
     }
   ]
 }
