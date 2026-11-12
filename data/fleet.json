@@ -3,9 +3,9 @@
     {
       "id": "fleet-1",
       "name": "Toyota Avanza",
-      "year": 2023,
-      "capacity": 7,
-      "transmission": "matic",
+      "year": 2026,
+      "capacity": 10,
+      "transmission": "manual",
       "imageUrl": "/images/services/1781145669201-2dq892.png",
       "isBestSeller": true
     },

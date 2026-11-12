@@ -2,22 +2,24 @@
   "items": [
     {
       "id": "testi-2",
-      "name": "Ahmad Hidayat",
+      "name": "Nauval Qais",
+      "description": "Driver Gojek Bandung",
       "photoUrl": null,
       "quote": "Proses pendaftaran mudah dan cepat. Dalam hitungan hari saya sudah bisa mulai bekerja sebagai mitra driver.",
       "rating": 4
     },
     {
       "id": "testi-3",
-      "name": "Siti Rahayu",
-      "photoUrl": "/images/testimonials/1793802098602-i0u453.jpeg",
+      "name": "Andini",
+      "description": "Driver Kelas atas",
+      "photoUrl": "/images/testimonials/1794450677357-h0aj6n.jpeg",
       "quote": "Skema sewa yang fleksibel sangat membantu saya mengatur keuangan. Terima kasih Mahkota Drive!",
       "rating": 5
     },
     {
       "id": "testi-1780719825388-b81xjn",
       "name": "Arli Ramdhani",
-      "description": "Driver Gojek - Bandung",
+      "description": "Driver Gojek Bandung",
       "photoUrl": "/images/testimonials/1780722277053-wkchtc.jpeg",
       "quote": "Layanan darurat dari Mahkota Drive sangat benar-benar membantu saat saya mengalami kendala dijalan.",
       "rating": 5

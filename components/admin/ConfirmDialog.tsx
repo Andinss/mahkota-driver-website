@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useEffect, useId } from "react";
 import { Alert02Icon } from "@hugeicons/core-free-icons";
+import Ico from "./Ico";
 
 interface ConfirmDialogProps {
   title: string;
@@ -23,6 +23,9 @@ export default function ConfirmDialog({
   onCancel,
   loading = false,
 }: ConfirmDialogProps) {
+  const titleId = useId();
+  const messageId = useId();
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && !loading) onCancel();
@@ -32,35 +35,37 @@ export default function ConfirmDialog({
   }, [onCancel, loading]);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={loading ? undefined : onCancel}
-      />
-      <div className="relative w-full max-w-sm bg-surf rounded-2xl shadow-xl p-6 space-y-4 border border-ln">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-red-50 text-red-500">
-          <span className="ms text-2xl">
-            <HugeiconsIcon icon={Alert02Icon} size="1em" />
-          </span>
+    <div
+      className="a-overlay a-open a-confirm"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      aria-describedby={messageId}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget && !loading) onCancel();
+      }}
+    >
+      <div className="a-modal a-sm a-dlg">
+        <div className="a-badge">
+          <Ico icon={Alert02Icon} />
         </div>
-        <div className="text-center">
-          <h3 className="text-lg font-bold text-ink">{title}</h3>
-          <p className="mt-2 text-sm text-mu">{message}</p>
-        </div>
-        <div className="flex gap-3 pt-2">
+        <h3 id={titleId}>{title}</h3>
+        <p id={messageId}>{message}</p>
+        <div className="a-acts">
           <button
             type="button"
+            className="a-btn a-bo a-sm"
             onClick={onCancel}
             disabled={loading}
-            className="flex-1 btn bo sm"
+            autoFocus
           >
             {cancelLabel}
           </button>
           <button
             type="button"
+            className="a-btn a-bbad a-sm"
             onClick={onConfirm}
             disabled={loading}
-            className="flex-1 px-4 py-2.5 bg-red-500 text-white text-sm font-semibold rounded-full hover:bg-red-600 transition-colors disabled:opacity-50"
           >
             {loading ? "Menghapus..." : confirmLabel}
           </button>

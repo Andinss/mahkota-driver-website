@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useEffect, useRef } from "react";
 import {
   CheckmarkCircle02Icon,
   AlertCircleIcon,
   Cancel01Icon,
 } from "@hugeicons/core-free-icons";
+import Ico from "./Ico";
 
 export type ToastType = "success" | "error";
 
@@ -23,34 +23,30 @@ export default function Toast({
   onClose,
   duration = 3000,
 }: ToastProps) {
+  // Simpan onClose di ref supaya timer tidak diulang tiap parent render ulang.
+  const closeRef = useRef(onClose);
   useEffect(() => {
-    const timer = setTimeout(onClose, duration);
-    return () => clearTimeout(timer);
-  }, [onClose, duration]);
+    closeRef.current = onClose;
+  });
 
-  const bgColor = type === "success" ? "bg-green-600" : "bg-red-600";
-  const icon = type === "success" ? CheckmarkCircle02Icon : AlertCircleIcon;
+  useEffect(() => {
+    const timer = setTimeout(() => closeRef.current(), duration);
+    return () => clearTimeout(timer);
+  }, [message, duration]);
 
   return (
-    <div className="fixed top-4 right-4 z-[100] animate-slide-in">
-      <div
-        className={`${bgColor} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 min-w-[280px] max-w-md`}
-      >
-        <span className="ms text-[20px] shrink-0">
-          <HugeiconsIcon icon={icon} size="1em" />
-        </span>
-        <span className="text-sm font-medium flex-1">{message}</span>
-        <button
-          type="button"
-          onClick={onClose}
-          className="shrink-0 p-1 hover:bg-white/20 rounded transition-colors"
-          aria-label="Tutup notifikasi"
-        >
-          <span className="ms text-[16px]">
-            <HugeiconsIcon icon={Cancel01Icon} size="1em" />
-          </span>
-        </button>
-      </div>
+    <div
+      className={`a-toast a-on ${type === "error" ? "a-bad" : ""}`.trim()}
+      role="status"
+      aria-live="polite"
+    >
+      <span className="a-t-ic">
+        <Ico icon={type === "success" ? CheckmarkCircle02Icon : AlertCircleIcon} />
+      </span>
+      <span className="a-m">{message}</span>
+      <button type="button" onClick={onClose} aria-label="Tutup notifikasi">
+        <Ico icon={Cancel01Icon} />
+      </button>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
 import Icon from "@/components/ui/Icon";
 
 /**
@@ -45,9 +44,58 @@ export const ADMIN_ICON_KEYS = [
   "share",
   "open_in_new",
   "logout",
+  "draw",
 ] as const;
 
 export type AdminIconKey = (typeof ADMIN_ICON_KEYS)[number];
+
+/** Nama ikon dalam bahasa Indonesia untuk tooltip dan pembaca layar. */
+const ICON_LABELS: Record<AdminIconKey, string> = {
+  calendar_day: "Kalender harian",
+  calendar_week: "Kalender mingguan",
+  calendar_month: "Kalender bulanan",
+  today: "Hari ini",
+  assignment: "Formulir",
+  directions_car: "Mobil",
+  tools: "Peralatan",
+  build: "Kunci pas",
+  headset: "Headset",
+  support_agent: "Layanan pelanggan",
+  wallet: "Dompet",
+  payments: "Uang",
+  sell: "Label harga",
+  star: "Bintang",
+  person: "Orang",
+  groups: "Kelompok",
+  location_on: "Lokasi",
+  call: "Telepon",
+  chat: "Obrolan",
+  image: "Gambar",
+  lock: "Gembok",
+  settings: "Pengaturan",
+  check_circle: "Centang",
+  warning: "Peringatan",
+  arrow_forward: "Panah kanan",
+  arrow_back: "Panah kiri",
+  north_east: "Panah serong",
+  bar_chart: "Grafik",
+  home_repair_service: "Peralatan servis",
+  reviews: "Ulasan",
+  tune: "Penyesuaian",
+  upload: "Unggah",
+  share: "Bagikan",
+  open_in_new: "Buka tautan",
+  logout: "Keluar",
+  draw: "Pena",
+};
+
+/** Kunci yang memakai ikon yang sama dengan kunci lain; disembunyikan dari grid. */
+const ALIAS: Partial<Record<string, AdminIconKey>> = {
+  today: "calendar_month",
+  home_repair_service: "tools",
+};
+
+const PICKER_KEYS = ADMIN_ICON_KEYS.filter((key) => !(key in ALIAS));
 
 interface HugeiconPickerProps {
   value: string;
@@ -59,67 +107,61 @@ interface HugeiconPickerProps {
 export default function HugeiconPicker({
   value,
   onChange,
-  label = "Icon Hugeicons",
-  helperText = "Pilih ikon bawaan. Kosongkan jika ingin pakai gambar upload.",
+  label = "Ikon",
+  helperText,
 }: HugeiconPickerProps) {
   const [open, setOpen] = useState(false);
+  const activeKey = ALIAS[value] ?? value;
 
   return (
-    <div>
-      <label className="block text-sm font-medium text-ink mb-2">
-        {label} <span className="text-mu font-normal">(opsional)</span>
-      </label>
+    <div className="a-picker">
+      <span className="a-lbl">
+        {label} <span className="a-opt">Opsional</span>
+      </span>
 
-      <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-lg border border-ln flex items-center justify-center bg-bg shrink-0">
-          {value ? (
-            <Icon name={value} className="text-[22px]" />
-          ) : (
-            <span className="text-xs text-mu">—</span>
-          )}
-        </div>
+      <div className="a-picker-row">
+        <span className={`a-cur ${value ? "" : "a-none"}`.trim()}>
+          {value ? <Icon name={value} className="text-[22px]" /> : "Kosong"}
+        </span>
         <button
           type="button"
+          className="a-btn a-bo a-sm"
           onClick={() => setOpen((v) => !v)}
-          className="px-4 py-2 text-xs font-semibold text-ink border border-ln rounded-lg hover:border-y transition-colors"
+          aria-expanded={open}
         >
-          {value ? "Ganti Icon" : "Pilih Icon"}
+          {value ? "Ganti ikon" : "Pilih ikon"}
         </button>
         {value && (
           <button
             type="button"
+            className="a-link-bad"
             onClick={() => onChange("")}
-            className="text-xs text-red-500 hover:text-red-700 font-medium"
           >
             Hapus
           </button>
         )}
       </div>
 
-      <p className="mt-1 text-xs text-mu">{helperText}</p>
+      {helperText && <p className="a-hint">{helperText}</p>}
 
       {open && (
-        <div className="mt-3 border border-ln rounded-xl p-3 bg-bg">
-          <div className="grid grid-cols-8 sm:grid-cols-10 gap-2 max-h-56 overflow-y-auto pr-1">
-            {ADMIN_ICON_KEYS.map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => {
-                  onChange(key);
-                  setOpen(false);
-                }}
-                className={`h-10 w-10 rounded-lg border-2 flex items-center justify-center transition-all hover:border-y ${
-                  value === key ? "border-y bg-y/10" : "border-ln bg-surf"
-                }`}
-                title={key}
-                aria-label={key}
-                aria-pressed={value === key}
-              >
-                <Icon name={key} className="text-[20px]" />
-              </button>
-            ))}
-          </div>
+        <div className="a-picker-grid">
+          {PICKER_KEYS.map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={activeKey === key ? "a-on" : undefined}
+              onClick={() => {
+                onChange(key);
+                setOpen(false);
+              }}
+              title={ICON_LABELS[key]}
+              aria-label={ICON_LABELS[key]}
+              aria-pressed={activeKey === key}
+            >
+              <Icon name={key} className="text-[21px]" />
+            </button>
+          ))}
         </div>
       )}
     </div>

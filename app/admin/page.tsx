@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserIcon,
-  LockIcon,
   AlertCircleIcon,
   ArrowRight01Icon,
   ArrowLeft01Icon,
 } from "@hugeicons/core-free-icons";
+import Ico from "@/components/admin/Ico";
+import PasswordField from "@/components/admin/PasswordField";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -51,125 +52,90 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-navy">
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/services/1781145669201-2dq892.png"
-          alt="Mahkota Drive Background"
-          className="w-full h-full object-cover opacity-20 blur-sm scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-transparent"></div>
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-y/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-y/10 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10 w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-y mb-4 shadow-lg shadow-y/30">
-            <img
-              src="/images/logo.png"
-              alt="Logo"
-              className="h-10 w-10 object-contain"
-            />
+    <main className="a-login">
+      <section className="a-login-art">
+        <div className="a-brand" style={{ padding: 0 }}>
+          <img src="/images/logo.png" alt="" />
+          <div>
+            <b>
+              Mahkota<span>Drive</span>
+            </b>
+            <span className="a-ey">Panel admin</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
-            Mahkota<span className="text-yt">Drive</span>
-          </h1>
-          <p className="text-gray-400 mt-2 font-medium">Panel Administrator</p>
         </div>
+        <div>
+          <h2>Kelola isi website Mahkota Drive.</h2>
+          <p>
+            Ubah armada, testimoni, dan kontak dari satu tempat. Perubahan
+            langsung tampil di website.
+          </p>
+        </div>
+        <img
+          className="a-car"
+          src="/images/services/1781145669201-2dq892.png"
+          alt=""
+        />
+      </section>
 
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] p-8 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-semibold text-gray-200 mb-2"
-              >
-                Username
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <span className="ms text-[20px]">
-                    <HugeiconsIcon icon={UserIcon} size="1em" />
-                  </span>
-                </div>
+      <section className="a-login-form">
+        <div className="a-login-card">
+          <h1>Masuk ke panel admin</h1>
+          <p>Gunakan akun administrator Anda.</p>
+
+          {error && (
+            <div className="a-alert a-bad" role="alert">
+              <Ico icon={AlertCircleIcon} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="a-field">
+              <label htmlFor="username">Username</label>
+              <div className="a-has-ic">
+                <Ico icon={UserIcon} />
                 <input
                   id="username"
+                  className="a-input"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   autoComplete="username"
                   disabled={isLoading}
-                  className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-y focus:border-transparent transition-all disabled:opacity-50"
                   placeholder="Masukkan username"
                 />
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-gray-200 mb-2"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <span className="ms text-[20px]">
-                    <HugeiconsIcon icon={LockIcon} size="1em" />
-                  </span>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  disabled={isLoading}
-                  className="w-full pl-12 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-y focus:border-transparent transition-all disabled:opacity-50"
-                  placeholder="Masukkan password"
-                />
-              </div>
-            </div>
-
-            {error && (
-              <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-xl flex items-start gap-2 text-sm text-red-200">
-                <span className="ms text-[20px] shrink-0">
-                  <HugeiconsIcon icon={AlertCircleIcon} size="1em" />
-                </span>
-                <p>{error}</p>
-              </div>
-            )}
+            <PasswordField
+              id="password"
+              label="Password"
+              value={password}
+              onChange={setPassword}
+              required
+              autoComplete="current-password"
+              disabled={isLoading}
+              placeholder="Masukkan password"
+            />
 
             <button
               type="submit"
+              className="a-btn a-bd a-block"
+              style={{ marginTop: 8 }}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 mt-2 py-4 bg-y text-navy rounded-xl font-bold text-base hover:bg-y-light transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-y/20"
             >
-              {isLoading ? "Memproses..." : "Masuk Dashboard"}
-              {!isLoading && (
-                <span className="ms text-[20px]">
-                  <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
-                </span>
-              )}
+              {isLoading ? "Memproses..." : "Masuk"}
+              {!isLoading && <Ico icon={ArrowRight01Icon} />}
             </button>
           </form>
-        </div>
 
-        <div className="mt-8 text-center">
-          <a
-            href="/"
-            className="text-sm font-medium text-gray-400 hover:text-y transition-colors flex items-center justify-center gap-2"
-          >
-            <span className="ms text-[16px]">
-              <HugeiconsIcon icon={ArrowLeft01Icon} size="1em" />
-            </span>{" "}
-            Kembali ke Website
-          </a>
+          <Link className="a-back" href="/">
+            <Ico icon={ArrowLeft01Icon} />
+            Kembali ke website
+          </Link>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

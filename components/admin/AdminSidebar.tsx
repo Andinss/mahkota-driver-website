@@ -1,35 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { useEffect } from "react";
+import type { IconSvgElement } from "@hugeicons/react";
 import {
   Analytics01Icon,
-  StarSquareIcon,
-  ToolsIcon,
+  Call02Icon,
   Car01Icon,
-  TaskDone01Icon,
-  Settings02Icon,
-  LockIcon,
+  File01Icon,
+  KeyIcon,
   Logout02Icon,
-  Cancel01Icon,
-  Menu01Icon,
+  Megaphone01Icon,
+  StarSquareIcon,
+  TaskDone01Icon,
+  ToolsIcon,
 } from "@hugeicons/core-free-icons";
+import Ico from "./Ico";
 
-type TabKey =
+export type TabKey =
+  | "hero"
   | "statistics"
-  | "testimonials"
   | "services"
   | "fleet"
+  | "testimonials"
   | "registration"
-  | "contact";
+  | "contact"
+  | "about";
 
-const TABS: { key: TabKey; label: string; icon: IconSvgElement }[] = [
-  { key: "statistics", label: "Statistik", icon: Analytics01Icon },
-  { key: "testimonials", label: "Testimoni", icon: StarSquareIcon },
-  { key: "services", label: "Layanan", icon: ToolsIcon },
-  { key: "fleet", label: "Armada", icon: Car01Icon },
-  { key: "registration", label: "Cara Daftar", icon: TaskDone01Icon },
-  { key: "contact", label: "General", icon: Settings02Icon },
+interface TabDef {
+  key: TabKey;
+  label: string;
+  icon: IconSvgElement;
+}
+
+/** Urutan menu mengikuti urutan section di beranda, dari atas ke bawah. */
+const GROUPS: { label: string; tabs: TabDef[] }[] = [
+  {
+    label: "Beranda",
+    tabs: [
+      { key: "hero", label: "Hero", icon: Megaphone01Icon },
+      { key: "statistics", label: "Tentang & statistik", icon: Analytics01Icon },
+      { key: "services", label: "Layanan & keunggulan", icon: ToolsIcon },
+      { key: "fleet", label: "Armada", icon: Car01Icon },
+      { key: "testimonials", label: "Testimoni", icon: StarSquareIcon },
+      { key: "registration", label: "Cara bergabung", icon: TaskDone01Icon },
+      { key: "contact", label: "Kontak", icon: Call02Icon },
+    ],
+  },
+  {
+    label: "Halaman lain",
+    tabs: [{ key: "about", label: "Halaman Tentang", icon: File01Icon }],
+  },
 ];
 
 interface SidebarProps {
@@ -38,6 +58,11 @@ interface SidebarProps {
   onLogout: () => void;
   onOpenPassword: () => void;
   isLoggingOut: boolean;
+  /** Jumlah item per menu, ditampilkan sebagai lencana kecil. */
+  counts?: Partial<Record<TabKey, number>>;
+  /** Drawer menu di layar kecil. */
+  open: boolean;
+  onClose: () => void;
 }
 
 export default function AdminSidebar({
@@ -46,103 +71,85 @@ export default function AdminSidebar({
   onLogout,
   onOpenPassword,
   isLoggingOut,
+  counts,
+  open,
+  onClose,
 }: SidebarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
 
   return (
     <>
-      {/* Tombol Hamburger untuk Mobile */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="h-10 w-10 bg-white border border-gray-200 rounded-xl flex items-center justify-center text-black shadow-sm"
-        >
-          <span className="ms text-black">
-            <HugeiconsIcon
-              icon={isOpen ? Cancel01Icon : Menu01Icon}
-              size="1em"
-            />
-          </span>
-        </button>
-      </div>
+      <div
+        className={`a-scrim ${open ? "a-on" : ""}`.trim()}
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
-      {/* Overlay Mobile */}
-      {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Sidebar Container - Dikunci lebarnya 280px */}
       <aside
-        className={`fixed md:sticky top-0 left-0 z-40 bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
-        style={{ width: "280px", minWidth: "280px", height: "100vh" }}
+        id="admin-sidebar"
+        className={`a-side ${open ? "a-open" : ""}`.trim()}
+        aria-label="Menu admin"
       >
-        {/* Logo */}
-        <div className="h-20 flex items-center gap-3 px-6 border-b border-gray-200 shrink-0">
-          <img
-            src="/images/logo.png"
-            alt="Logo"
-            className="h-8 w-8 object-contain"
-          />
-          <h1 className="text-lg font-extrabold text-black tracking-tight whitespace-nowrap">
-            Mahkota<span className="text-yellow-600">Drive</span>
-          </h1>
+        <div className="a-brand">
+          <img src="/images/logo.png" alt="" />
+          <div>
+            <b>
+              Mahkota<span>Drive</span>
+            </b>
+            <span className="a-ey">Panel admin</span>
+          </div>
         </div>
 
-        {/* Menu - Menggunakan div, flex-col agar berjejer ke bawah */}
-        <div className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-1">
-          <p className="px-3 text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-            Manajemen Konten
-          </p>
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => {
-                setActiveTab(tab.key);
-                setIsOpen(false);
-              }}
-              className={`w-full flex flex-row items-center justify-start gap-3 px-3 py-3 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === tab.key
-                  ? "bg-yellow-600 text-white shadow-sm"
-                  : "text-gray-500 hover:bg-gray-100 hover:text-black"
-              }`}
-            >
-              <span
-                className={`ms text-[20px] shrink-0 ${
-                  activeTab === tab.key ? "text-white" : "text-gray-500"
-                }`}
-              >
-                <HugeiconsIcon icon={tab.icon} size="1em" />
-              </span>
-              <span>{tab.label}</span>
-            </button>
+        <nav className="a-nav" aria-label="Tab navigasi admin">
+          {GROUPS.map((group) => (
+            <div key={group.label}>
+              <div className="a-nav-label">{group.label}</div>
+              {group.tabs.map((tab) => {
+                const active = activeTab === tab.key;
+                const count = counts?.[tab.key];
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    className={`a-nav-item ${active ? "a-on" : ""}`.trim()}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => {
+                      setActiveTab(tab.key);
+                      onClose();
+                    }}
+                  >
+                    <Ico icon={tab.icon} />
+                    {tab.label}
+                    {count !== undefined && (
+                      <span className="a-n">{count}</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           ))}
-        </div>
+        </nav>
 
-        {/* Bottom Actions */}
-        <div className="p-4 border-t border-gray-200 flex flex-col gap-1 shrink-0">
-          <button
-            onClick={onOpenPassword}
-            className="w-full flex flex-row items-center justify-start gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-100 hover:text-black transition-colors"
-          >
-            <span className="ms text-[20px] shrink-0">
-              <HugeiconsIcon icon={LockIcon} size="1em" />
-            </span>{" "}
-            <span>Ubah Password</span>
+        <div className="a-side-foot">
+          <button type="button" className="a-nav-item" onClick={onOpenPassword}>
+            <Ico icon={KeyIcon} />
+            Ubah password
           </button>
           <button
+            type="button"
+            className="a-nav-item a-out"
             onClick={onLogout}
             disabled={isLoggingOut}
-            className="w-full flex flex-row items-center justify-start gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
           >
-            <span className="ms text-[20px] shrink-0">
-              <HugeiconsIcon icon={Logout02Icon} size="1em" />
-            </span>{" "}
-            <span>{isLoggingOut ? "Keluar..." : "Keluar"}</span>
+            <Ico icon={Logout02Icon} />
+            {isLoggingOut ? "Keluar..." : "Keluar"}
           </button>
         </div>
       </aside>

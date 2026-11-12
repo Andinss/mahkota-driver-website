@@ -1,19 +1,29 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Image01Icon, Upload01Icon } from "@hugeicons/core-free-icons";
+import { Image01Icon } from "@hugeicons/core-free-icons";
+import Ico from "./Ico";
 
 interface PhotoUploadProps {
   value: string;
   onChange: (url: string) => void;
   category?: string;
+  label?: string;
+  hint?: string;
+  /** Tampilkan gambar utuh (untuk foto mobil tanpa latar). */
+  contain?: boolean;
+  /** Pratinjau berbentuk persegi panjang. */
+  wide?: boolean;
 }
 
 export default function PhotoUpload({
   value,
   onChange,
   category = "testimonials",
+  label = "Foto",
+  hint = "Opsional, maksimal 5 MB",
+  contain = false,
+  wide = false,
 }: PhotoUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +33,8 @@ export default function PhotoUpload({
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      setError("Maksimal 5MB.");
+      setError("Ukuran foto maksimal 5 MB.");
+      e.target.value = "";
       return;
     }
     setUploading(true);
@@ -40,10 +51,10 @@ export default function PhotoUpload({
         const data = await res.json();
         onChange(data.url);
       } else {
-        setError("Gagal mengunggah.");
+        setError("Foto gagal diunggah. Coba lagi.");
       }
     } catch {
-      setError("Gagal mengunggah.");
+      setError("Foto gagal diunggah. Periksa koneksi Anda.");
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -51,58 +62,53 @@ export default function PhotoUpload({
   }
 
   return (
-    <div>
-      <label className="block text-sm font-medium text-ink mb-2">
-        Foto <span className="text-mu font-normal">(maks 5MB)</span>
-      </label>
-      <div className="flex items-center gap-4">
-        {value ? (
-          <div className="h-20 w-20 rounded-xl border border-ln overflow-hidden shrink-0 bg-bg">
-            <img
-              src={value}
-              alt="Preview"
-              className="h-full w-full object-cover"
-            />
-          </div>
-        ) : (
-          <div className="h-20 w-20 rounded-xl border-2 border-dashed border-ln shrink-0 flex items-center justify-center bg-bg text-mu">
-            <span className="ms text-3xl">
-              <HugeiconsIcon icon={Image01Icon} size="1em" />
-            </span>
-          </div>
-        )}
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            disabled={uploading}
-            className="px-4 py-2 text-xs font-semibold text-ink border border-ln rounded-lg hover:border-y hover:bg-y/10 transition-colors disabled:opacity-50 flex items-center gap-2"
-          >
-            <span className="ms text-[16px]">
-              <HugeiconsIcon icon={Upload01Icon} size="1em" />
-            </span>{" "}
-            {uploading ? "Mengunggah..." : value ? "Ganti Foto" : "Upload Foto"}
-          </button>
-          {value && (
-            <button
-              type="button"
-              onClick={() => onChange("")}
-              className="text-xs text-red-500 hover:text-red-700 font-medium text-left px-1"
-            >
-              Hapus foto
-            </button>
+    <div className="a-field">
+      <span className="a-lbl">
+        {label} <span className="a-opt">{hint}</span>
+      </span>
+      <button
+        type="button"
+        className={`a-drop ${wide ? "a-wide" : ""}`.trim()}
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+      >
+        <span className={`a-thumb ${contain ? "a-contain" : ""}`.trim()}>
+          {value ? (
+            <img src={value} alt="Pratinjau foto" />
+          ) : (
+            <Ico icon={Image01Icon} />
           )}
-          {error && <p className="text-xs text-red-500">{error}</p>}
-        </div>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={handleUpload}
-          disabled={uploading}
-        />
-      </div>
+        </span>
+        <span>
+          <b>
+            {uploading ? "Mengunggah..." : value ? "Ganti foto" : "Unggah foto"}
+          </b>
+          <span
+            className="a-s"
+            style={error ? { color: "var(--bad)" } : undefined}
+          >
+            {error ?? "JPG, PNG, atau WebP."}
+          </span>
+        </span>
+      </button>
+      {value && (
+        <button
+          type="button"
+          className="a-link-bad"
+          style={{ marginTop: 6 }}
+          onClick={() => onChange("")}
+        >
+          Hapus foto
+        </button>
+      )}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+        onChange={handleUpload}
+        disabled={uploading}
+      />
     </div>
   );
 }

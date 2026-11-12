@@ -1,16 +1,22 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useState, useCallback, type FormEvent } from "react";
 import {
   Add01Icon,
-  ArrowUp01Icon,
   ArrowDown01Icon,
+  ArrowUp01Icon,
+  Delete02Icon,
+  Edit02Icon,
+  Link01Icon,
+  MinusSignIcon,
 } from "@hugeicons/core-free-icons";
 import { RegistrationData, RegistrationStep } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
 import ConfirmDialog from "./ConfirmDialog";
 import HugeiconPicker from "./HugeiconPicker";
+import PageHeader from "./PageHeader";
+import Modal from "./Modal";
+import Ico from "./Ico";
 import Icon from "@/components/ui/Icon";
 
 interface RegistrationTabProps {
@@ -25,6 +31,11 @@ interface StepForm {
 }
 
 const emptyStepForm: StepForm = { title: "", description: "", icon: "" };
+
+const MIN_STEPS = 3;
+const MAX_STEPS = 6;
+const MIN_MINUTES = 5;
+const MAX_MINUTES = 15;
 
 export default function RegistrationTab({
   data,
@@ -49,13 +60,9 @@ export default function RegistrationTab({
   } | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && showModal) closeModal();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [showModal]);
+  const showToast = useCallback((message: string, type: ToastType) => {
+    setToast({ message, type });
+  }, []);
 
   function closeModal() {
     setShowModal(false);
@@ -63,10 +70,6 @@ export default function RegistrationTab({
     setStepForm(emptyStepForm);
     setFormError(null);
   }
-
-  const showToast = useCallback((message: string, type: ToastType) => {
-    setToast({ message, type });
-  }, []);
 
   async function persistData(
     updatedSteps: RegistrationStep[],
@@ -97,11 +100,11 @@ export default function RegistrationTab({
   }
 
   function handleAddStep() {
-    if (steps.length >= 6) return;
+    if (steps.length >= MAX_STEPS) return;
     setEditingStepId(null);
     setStepForm(emptyStepForm);
-    setShowModal(true);
     setFormError(null);
+    setShowModal(true);
   }
 
   function handleEditStep(item: RegistrationStep) {
@@ -111,13 +114,13 @@ export default function RegistrationTab({
       description: item.description,
       icon: item.icon ?? "",
     });
-    setShowModal(true);
     setFormError(null);
+    setShowModal(true);
   }
 
   function handleDeleteStepClick(item: RegistrationStep) {
-    if (steps.length <= 3) {
-      showToast("Minimal 3 langkah.", "error");
+    if (steps.length <= MIN_STEPS) {
+      showToast(`Minimal ${MIN_STEPS} langkah diperlukan.`, "error");
       return;
     }
     setConfirmDelete({ id: item.id, name: item.title });
@@ -126,15 +129,16 @@ export default function RegistrationTab({
   async function handleConfirmDelete() {
     if (!confirmDelete) return;
     setDeleting(true);
-    const filtered = steps.filter((s) => s.id !== confirmDelete.id);
-    const reordered = filtered.map((s, i) => ({ ...s, order: i + 1 }));
+    const reordered = steps
+      .filter((s) => s.id !== confirmDelete.id)
+      .map((s, i) => ({ ...s, order: i + 1 }));
     const success = await persistData(reordered);
     setDeleting(false);
     setConfirmDelete(null);
     if (success) showToast("Langkah dihapus.", "success");
   }
 
-  async function handleSubmitStep(e: React.FormEvent) {
+  async function handleSubmitStep(e: FormEvent) {
     e.preventDefault();
     if (!stepForm.title.trim()) {
       setFormError("Judul tidak boleh kosong.");
@@ -144,7 +148,7 @@ export default function RegistrationTab({
       setFormError("Deskripsi tidak boleh kosong.");
       return;
     }
-    const finalIcon = stepForm.icon.trim() || undefined;
+    const icon = stepForm.icon.trim() || undefined;
 
     let updatedSteps: RegistrationStep[];
     if (editingStepId) {
@@ -154,7 +158,7 @@ export default function RegistrationTab({
               ...s,
               title: stepForm.title.trim(),
               description: stepForm.description.trim(),
-              icon: finalIcon,
+              icon,
             }
           : s,
       );
@@ -168,55 +172,45 @@ export default function RegistrationTab({
           order: maxOrder + 1,
           title: stepForm.title.trim(),
           description: stepForm.description.trim(),
-          icon: finalIcon,
+          icon,
         },
       ];
     }
     const success = await persistData(updatedSteps);
     if (success) {
-      showToast(
-        editingStepId ? "Langkah diperbarui." : "Langkah ditambahkan.",
-        "success",
-      );
+      showToast("Langkah disimpan.", "success");
       closeModal();
     }
   }
 
-  async function handleMoveUp(index: number) {
-    if (index === 0) return;
-    const newSteps = [...steps];
-    [newSteps[index - 1], newSteps[index]] = [
-      newSteps[index],
-      newSteps[index - 1],
-    ];
-    const reordered = newSteps.map((s, i) => ({ ...s, order: i + 1 }));
+  async function handleMove(index: number, dir: -1 | 1) {
+    const target = index + dir;
+    if (target < 0 || target >= steps.length) return;
+    const next = [...steps];
+    [next[index], next[target]] = [next[target], next[index]];
+    const reordered = next.map((s, i) => ({ ...s, order: i + 1 }));
     const success = await persistData(reordered);
-    if (success) showToast("Urutan diperbarui.", "success");
+    if (success) showToast("Urutan disimpan.", "success");
   }
 
-  async function handleMoveDown(index: number) {
-    if (index === steps.length - 1) return;
-    const newSteps = [...steps];
-    [newSteps[index], newSteps[index + 1]] = [
-      newSteps[index + 1],
-      newSteps[index],
-    ];
-    const reordered = newSteps.map((s, i) => ({ ...s, order: i + 1 }));
-    const success = await persistData(reordered);
-    if (success) showToast("Urutan diperbarui.", "success");
+  function stepMinutes(delta: number) {
+    setEstimateMinutes((m) =>
+      Math.min(MAX_MINUTES, Math.max(MIN_MINUTES, m + delta)),
+    );
   }
 
-  async function handleSaveSettings() {
-    if (estimateMinutes < 5 || estimateMinutes > 15) {
-      showToast("Estimasi 5–15 menit.", "error");
+  async function handleSaveSettings(e: FormEvent) {
+    e.preventDefault();
+    if (estimateMinutes < MIN_MINUTES || estimateMinutes > MAX_MINUTES) {
+      showToast(`Estimasi harus ${MIN_MINUTES}–${MAX_MINUTES} menit.`, "error");
       return;
     }
     if (!formUrl.trim()) {
-      showToast("URL formulir wajib.", "error");
+      showToast("Tautan formulir wajib diisi.", "error");
       return;
     }
     if (!playStoreUrl.trim()) {
-      showToast("URL Play Store wajib.", "error");
+      showToast("Tautan Play Store wajib diisi.", "error");
       return;
     }
     const success = await persistData(
@@ -229,222 +223,221 @@ export default function RegistrationTab({
   }
 
   return (
-    <div className="p-6 space-y-8">
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-ink">
-            Langkah{" "}
-            <span className="text-sm font-normal text-mu">
-              ({steps.length} item, 3–6)
-            </span>
-          </h2>
-          {steps.length < 6 && (
-            <button
-              type="button"
-              onClick={handleAddStep}
-              disabled={saving}
-              className="btn bd sm"
-            >
-              <span className="ms">
-                <HugeiconsIcon icon={Add01Icon} size="1em" />
-              </span>{" "}
-              Tambah Langkah
-            </button>
-          )}
-        </div>
-        <div className="space-y-3">
-          {steps.map((step, index) => (
-            <div
-              key={step.id}
-              className="border border-ln rounded-xl p-4 bg-bg flex items-start justify-between gap-4"
-            >
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="h-10 w-10 rounded-lg border border-ln bg-surf flex items-center justify-center shrink-0">
-                  {step.icon ? (
-                    <Icon name={step.icon} className="text-[20px]" />
-                  ) : (
-                    <span className="text-xs text-mu">—</span>
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-y text-navy text-xs font-bold">
-                      {step.order}
-                    </span>
-                    <span className="font-semibold text-sm text-ink">
-                      {step.title}
-                    </span>
-                  </div>
-                  <p className="text-sm text-mu ml-8 line-clamp-2">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => handleMoveUp(index)}
-                  disabled={index === 0 || saving}
-                  className="p-1.5 text-mu hover:bg-surf rounded-md disabled:opacity-30"
-                >
-                  <span className="ms text-[18px]">
-                    <HugeiconsIcon icon={ArrowUp01Icon} size="1em" />
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleMoveDown(index)}
-                  disabled={index === steps.length - 1 || saving}
-                  className="p-1.5 text-mu hover:bg-surf rounded-md disabled:opacity-30"
-                >
-                  <span className="ms text-[18px]">
-                    <HugeiconsIcon icon={ArrowDown01Icon} size="1em" />
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleEditStep(step)}
-                  disabled={saving}
-                  className="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors disabled:opacity-50 ml-2"
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteStepClick(step)}
-                  disabled={saving || steps.length <= 3}
-                  className="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors disabled:opacity-30"
-                >
-                  Hapus
-                </button>
-              </div>
+    <div>
+      <PageHeader
+        title="Cara bergabung"
+        description="Atur langkah pendaftaran dan tautan yang dipakai calon mitra."
+      />
+
+      <div className="a-reg">
+        <div>
+          <div className="a-sub-head">
+            <div className="a-ph-r">
+              <h2 style={{ fontSize: "1.3rem" }}>Langkah pendaftaran</h2>
+              <span className="a-tag">
+                <b>{steps.length}</b> dari maks. {MAX_STEPS}
+              </span>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <hr className="border-ln" />
-
-      <section className="space-y-4">
-        <h2 className="text-lg font-bold text-ink">Pengaturan</h2>
-        <div>
-          <label className="block text-sm font-medium text-ink mb-1">
-            Estimasi Waktu (menit)
-          </label>
-          <input
-            type="number"
-            min={5}
-            max={15}
-            value={estimateMinutes}
-            onChange={(e) => setEstimateMinutes(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-ink mb-1">
-            URL Formulir
-          </label>
-          <input
-            type="url"
-            value={formUrl}
-            onChange={(e) => setFormUrl(e.target.value)}
-            className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-ink mb-1">
-            URL Play Store
-          </label>
-          <input
-            type="url"
-            value={playStoreUrl}
-            onChange={(e) => setPlayStoreUrl(e.target.value)}
-            className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
-          />
-        </div>
-        <div className="pt-2">
-          <button
-            type="button"
-            onClick={handleSaveSettings}
-            disabled={saving}
-            className="btn bd"
-          >
-            {saving ? "Menyimpan..." : "Simpan Pengaturan"}
-          </button>
-        </div>
-      </section>
-
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={closeModal}
-          />
-          <div className="relative w-full max-w-lg bg-surf rounded-2xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-ink">
-              {editingStepId ? "Edit Langkah" : "Tambah Langkah"}
-            </h3>
-            {formError && (
-              <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">
-                {formError}
-              </div>
+            {steps.length < MAX_STEPS && (
+              <button
+                type="button"
+                className="a-btn a-bd"
+                onClick={handleAddStep}
+                disabled={saving}
+              >
+                <Ico icon={Add01Icon} />
+                Tambah langkah
+              </button>
             )}
-            <form onSubmit={handleSubmitStep} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-ink mb-1">
-                  Judul <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={stepForm.title}
-                  onChange={(e) =>
-                    setStepForm({ ...stepForm, title: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none"
-                  autoFocus
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-ink mb-1">
-                  Deskripsi <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  value={stepForm.description}
-                  onChange={(e) =>
-                    setStepForm({ ...stepForm, description: e.target.value })
-                  }
-                  rows={2}
-                  className="w-full px-3 py-2 border border-ln rounded-lg text-sm focus:ring-2 focus:ring-y outline-none resize-none"
-                />
-              </div>
+          </div>
 
-              <HugeiconPicker
-                value={stepForm.icon}
-                onChange={(key) => setStepForm({ ...stepForm, icon: key })}
-                label="Icon Langkah"
-                helperText="Pilih ikon bawaan Hugeicons."
-              />
-
-              <div className="flex justify-end gap-3 pt-4 border-t border-ln">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="btn bo sm"
-                >
-                  Batal
-                </button>
-                <button type="submit" disabled={saving} className="btn bd sm">
-                  {saving ? "Menyimpan..." : "Simpan"}
-                </button>
+          <div className="a-steps">
+            {steps.map((step, index) => (
+              <div key={step.id} className="a-step">
+                <span className="a-no">{index + 1}</span>
+                <div className="a-card a-item">
+                  <div className="a-ib a-soft">
+                    {step.icon ? (
+                      <Icon name={step.icon} />
+                    ) : (
+                      <span aria-hidden="true">—</span>
+                    )}
+                  </div>
+                  <div className="a-txt">
+                    <b>{step.title}</b>
+                    <span>{step.description}</span>
+                  </div>
+                  <div className="a-ctl">
+                    <button
+                      type="button"
+                      className="a-icon-btn a-sm"
+                      onClick={() => handleMove(index, -1)}
+                      disabled={index === 0 || saving}
+                      title="Naikkan"
+                      aria-label={`Naikkan langkah ${step.title}`}
+                    >
+                      <Ico icon={ArrowUp01Icon} />
+                    </button>
+                    <button
+                      type="button"
+                      className="a-icon-btn a-sm"
+                      onClick={() => handleMove(index, 1)}
+                      disabled={index === steps.length - 1 || saving}
+                      title="Turunkan"
+                      aria-label={`Turunkan langkah ${step.title}`}
+                    >
+                      <Ico icon={ArrowDown01Icon} />
+                    </button>
+                    <span className="a-sep" />
+                    <button
+                      type="button"
+                      className="a-btn a-bo a-sm"
+                      onClick={() => handleEditStep(step)}
+                      disabled={saving}
+                    >
+                      <Ico icon={Edit02Icon} />
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className={`a-icon-btn a-del ${
+                        steps.length <= MIN_STEPS ? "a-locked" : ""
+                      }`.trim()}
+                      onClick={() => handleDeleteStepClick(step)}
+                      disabled={saving}
+                      title="Hapus langkah"
+                      aria-label={`Hapus langkah ${step.title}`}
+                    >
+                      <Ico icon={Delete02Icon} />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </form>
+            ))}
           </div>
         </div>
+
+        <form className="a-card a-reg-side" onSubmit={handleSaveSettings}>
+          <h2>Pengaturan pendaftaran</h2>
+          <p>Dipakai di bagian &quot;Cara bergabung&quot; dan tombol unduh aplikasi.</p>
+
+          <div className="a-field">
+            <span className="a-lbl">
+              Perkiraan waktu daftar
+              <span className="a-opt">
+                {MIN_MINUTES} sampai {MAX_MINUTES} menit
+              </span>
+            </span>
+            <div className="a-stepper">
+              <button
+                type="button"
+                onClick={() => stepMinutes(-1)}
+                disabled={estimateMinutes <= MIN_MINUTES}
+                aria-label="Kurangi satu menit"
+              >
+                <Ico icon={MinusSignIcon} />
+              </button>
+              <output aria-live="polite">
+                <span>{estimateMinutes}</span> <small>menit</small>
+              </output>
+              <button
+                type="button"
+                onClick={() => stepMinutes(1)}
+                disabled={estimateMinutes >= MAX_MINUTES}
+                aria-label="Tambah satu menit"
+              >
+                <Ico icon={Add01Icon} />
+              </button>
+            </div>
+          </div>
+
+          <div className="a-field">
+            <label htmlFor="r-form">Tautan formulir</label>
+            <div className="a-has-ic">
+              <Ico icon={Link01Icon} />
+              <input
+                id="r-form"
+                className="a-input"
+                type="url"
+                value={formUrl}
+                onChange={(e) => setFormUrl(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="a-field">
+            <label htmlFor="r-play">Tautan Play Store</label>
+            <div className="a-has-ic">
+              <Ico icon={Link01Icon} />
+              <input
+                id="r-play"
+                className="a-input"
+                type="url"
+                value={playStoreUrl}
+                onChange={(e) => setPlayStoreUrl(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="a-btn a-bd a-block"
+            disabled={saving}
+          >
+            {saving ? "Menyimpan..." : "Simpan pengaturan"}
+          </button>
+        </form>
+      </div>
+
+      {showModal && (
+        <Modal
+          title={editingStepId ? "Edit langkah" : "Tambah langkah"}
+          onClose={closeModal}
+          onSubmit={handleSubmitStep}
+          error={formError}
+          saving={saving}
+        >
+          <div className="a-field">
+            <label htmlFor="p-title">
+              Judul <span className="a-req">*</span>
+            </label>
+            <input
+              id="p-title"
+              className="a-input"
+              type="text"
+              value={stepForm.title}
+              onChange={(e) =>
+                setStepForm({ ...stepForm, title: e.target.value })
+              }
+              autoFocus
+            />
+          </div>
+          <div className="a-field">
+            <label htmlFor="p-desc">
+              Deskripsi <span className="a-req">*</span>
+            </label>
+            <textarea
+              id="p-desc"
+              className="a-input a-ta"
+              rows={3}
+              value={stepForm.description}
+              onChange={(e) =>
+                setStepForm({ ...stepForm, description: e.target.value })
+              }
+            />
+          </div>
+          <HugeiconPicker
+            value={stepForm.icon}
+            onChange={(key) => setStepForm({ ...stepForm, icon: key })}
+            label="Ikon"
+          />
+        </Modal>
       )}
+
       {confirmDelete && (
         <ConfirmDialog
-          title="Hapus Langkah"
-          message={`Hapus "${confirmDelete.name}"?`}
+          title="Hapus langkah?"
+          message={`"${confirmDelete.name}" akan dihapus dari website. Tindakan ini tidak bisa dibatalkan.`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setConfirmDelete(null)}
           loading={deleting}
