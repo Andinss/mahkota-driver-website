@@ -1,6 +1,64 @@
 import { HugeiconsIcon } from "@hugeicons/react";
-import { StarIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import type { TestimonialsData } from "@/types/content";
+import { StarIcon } from "@hugeicons/core-free-icons";
+import type { Testimonial, TestimonialsData } from "@/types/content";
+import TestimonialSlider from "./TestimonialSlider";
+
+/** Lebih dari ini, testimoni tampil sebagai slider. */
+const MAX_GRID = 3;
+
+function TestimonialCard({
+  item,
+  className = "",
+}: {
+  item: Testimonial;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`bg-surf border border-ln rounded-[24px] p-8 flex flex-col shadow-sm hover:shadow-md transition-shadow ${className}`}
+    >
+      <div className="flex gap-1 text-y mb-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span
+            key={i}
+            className={`ms text-[18px] ${i < item.rating ? "text-y" : "text-ln"}`}
+          >
+            <HugeiconsIcon icon={StarIcon} size="1em" />
+          </span>
+        ))}
+      </div>
+      <p className="text-ink leading-relaxed italic mb-6 flex-1">
+        "{item.quote}"
+      </p>
+      <div className="flex items-center gap-4 border-t border-ln pt-6">
+        <div className="h-12 w-12 rounded-full overflow-hidden bg-bg border border-ln shrink-0 flex items-center justify-center">
+          {item.photoUrl ? (
+            <img
+              src={item.photoUrl}
+              alt={item.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <span className="text-sm font-bold text-mu">
+              {item.name
+                .split(" ")
+                .map((w) => w[0])
+                .slice(0, 2)
+                .join("")
+                .toUpperCase()}
+            </span>
+          )}
+        </div>
+        <div>
+          <b className="block text-sm font-bold text-ink">{item.name}</b>
+          <small className="text-xs text-mu font-medium">
+            {item.description || "Mitra Driver"}
+          </small>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Testimonials({
   testimonials,
@@ -23,68 +81,21 @@ export default function Testimonials({
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.slice(0, 3).map((item) => (
-            <div
-              key={item.id}
-              className="bg-surf border border-ln rounded-[24px] p-8 flex flex-col shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex gap-1 text-y mb-4">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={`ms text-[18px] ${i < item.rating ? "text-y" : "text-ln"}`}
-                  >
-                    <HugeiconsIcon icon={StarIcon} size="1em" />
-                  </span>
-                ))}
-              </div>
-              <p className="text-ink leading-relaxed italic mb-6 flex-1">
-                "{item.quote}"
-              </p>
-              <div className="flex items-center gap-4 border-t border-ln pt-6">
-                <div className="h-12 w-12 rounded-full overflow-hidden bg-bg border border-ln shrink-0 flex items-center justify-center">
-                  {item.photoUrl ? (
-                    <img
-                      src={item.photoUrl}
-                      alt={item.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-sm font-bold text-mu">
-                      {item.name
-                        .split(" ")
-                        .map((w) => w[0])
-                        .slice(0, 2)
-                        .join("")
-                        .toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <b className="block text-sm font-bold text-ink">
-                    {item.name}
-                  </b>
-                  <small className="text-xs text-mu font-medium">
-                    {item.description || "Mitra Driver"}
-                  </small>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {items.length > 3 && (
-          <div className="text-center mt-10">
-            <a
-              href="/about"
-              className="inline-flex items-center gap-2 text-sm font-bold text-ink hover:text-yt transition-colors"
-            >
-              Lihat semua testimoni{" "}
-              <span className="ms text-[18px]">
-                <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
-              </span>
-            </a>
+        {items.length > MAX_GRID ? (
+          <TestimonialSlider>
+            {items.map((item) => (
+              <TestimonialCard
+                key={item.id}
+                item={item}
+                className="snap-start shrink-0 basis-[88%] md:basis-[calc(50%-12px)] lg:basis-[calc(33.333%-16px)]"
+              />
+            ))}
+          </TestimonialSlider>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item) => (
+              <TestimonialCard key={item.id} item={item} />
+            ))}
           </div>
         )}
       </div>

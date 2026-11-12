@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Add01Icon, Delete02Icon, Megaphone01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  Delete02Icon,
+  InformationCircleIcon,
+  Megaphone01Icon,
+} from "@hugeicons/core-free-icons";
 import { ContactData } from "@/types/content";
 import Toast, { ToastType } from "./Toast";
+import ConfirmDialog from "./ConfirmDialog";
 import PageHeader from "./PageHeader";
 import SectionHead from "./SectionHead";
 import SaveBar from "./SaveBar";
@@ -33,6 +39,8 @@ function toSlides(data: ContactData): Slide[] {
   }));
 }
 
+const MIN_SLIDES = 3;
+
 const snap = (slides: Slide[]) =>
   JSON.stringify(slides.map(({ headline, sub }) => ({ headline, sub })));
 
@@ -45,7 +53,10 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
     type: ToastType;
   } | null>(null);
 
+  const [confirmRemove, setConfirmRemove] = useState<number | null>(null);
+
   const dirty = snap(slides) !== baseline;
+  const atMin = slides.length <= MIN_SLIDES;
 
   function updateSlide(id: number, field: "headline" | "sub", value: string) {
     setSlides((prev) =>
@@ -64,15 +75,25 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
     ]);
   }
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  function requestRemove(id: number) {
+    if (atMin) {
+      setToast({
+        message: `Minimal ${MIN_SLIDES} slide hero diperlukan.`,
+        type: "error",
+      });
+      return;
+    }
+    setConfirmRemove(id);
+  }
 
+  /** Validasi lalu simpan daftar slide ke website. */
+  async function save(list: Slide[], successMessage: string) {
     // Slide yang benar-benar kosong dibuang. Hero di website memakai array apa adanya,
     // jadi slide tanpa judul, atau tanpa slide sama sekali, akan merusak tampilan.
-    const filled = slides.filter((s) => s.headline.trim() || s.sub.trim());
-    if (filled.length === 0) {
+    const filled = list.filter((s) => s.headline.trim() || s.sub.trim());
+    if (filled.length < MIN_SLIDES) {
       setToast({
-        message: "Minimal 1 slide hero dengan judul diperlukan.",
+        message: `Minimal ${MIN_SLIDES} slide hero dengan judul diperlukan.`,
         type: "error",
       });
       return;
@@ -100,7 +121,7 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
       }));
       setSlides(cleaned);
       setBaseline(snap(cleaned));
-      setToast({ message: "Hero disimpan.", type: "success" });
+      setToast({ message: successMessage, type: "success" });
     } catch (err) {
       setToast({
         message: err instanceof Error ? err.message : "Gagal menyimpan data.",
@@ -109,6 +130,20 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
     } finally {
       setSaving(false);
     }
+  }
+
+  /** Hapus slide langsung disimpan, seperti hapus data di menu lain. */
+  async function confirmRemoveSlide() {
+    if (confirmRemove === null) return;
+    const next = slides.filter((x) => x.id !== confirmRemove);
+    setSlides(next);
+    setConfirmRemove(null);
+    await save(next, "Slide dihapus.");
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    void save(slides, "Hero disimpan.");
   }
 
   return (
@@ -124,6 +159,11 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
           title="Teks hero beranda"
           description="Tiap slide punya judul dan sub-judul sendiri. Tekan Enter di judul untuk memisah baris."
         />
+        <p className="a-rule" style={{ marginBottom: 16 }}>
+          <Ico icon={InformationCircleIcon} />
+          Minimal {MIN_SLIDES} slide. Slide tambahan otomatis ikut berputar di
+          beranda.
+        </p>
         <div className="a-slides">
           {slides.map((s, i) => (
             <div key={s.id} className="a-slide">
@@ -133,11 +173,13 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
                 </b>
                 <button
                   type="button"
-                  className="a-icon-btn a-sm a-del"
-                  onClick={() =>
-                    setSlides((prev) => prev.filter((x) => x.id !== s.id))
+                  className={`a-icon-btn a-sm a-del ${atMin ? "a-locked" : ""}`.trim()}
+                  onClick={() => requestRemove(s.id)}
+                  title={
+                    atMin
+                      ? `Minimal ${MIN_SLIDES} slide diperlukan`
+                      : "Hapus slide"
                   }
-                  title="Hapus slide"
                   aria-label={`Hapus slide ${i + 1}`}
                 >
                   <Ico icon={Delete02Icon} />
@@ -188,6 +230,17 @@ export default function HeroTab({ data, onSave }: HeroTabProps) {
       </section>
 
       <SaveBar dirty={dirty} saving={saving} />
+
+      {confirmRemove !== null && (
+        <ConfirmDialog
+          title="Hapus slide?"
+          message={`Slide ${
+            slides.findIndex((x) => x.id === confirmRemove) + 1
+          } akan dihapus dari hero dan langsung hilang dari website.`}
+          onConfirm={confirmRemoveSlide}
+          onCancel={() => setConfirmRemove(null)}
+        />
+      )}
 
       {toast && (
         <Toast

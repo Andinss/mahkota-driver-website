@@ -3,8 +3,8 @@
     {
       "id": "fleet-1",
       "name": "Toyota Avanza",
-      "year": 2026,
-      "capacity": 10,
+      "year": 2027,
+      "capacity": 7,
       "transmission": "manual",
       "imageUrl": "/images/services/1781145669201-2dq892.png",
       "isBestSeller": true
@@ -41,7 +41,8 @@
       "year": 2026,
       "capacity": 7,
       "transmission": "manual",
-      "imageUrl": "/images/services/1781145871559-d93kmb.png"
+      "imageUrl": "/images/services/1781145871559-d93kmb.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1781145937613-mhfy4a",

@@ -18,8 +18,8 @@ const NAV_ITEMS = [
   { id: "layanan", label: "Layanan", href: "#layanan" },
   { id: "keunggulan", label: "Keunggulan", href: "#keunggulan" },
   { id: "armada", label: "Armada", href: "#armada" },
-  { id: "bergabung", label: "Bergabung", href: "#bergabung" },
   { id: "testimoni", label: "Testimoni", href: "#testimoni" },
+  { id: "bergabung", label: "Bergabung", href: "#bergabung" },
   { id: "faq", label: "FAQ", href: "/faq" },
   { id: "kontak", label: "Kontak", href: "#kontak" },
 ];

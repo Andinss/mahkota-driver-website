@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "id": "faq-1",
+      "question": "Apa saja syarat untuk bergabung menjadi mitra driver?",
+      "answer": "Syaratnya sangat mudah: KTP, SIM A yang masih berlaku, dan membayar deposit/join fee sesuai unit yang dipilih. Tidak perlu BI Checking atau antre panjang. Setelah dokumen lengkap, unit langsung bisa dibawa."
+    },
+    {
+      "id": "faq-2",
+      "question": "Apakah ada potongan dari penghasilan harian saya?",
+      "answer": "Tidak ada. Anda hanya membayar setoran sewa harian sesuai tarif yang disepakati di awal. Seluruh sisa penghasilan dari aplikasi sepenuhnya menjadi milik Anda."
+    },
+    {
+      "id": "faq-3",
+      "question": "Bagaimana jika mobil mogok atau mengalami kecelakaan?",
+      "answer": "Tim support kami siaga 24 jam. Jika terjadi mogok atau kendala di jalan, segera hubungi CS kami. Kami akan mengirimkan bantuan darurat atau unit pengganti agar Anda tetap bisa narik."
+    },
+    {
+      "id": "faq-4",
+      "question": "Apakah unit sudah termasuk pajak dan perawatan?",
+      "answer": "Ya. Semua unit Mahkota Drive sudah termasuk pajak tahunan, servis rutin berkala, dan perawatan mesin. Anda hanya perlu mengisi bahan bakar dan menjalankan operasional harian."
+    },
+    {
+      "id": "faq-5",
+      "question": "Berapa lama proses pendaftaran sampai mobil bisa dibawa?",
+      "answer": "Prosesnya sangat cepat, biasanya kurang dari 15 menit. Setelah Anda mengisi formulir online dan verifikasi dokumen via WhatsApp, unit bisa langsung diambil di lokasi kami."
+    }
+  ]
+}

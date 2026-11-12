@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
             <b>
               Mahkota<span>Drive</span>
             </b>
-            <span className="a-ey">Panel admin</span>
+            <span className="a-ey">PANEL ADMIN</span>
           </div>
         </div>
         <div>

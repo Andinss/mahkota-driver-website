@@ -1,10 +1,10 @@
 {
   "steps": [
     {
-      "id": "step-1794451023563-o8u1f4",
+      "id": "step-1",
       "order": 1,
       "title": "Isi Formulir",
-      "description": "Isi data diri dan pilih armada yang diinginkan",
+      "description": "Isi data diri dan pilih armada yang diinginkan.",
       "icon": "assignment"
     },
     {
@@ -29,7 +29,5 @@
       "icon": "directions_car"
     }
   ],
-  "estimateMinutes": 10,
-  "formUrl": "https://forms.gle/...",
-  "playStoreUrl": "https://play.google.com/store/apps/details?id=..."
+  "estimateMinutes": 10
 }

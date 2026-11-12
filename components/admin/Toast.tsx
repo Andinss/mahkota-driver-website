@@ -41,7 +41,9 @@ export default function Toast({
       aria-live="polite"
     >
       <span className="a-t-ic">
-        <Ico icon={type === "success" ? CheckmarkCircle02Icon : AlertCircleIcon} />
+        <Ico
+          icon={type === "success" ? CheckmarkCircle02Icon : AlertCircleIcon}
+        />
       </span>
       <span className="a-m">{message}</span>
       <button type="button" onClick={onClose} aria-label="Tutup notifikasi">

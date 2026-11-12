@@ -200,7 +200,11 @@ export default function TestimonialsTab({
                 {item.description && <small>{item.description}</small>}
               </div>
             </div>
-            <div className="a-rate" role="img" aria-label={`Rating ${item.rating} dari 5`}>
+            <div
+              className="a-rate"
+              role="img"
+              aria-label={`Rating ${item.rating} dari 5`}
+            >
               {[1, 2, 3, 4, 5].map((n) => (
                 <Ico
                   key={n}

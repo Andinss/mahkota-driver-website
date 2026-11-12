@@ -29,6 +29,7 @@ interface VehicleForm {
   capacity: number;
   transmission: "manual" | "matic";
   imageUrl: string;
+  isBestSeller: boolean;
 }
 
 const emptyForm: VehicleForm = {
@@ -37,6 +38,7 @@ const emptyForm: VehicleForm = {
   capacity: 7,
   transmission: "matic",
   imageUrl: "",
+  isBestSeller: false,
 };
 
 export default function FleetTab({ data, onSave }: FleetTabProps) {
@@ -96,6 +98,7 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
       capacity: item.capacity,
       transmission: item.transmission,
       imageUrl: item.imageUrl || "",
+      isBestSeller: item.isBestSeller === true,
     });
     setFormError(null);
     setShowModal(true);
@@ -142,6 +145,7 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
       capacity: form.capacity,
       transmission: form.transmission,
       imageUrl: form.imageUrl.trim() || undefined,
+      isBestSeller: form.isBestSeller,
     };
     const updated = editingId
       ? vehicles.map((v) => (v.id === editingId ? vehicle : v))
@@ -307,6 +311,28 @@ export default function FleetTab({ data, onSave }: FleetTabProps) {
                   onClick={() => setForm({ ...form, transmission: t })}
                 >
                   {t === "matic" ? "Matic" : "Manual"}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="a-field">
+            <span className="a-lbl">
+              Label di katalog
+              <span className="a-opt">Tampil sebagai &quot;Terlaris&quot;</span>
+            </span>
+            <div className="a-seg a-full">
+              {[
+                { v: false, label: "Biasa" },
+                { v: true, label: "Terlaris" },
+              ].map((o) => (
+                <button
+                  key={o.label}
+                  type="button"
+                  className={form.isBestSeller === o.v ? "a-on" : ""}
+                  aria-pressed={form.isBestSeller === o.v}
+                  onClick={() => setForm({ ...form, isBestSeller: o.v })}
+                >
+                  {o.label}
                 </button>
               ))}
             </div>

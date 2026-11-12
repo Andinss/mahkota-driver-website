@@ -79,8 +79,6 @@ const validReg = {
     { id: '3', order: 3, title: 'Step 3', description: 'Desc 3', iconUrl: '/icon3.svg' },
   ],
   estimateMinutes: 10,
-  formUrl: 'https://form.example.com',
-  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.example',
 };
 const r5 = registrationSchema.safeParse(validReg);
 console.log('registrationSchema valid:', r5.success);
@@ -93,8 +91,6 @@ const dupReg = {
     { id: '3', order: 3, title: 'Step 3', description: 'Desc 3', iconUrl: '/icon3.svg' },
   ],
   estimateMinutes: 10,
-  formUrl: 'https://form.example.com',
-  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.example',
 };
 const r5b = registrationSchema.safeParse(dupReg);
 console.log('registrationSchema invalid (dup order):', !r5b.success);

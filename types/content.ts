@@ -119,9 +119,40 @@ export interface RegistrationStep {
 
 export interface RegistrationData {
   steps: RegistrationStep[];
+  /** Dipakai di kalimat "Mendaftar hanya sekitar N menit" pada bagian Cara Bergabung. */
   estimateMinutes: number;
-  formUrl: string;
-  playStoreUrl: string;
+}
+
+// ============================================
+// FAQ
+// ============================================
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface FaqData {
+  items: FaqItem[];
+}
+
+// ============================================
+// Halaman legal (Syarat & Ketentuan, Kebijakan Privasi)
+// ============================================
+export interface LegalSection {
+  id: string;
+  title: string;
+  /**
+   * Isi bagian. Paragraf dipisah satu baris kosong; baris yang diawali "- "
+   * ditampilkan sebagai daftar poin.
+   */
+  body: string;
+}
+
+export interface LegalData {
+  /** Tanggal terakhir diubah dari admin, format YYYY-MM-DD. */
+  updatedAt: string;
+  sections: LegalSection[];
 }
 
 // ============================================
@@ -134,4 +165,7 @@ export interface AllContent {
   registration: RegistrationData;
   contact: ContactData;
   fleet: FleetData;
+  faq: FaqData;
+  terms: LegalData;
+  privacy: LegalData;
 }

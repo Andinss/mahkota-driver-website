@@ -34,7 +34,7 @@ export const testimonialsSchema = z.object({
     .min(3),
 });
 
-// Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 100 chars)
+// Services schema: services min 3 (description <= 150 chars), advantages min 3 (description <= 120 chars)
 export const servicesSchema = z.object({
   services: z
     .array(
@@ -52,7 +52,7 @@ export const servicesSchema = z.object({
       z.object({
         id: z.string(),
         title: z.string().min(1),
-        description: z.string().max(100),
+        description: z.string().max(120),
         iconAlt: z.string().optional(),
         icon: z.string().optional(),
       }),
@@ -60,7 +60,7 @@ export const servicesSchema = z.object({
     .min(3),
 });
 
-// Registration schema: steps 3-6, order unique, estimateMinutes 5-15
+// Registration schema: steps 3-6, order unique, estimateMinutes 5-15 (dipakai di teks 'Cara Bergabung')
 export const registrationSchema = z
   .object({
     steps: z
@@ -76,8 +76,6 @@ export const registrationSchema = z
       .min(3)
       .max(6),
     estimateMinutes: z.number().int().min(5).max(15),
-    formUrl: z.string(),
-    playStoreUrl: z.string(),
   })
   .check((payload) => {
     const orders = payload.value.steps.map((s) => s.order);
@@ -117,7 +115,8 @@ export const contactSchema = z.object({
     )
     .optional(),
   // --- VALIDASI UNTUK HERO DINAMIS ---
-  heroHeadlines: z.array(z.string()).optional(),
+  // Hero minimal 3 slide (judul wajib, sub-judul boleh kosong)
+  heroHeadlines: z.array(z.string().min(1)).min(3).optional(),
   heroSubheadlines: z.array(z.string()).optional(),
 });
 
@@ -142,6 +141,35 @@ export const fleetSchema = z.object({
     .min(1),
 });
 
+// FAQ schema: pertanyaan dan jawaban tidak boleh kosong
+export const faqSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        id: z.string(),
+        question: z.string().min(1),
+        answer: z.string().min(1),
+      }),
+    )
+    .min(1),
+});
+
+// Halaman legal (Syarat & Ketentuan, Kebijakan Privasi): daftar bagian berjudul
+const legalSchema = z.object({
+  updatedAt: z.string().min(1),
+  sections: z
+    .array(
+      z.object({
+        id: z.string(),
+        title: z.string().min(1),
+        body: z.string().min(1),
+      }),
+    )
+    .min(1),
+});
+export const termsSchema = legalSchema;
+export const privacySchema = legalSchema;
+
 // Map of category names to their schemas
 const schemas: Record<string, z.ZodType> = {
   statistics: statisticsSchema,
@@ -150,6 +178,9 @@ const schemas: Record<string, z.ZodType> = {
   registration: registrationSchema,
   contact: contactSchema,
   fleet: fleetSchema,
+  faq: faqSchema,
+  terms: termsSchema,
+  privacy: privacySchema,
 };
 
 // Valid category names
@@ -159,7 +190,10 @@ export type ContentCategory =
   | "services"
   | "registration"
   | "contact"
-  | "fleet";
+  | "fleet"
+  | "faq"
+  | "terms"
+  | "privacy";
 
 // Validation result type
 export type ValidationResult<T = unknown> =

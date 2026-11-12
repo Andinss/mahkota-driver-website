@@ -12,14 +12,14 @@
       "name": "Sewa Mingguan",
       "description": "Paket mingguan dengan harga lebih hemat. Ideal untuk driver yang sudah rutin beroperasi setiap hari.",
       "iconAlt": "Ikon kalender mingguan",
-      "icon": "calendar_week"
+      "icon": "calendar_month"
     },
     {
       "id": "svc-monthly",
       "name": "Sewa Bulanan",
       "description": "Komitmen bulanan dengan tarif paling kompetitif. Pilihan terbaik untuk mitra driver jangka panjang.",
       "iconAlt": "Ikon kalender bulanan",
-      "icon": "calendar_month"
+      "icon": "calendar_week"
     }
   ],
   "advantages": [

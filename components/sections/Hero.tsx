@@ -70,10 +70,18 @@ export default function Hero({
     s: rawSubheadlines[idx] || "",
   }));
 
+  // Jumlah slide mengikuti data dari admin (minimal 3), bukan angka tetap.
+  const count = Math.max(slides.length, 1);
+  // Panggung mobil hanya ada 3; slide berikutnya memakai mobil secara bergiliran.
+  const activeStage = activeSlide % vehicles.length;
+
   useEffect(() => {
-    const timer = setInterval(() => setActiveSlide((p) => (p + 1) % 3), 6500);
+    const timer = setInterval(
+      () => setActiveSlide((p) => (p + 1) % count),
+      6500,
+    );
     return () => clearInterval(timer);
-  }, []);
+  }, [count]);
 
   return (
     <section className="hero" aria-roledescription="carousel">
@@ -121,7 +129,7 @@ export default function Hero({
           {vehicles.map((car, idx) => (
             <div
               key={car.id}
-              className={`stg ${activeSlide === idx ? "on" : ""}`}
+              className={`stg ${activeStage === idx ? "on" : ""}`}
             >
               <span className="yc" />
               <svg
@@ -189,7 +197,7 @@ export default function Hero({
         </div>
         <div className="ctl">
           <div className="dots">
-            {[0, 1, 2].map((i) => (
+            {Array.from({ length: count }, (_, i) => i).map((i) => (
               <button
                 key={i}
                 onClick={() => setActiveSlide(i)}
@@ -204,7 +212,7 @@ export default function Hero({
           </div>
           <div className="ar">
             <button
-              onClick={() => setActiveSlide((p) => (p - 1 + 3) % 3)}
+              onClick={() => setActiveSlide((p) => (p - 1 + count) % count)}
               aria-label="Slide sebelumnya"
             >
               <span className="ms">
@@ -212,7 +220,7 @@ export default function Hero({
               </span>
             </button>
             <button
-              onClick={() => setActiveSlide((p) => (p + 1) % 3)}
+              onClick={() => setActiveSlide((p) => (p + 1) % count)}
               aria-label="Slide berikutnya"
             >
               <span className="ms">

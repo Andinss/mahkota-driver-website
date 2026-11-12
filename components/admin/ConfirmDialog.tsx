@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId } from "react";
-import { Alert02Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, FloppyDiskIcon } from "@hugeicons/core-free-icons";
 import Ico from "./Ico";
 
 interface ConfirmDialogProps {
@@ -12,6 +12,10 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   onCancel: () => void;
   loading?: boolean;
+  /** "danger" untuk hapus (merah), "primary" untuk simpan (netral). */
+  tone?: "danger" | "primary";
+  /** Teks tombol saat proses berjalan. */
+  loadingLabel?: string;
 }
 
 export default function ConfirmDialog({
@@ -22,6 +26,8 @@ export default function ConfirmDialog({
   onConfirm,
   onCancel,
   loading = false,
+  tone = "danger",
+  loadingLabel,
 }: ConfirmDialogProps) {
   const titleId = useId();
   const messageId = useId();
@@ -46,8 +52,8 @@ export default function ConfirmDialog({
       }}
     >
       <div className="a-modal a-sm a-dlg">
-        <div className="a-badge">
-          <Ico icon={Alert02Icon} />
+        <div className={`a-badge ${tone === "primary" ? "a-info" : ""}`.trim()}>
+          <Ico icon={tone === "primary" ? FloppyDiskIcon : Alert02Icon} />
         </div>
         <h3 id={titleId}>{title}</h3>
         <p id={messageId}>{message}</p>
@@ -63,11 +69,14 @@ export default function ConfirmDialog({
           </button>
           <button
             type="button"
-            className="a-btn a-bbad a-sm"
+            className={`a-btn a-sm ${tone === "primary" ? "a-bd" : "a-bbad"}`}
             onClick={onConfirm}
             disabled={loading}
           >
-            {loading ? "Menghapus..." : confirmLabel}
+            {loading
+              ? (loadingLabel ??
+                (tone === "primary" ? "Menyimpan..." : "Menghapus..."))
+              : confirmLabel}
           </button>
         </div>
       </div>

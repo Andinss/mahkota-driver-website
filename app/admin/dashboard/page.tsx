@@ -22,6 +22,8 @@ import RegistrationTab from "@/components/admin/RegistrationTab";
 import HeroTab from "@/components/admin/HeroTab";
 import KontakTab from "@/components/admin/KontakTab";
 import AboutPageTab from "@/components/admin/AboutPageTab";
+import FaqTab from "@/components/admin/FaqTab";
+import LegalTab from "@/components/admin/LegalTab";
 
 /** Judul halaman untuk breadcrumb di topbar. Judul lengkap ada di tiap tab. */
 const TAB_TITLES: Record<TabKey, string> = {
@@ -33,6 +35,9 @@ const TAB_TITLES: Record<TabKey, string> = {
   registration: "Cara bergabung",
   contact: "Kontak",
   about: "Halaman Tentang",
+  faq: "FAQ",
+  terms: "Syarat & ketentuan",
+  privacy: "Kebijakan privasi",
 };
 
 /** Kelompok menu, dipakai di breadcrumb. */
@@ -45,6 +50,9 @@ const TAB_GROUP: Record<TabKey, string> = {
   registration: "Beranda",
   contact: "Beranda",
   about: "Halaman lain",
+  faq: "Halaman lain",
+  terms: "Halaman lain",
+  privacy: "Halaman lain",
 };
 
 const emptyPasswordForm = {
@@ -312,6 +320,27 @@ export default function AdminDashboardPage() {
                 onSave={(d) => handleSave("contact", d)}
               />
             )}
+            {content && activeTab === "faq" && (
+              <FaqTab data={content.faq} onSave={(d) => handleSave("faq", d)} />
+            )}
+            {content && activeTab === "terms" && (
+              <LegalTab
+                data={content.terms}
+                onSave={(d) => handleSave("terms", d)}
+                title="Syarat & ketentuan"
+                href="/syarat-ketentuan"
+                idPrefix="term"
+              />
+            )}
+            {content && activeTab === "privacy" && (
+              <LegalTab
+                data={content.privacy}
+                onSave={(d) => handleSave("privacy", d)}
+                title="Kebijakan privasi"
+                href="/privasi"
+                idPrefix="priv"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -325,6 +354,8 @@ export default function AdminDashboardPage() {
           error={passwordError}
           saving={passwordSaving}
           submitLabel="Simpan password"
+          confirmTitle="Ubah password?"
+          confirmMessage="Password baru akan dipakai untuk login berikutnya."
         >
           {passwordSuccess && (
             <div className="a-alert a-ok" role="status">

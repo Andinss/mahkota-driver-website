@@ -12,6 +12,8 @@ import type {
   RegistrationData,
   ContactData,
   FleetData,
+  FaqData,
+  LegalData,
 } from "@/types/content";
 
 /** Valid content categories */
@@ -22,6 +24,9 @@ export const VALID_CATEGORIES = [
   "registration",
   "contact",
   "fleet",
+  "faq",
+  "terms",
+  "privacy",
 ] as const;
 
 export type ContentCategory = (typeof VALID_CATEGORIES)[number];
@@ -34,6 +39,9 @@ type CategoryDataMap = {
   registration: RegistrationData;
   contact: ContactData;
   fleet: FleetData;
+  faq: FaqData;
+  terms: LegalData;
+  privacy: LegalData;
 };
 
 /**
@@ -126,20 +134,32 @@ export async function writeCategory<T extends ContentCategory>(
 }
 
 /**
- * Read all 5 content categories and return a combined AllContent object.
+ * Read all content categories and return a combined AllContent object.
  *
  * @throws Error if any category file fails to read
  */
 export async function readAllContent(): Promise<AllContent> {
-  const [statistics, testimonials, services, registration, contact, fleet] =
-    await Promise.all([
-      readCategory("statistics"),
-      readCategory("testimonials"),
-      readCategory("services"),
-      readCategory("registration"),
-      readCategory("contact"),
-      readCategory("fleet"),
-    ]);
+  const [
+    statistics,
+    testimonials,
+    services,
+    registration,
+    contact,
+    fleet,
+    faq,
+    terms,
+    privacy,
+  ] = await Promise.all([
+    readCategory("statistics"),
+    readCategory("testimonials"),
+    readCategory("services"),
+    readCategory("registration"),
+    readCategory("contact"),
+    readCategory("fleet"),
+    readCategory("faq"),
+    readCategory("terms"),
+    readCategory("privacy"),
+  ]);
 
   return {
     statistics,
@@ -148,5 +168,8 @@ export async function readAllContent(): Promise<AllContent> {
     registration,
     contact,
     fleet,
+    faq,
+    terms,
+    privacy,
   };
 }

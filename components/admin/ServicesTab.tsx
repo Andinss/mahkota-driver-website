@@ -29,7 +29,12 @@ interface ItemForm {
   icon: string;
 }
 
-const emptyForm: ItemForm = { name: "", description: "", iconAlt: "", icon: "" };
+const emptyForm: ItemForm = {
+  name: "",
+  description: "",
+  iconAlt: "",
+  icon: "",
+};
 
 type Kind = "service" | "advantage";
 type SubTab = "layanan" | "keunggulan";
@@ -50,7 +55,7 @@ const KIND: Record<
     noun: "keunggulan",
     Noun: "Keunggulan",
     nameLabel: "Judul keunggulan",
-    max: 100,
+    max: 120,
   },
 };
 
@@ -138,10 +143,7 @@ export default function ServicesTab({ data, onSave }: ServicesTabProps) {
   function handleDeleteClick(kind: Kind, id: string, name: string) {
     const count = kind === "service" ? services.length : advantages.length;
     if (count <= MIN_ITEMS) {
-      showToast(
-        `Minimal ${MIN_ITEMS} ${KIND[kind].noun} diperlukan.`,
-        "error",
-      );
+      showToast(`Minimal ${MIN_ITEMS} ${KIND[kind].noun} diperlukan.`, "error");
       return;
     }
     setConfirmDelete({ kind, id, name });

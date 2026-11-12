@@ -1,0 +1,25 @@
+{
+  "updatedAt": "2026-11-12",
+  "sections": [
+    {
+      "id": "term-1",
+      "title": "1. Ketentuan Umum",
+      "body": "Dengan mendaftar sebagai mitra driver Mahkota Drive, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan yang berlaku."
+    },
+    {
+      "id": "term-2",
+      "title": "2. Syarat Pendaftaran",
+      "body": "- Memiliki KTP yang masih berlaku.\n- Memiliki SIM A yang masih berlaku.\n- Membayar deposit/join fee sesuai unit yang dipilih."
+    },
+    {
+      "id": "term-3",
+      "title": "3. Kewajiban Mitra",
+      "body": "- Membayar setoran harian tepat waktu sesuai kesepakatan.\n- Menjaga kebersihan dan kondisi kendaraan.\n- Tidak menyalahgunakan kendaraan untuk tindak kriminal."
+    },
+    {
+      "id": "term-4",
+      "title": "4. Denda & Keterlambatan",
+      "body": "Keterlambatan pembayaran setoran akan dikenakan denda sesuai kebijakan perusahaan. Jika terjadi penunggakan dalam jangka waktu lama, pihak perusahaan berhak menarik kembali unit kendaraan."
+    }
+  ]
+}

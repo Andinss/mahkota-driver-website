@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
 import { isValidCategory, writeCategory } from "@/lib/content";
 import { validateCategory } from "@/lib/validation";
@@ -47,7 +48,7 @@ export async function PUT(
   if (!isValidCategory(category)) {
     return NextResponse.json(
       {
-        error: `Invalid category: "${category}". Valid categories: statistics, testimonials, services, registration, contact`,
+        error: `Invalid category: "${category}". Valid categories: statistics, testimonials, services, registration, contact, fleet, faq, terms, privacy`,
       },
       { status: 400 },
     );
@@ -80,6 +81,8 @@ export async function PUT(
   // 6. Write validated data to JSON file
   try {
     await writeCategory(category, sanitizedBody);
+    // Halaman publik membaca data saat build/cache; paksa dibuat ulang agar perubahan langsung tampil.
+    revalidatePath("/", "layout");
     return NextResponse.json(
       { message: `Content for "${category}" updated successfully` },
       { status: 200 },
