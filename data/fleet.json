@@ -3,10 +3,11 @@
     {
       "id": "fleet-1",
       "name": "Toyota Avanza",
-      "year": 2023,
+      "year": 2027,
       "capacity": 7,
-      "transmission": "matic",
-      "imageUrl": "/images/services/1781145669201-2dq892.png"
+      "transmission": "manual",
+      "imageUrl": "/images/services/1781145669201-2dq892.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-2",
@@ -22,15 +23,17 @@
       "year": 2023,
       "capacity": 7,
       "transmission": "matic",
-      "imageUrl": "/images/services/1781145766986-8szosa.png"
+      "imageUrl": "/images/services/1781145766986-8szosa.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1780724690615-l1o82x",
-      "name": "Hyundai Stargezer",
+      "name": "Hyundai Stargazer",
       "year": 2025,
       "capacity": 6,
       "transmission": "matic",
-      "imageUrl": "/images/services/1781145807462-9vjy0g.webp"
+      "imageUrl": "/images/services/1781145807462-9vjy0g.webp",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1781145872730-v2zder",
@@ -38,7 +41,8 @@
       "year": 2026,
       "capacity": 7,
       "transmission": "manual",
-      "imageUrl": "/images/services/1781145871559-d93kmb.png"
+      "imageUrl": "/images/services/1781145871559-d93kmb.png",
+      "isBestSeller": true
     },
     {
       "id": "fleet-1781145937613-mhfy4a",

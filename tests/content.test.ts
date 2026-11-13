@@ -153,8 +153,6 @@ describe('readAllContent', () => {
         { id: 's-3', order: 3, title: 'TTD', description: 'Kontrak.', iconUrl: '/i.svg' },
       ],
       estimateMinutes: 10,
-      formUrl: 'https://forms.example.com',
-      playStoreUrl: 'https://play.google.com/store/apps',
     };
     const mockContact = {
       whatsappUrl: 'https://wa.me/6281234567890',

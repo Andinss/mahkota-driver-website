@@ -1,41 +1,77 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { AllContent } from '@/types/content';
-import StatisticsTab from '@/components/admin/StatisticsTab';
-import TestimonialsTab from '@/components/admin/TestimonialsTab';
-import ServicesTab from '@/components/admin/ServicesTab';
-import FleetTab from '@/components/admin/FleetTab';
-import RegistrationTab from '@/components/admin/RegistrationTab';
-import ContactTab from '@/components/admin/ContactTab';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  AlertCircleIcon,
+  ArrowRight01Icon,
+  CheckmarkCircle02Icon,
+  LinkSquare02Icon,
+  Menu01Icon,
+} from "@hugeicons/core-free-icons";
+import { AllContent } from "@/types/content";
+import AdminSidebar, { type TabKey } from "@/components/admin/AdminSidebar";
+import Ico from "@/components/admin/Ico";
+import Modal from "@/components/admin/Modal";
+import PasswordField from "@/components/admin/PasswordField";
+import StatisticsTab from "@/components/admin/StatisticsTab";
+import TestimonialsTab from "@/components/admin/TestimonialsTab";
+import ServicesTab from "@/components/admin/ServicesTab";
+import FleetTab from "@/components/admin/FleetTab";
+import RegistrationTab from "@/components/admin/RegistrationTab";
+import HeroTab from "@/components/admin/HeroTab";
+import KontakTab from "@/components/admin/KontakTab";
+import AboutPageTab from "@/components/admin/AboutPageTab";
+import FaqTab from "@/components/admin/FaqTab";
+import LegalTab from "@/components/admin/LegalTab";
 
-type TabKey = 'statistics' | 'testimonials' | 'services' | 'fleet' | 'registration' | 'contact';
+/** Judul halaman untuk breadcrumb di topbar. Judul lengkap ada di tiap tab. */
+const TAB_TITLES: Record<TabKey, string> = {
+  hero: "Hero",
+  statistics: "Tentang & statistik",
+  services: "Layanan & keunggulan",
+  fleet: "Armada",
+  testimonials: "Testimoni",
+  registration: "Cara bergabung",
+  contact: "Kontak",
+  about: "Halaman Tentang",
+  faq: "FAQ",
+  terms: "Syarat & ketentuan",
+  privacy: "Kebijakan privasi",
+};
 
-interface TabConfig {
-  key: TabKey;
-  label: string;
-}
+/** Kelompok menu, dipakai di breadcrumb. */
+const TAB_GROUP: Record<TabKey, string> = {
+  hero: "Beranda",
+  statistics: "Beranda",
+  services: "Beranda",
+  fleet: "Beranda",
+  testimonials: "Beranda",
+  registration: "Beranda",
+  contact: "Beranda",
+  about: "Halaman lain",
+  faq: "Halaman lain",
+  terms: "Halaman lain",
+  privacy: "Halaman lain",
+};
 
-const TABS: TabConfig[] = [
-  { key: 'statistics', label: 'Statistik' },
-  { key: 'testimonials', label: 'Testimoni' },
-  { key: 'services', label: 'Layanan' },
-  { key: 'fleet', label: 'Armada' },
-  { key: 'registration', label: 'Cara Daftar' },
-  { key: 'contact', label: 'General' },
-];
+const emptyPasswordForm = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+};
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<TabKey>('statistics');
+  const [activeTab, setActiveTab] = useState<TabKey>("hero");
   const [content, setContent] = useState<AllContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passwordForm, setPasswordForm] = useState(emptyPasswordForm);
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
@@ -43,281 +79,319 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function fetchContent() {
       try {
-        const res = await fetch('/api/content');
-        if (!res.ok) {
-          throw new Error('Gagal memuat data konten');
-        }
-        const data: AllContent = await res.json();
-        setContent(data);
+        const res = await fetch("/api/content");
+        if (!res.ok) throw new Error("Gagal memuat data konten");
+        setContent(await res.json());
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Terjadi kesalahan');
+        setError(err instanceof Error ? err.message : "Terjadi kesalahan");
       } finally {
         setLoading(false);
       }
     }
-
     fetchContent();
   }, []);
 
   async function handleLogout() {
     setLoggingOut(true);
     try {
-      const res = await fetch('/api/admin/logout', { method: 'POST' });
-      if (res.ok) {
-        router.push('/admin');
-      } else {
-        setError('Gagal logout');
-        setLoggingOut(false);
-      }
+      const res = await fetch("/api/admin/logout", { method: "POST" });
+      if (res.ok) router.push("/admin");
+      else setError("Gagal logout");
     } catch {
-      setError('Gagal logout');
+      setError("Gagal logout");
+    } finally {
       setLoggingOut(false);
     }
   }
 
-  async function handleSave(category: TabKey, data: unknown) {
-    try {
-      const res = await fetch(`/api/admin/content/${category}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Gagal menyimpan');
-      }
-
-      // Update local state with saved data
-      setContent((prev) => {
-        if (!prev) return prev;
-        return { ...prev, [category]: data };
-      });
-    } catch (err) {
-      throw err;
+  async function handleSave(category: keyof AllContent, data: unknown) {
+    const res = await fetch(`/api/admin/content/${category}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Gagal menyimpan");
     }
+    setContent((prev) => (prev ? { ...prev, [category]: data } : prev));
+  }
+
+  function openPasswordModal() {
+    setPasswordForm(emptyPasswordForm);
+    setPasswordError(null);
+    setPasswordSuccess(false);
+    setShowPasswordModal(true);
+    setMenuOpen(false);
   }
 
   async function handleChangePassword(e: React.FormEvent) {
     e.preventDefault();
     setPasswordError(null);
     setPasswordSuccess(false);
-
     if (!passwordForm.currentPassword || !passwordForm.newPassword) {
-      setPasswordError('Semua field wajib diisi.');
+      setPasswordError("Semua field wajib diisi.");
       return;
     }
     if (passwordForm.newPassword.length < 6) {
-      setPasswordError('Password baru minimal 6 karakter.');
+      setPasswordError("Password baru minimal 6 karakter.");
       return;
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setPasswordError('Konfirmasi password tidak cocok.');
+      setPasswordError("Konfirmasi password tidak cocok.");
       return;
     }
 
     setPasswordSaving(true);
     try {
-      const res = await fetch('/api/admin/change-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword,
         }),
       });
-
       if (res.ok) {
         setPasswordSuccess(true);
-        setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        setPasswordForm(emptyPasswordForm);
         setTimeout(() => {
           setShowPasswordModal(false);
           setPasswordSuccess(false);
         }, 1500);
       } else {
         const data = await res.json();
-        setPasswordError(data.error || 'Gagal mengubah password.');
+        setPasswordError(data.error || "Gagal mengubah password.");
       }
     } catch {
-      setPasswordError('Gagal terhubung ke server.');
+      setPasswordError("Gagal terhubung ke server.");
     } finally {
       setPasswordSaving(false);
     }
   }
-  if (loading) {
+
+  if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
-          <p className="text-gray-600 font-body">Memuat data...</p>
+      <div className="a-state">
+        <div>
+          <div className="a-spin" role="status" aria-label="Memuat" />
+          <p style={{ color: "var(--mu)", fontWeight: 600 }}>
+            Memuat data konten…
+          </p>
         </div>
       </div>
     );
-  }
 
-  if (error && !content) {
+  if (error && !content)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <p className="text-red-600 font-body mb-4">{error}</p>
+      <div className="a-state">
+        <div>
+          <div className="a-badge">
+            <Ico icon={AlertCircleIcon} />
+          </div>
+          <h2>Data konten gagal dimuat</h2>
+          <p>{error}. Periksa koneksi internet Anda, lalu coba lagi.</p>
           <button
+            type="button"
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-gold text-brand-black rounded font-medium hover:bg-gold-light transition-colors"
+            className="a-btn a-bd"
           >
-            Coba Lagi
+            Coba lagi
           </button>
         </div>
       </div>
     );
-  }
+
+  const counts = content
+    ? {
+        testimonials: content.testimonials.items.length,
+        fleet: content.fleet.vehicles.length,
+        registration: content.registration.steps.length,
+      }
+    : undefined;
 
   return (
-    <div className="min-h-screen bg-gray-50 font-body">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/images/logo.png"
-                alt="Mahkota Drive"
-                width={32}
-                height={32}
-                className="h-8 w-8"
+    <div className="a-app">
+      <AdminSidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onLogout={handleLogout}
+        onOpenPassword={openPasswordModal}
+        isLoggingOut={loggingOut}
+        counts={counts}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
+
+      <div className="a-main">
+        <div className="a-topbar">
+          <div className="a-crumb">
+            <button
+              type="button"
+              className="a-icon-btn a-burger"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Buka menu"
+              aria-controls="admin-sidebar"
+              aria-expanded={menuOpen}
+            >
+              <Ico icon={Menu01Icon} />
+            </button>
+            <span className="a-hide-sm">{TAB_GROUP[activeTab]}</span>
+            <Ico icon={ArrowRight01Icon} className="a-hide-sm" />
+            <b>{TAB_TITLES[activeTab]}</b>
+          </div>
+
+          <div className="a-tb-r">
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="a-btn a-bo a-sm"
+            >
+              <Ico icon={LinkSquare02Icon} />
+              <span>Lihat website</span>
+            </a>
+            <div
+              className="a-avatar"
+              title="Administrator"
+              aria-label="Akun administrator"
+            >
+              A
+            </div>
+          </div>
+        </div>
+
+        <div className="a-scroll">
+          <div className="a-content">
+            {error && (
+              <div className="a-alert a-bad" role="alert">
+                <Ico icon={AlertCircleIcon} />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {content && activeTab === "hero" && (
+              <HeroTab
+                data={content.contact}
+                onSave={(d) => handleSave("contact", d)}
               />
-              <h1 className="text-lg font-heading font-bold text-gold md:text-xl">
-                Mahkota Drive <span className="text-gray-500 font-body text-sm font-normal">— Website Administrator</span>
-              </h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowPasswordModal(true)}
-                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Ubah Password"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-              </button>
-              <button
-                onClick={handleLogout}
-                disabled={loggingOut}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                </svg>
-                {loggingOut ? 'Keluar...' : 'Keluar'}
-              </button>
-            </div>
+            )}
+            {content && activeTab === "statistics" && (
+              <StatisticsTab
+                data={content.statistics}
+                onSave={(d) => handleSave("statistics", d)}
+                contact={content.contact}
+                onSaveContact={(d) => handleSave("contact", d)}
+              />
+            )}
+            {content && activeTab === "services" && (
+              <ServicesTab
+                data={content.services}
+                onSave={(d) => handleSave("services", d)}
+              />
+            )}
+            {content && activeTab === "fleet" && (
+              <FleetTab
+                data={content.fleet}
+                onSave={(d) => handleSave("fleet", d)}
+              />
+            )}
+            {content && activeTab === "testimonials" && (
+              <TestimonialsTab
+                data={content.testimonials}
+                onSave={(d) => handleSave("testimonials", d)}
+              />
+            )}
+            {content && activeTab === "registration" && (
+              <RegistrationTab
+                data={content.registration}
+                onSave={(d) => handleSave("registration", d)}
+              />
+            )}
+            {content && activeTab === "contact" && (
+              <KontakTab
+                data={content.contact}
+                onSave={(d) => handleSave("contact", d)}
+              />
+            )}
+            {content && activeTab === "about" && (
+              <AboutPageTab
+                data={content.contact}
+                onSave={(d) => handleSave("contact", d)}
+              />
+            )}
+            {content && activeTab === "faq" && (
+              <FaqTab data={content.faq} onSave={(d) => handleSave("faq", d)} />
+            )}
+            {content && activeTab === "terms" && (
+              <LegalTab
+                data={content.terms}
+                onSave={(d) => handleSave("terms", d)}
+                title="Syarat & ketentuan"
+                href="/syarat-ketentuan"
+                idPrefix="term"
+              />
+            )}
+            {content && activeTab === "privacy" && (
+              <LegalTab
+                data={content.privacy}
+                onSave={(d) => handleSave("privacy", d)}
+                title="Kebijakan privasi"
+                href="/privasi"
+                idPrefix="priv"
+              />
+            )}
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-200" aria-label="Tab navigasi admin">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex overflow-x-auto -mb-px">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`whitespace-nowrap py-3 px-4 border-b-2 text-sm font-medium transition-colors ${
-                  activeTab === tab.key
-                    ? 'border-gold text-gold'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-                aria-selected={activeTab === tab.key}
-                role="tab"
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
-
-      {/* Error Banner */}
-      {error && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
-          </div>
-        </div>
-      )}
-
-      {/* Tab Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          {content && activeTab === 'statistics' && (
-            <StatisticsTab
-              data={content.statistics}
-              onSave={(data) => handleSave('statistics', data)}
-            />
-          )}
-          {content && activeTab === 'testimonials' && (
-            <TestimonialsTab
-              data={content.testimonials}
-              onSave={(data) => handleSave('testimonials', data)}
-            />
-          )}
-          {content && activeTab === 'services' && (
-            <ServicesTab
-              data={content.services}
-              onSave={(data) => handleSave('services', data)}
-            />
-          )}
-          {content && activeTab === 'fleet' && (
-            <FleetTab
-              data={content.fleet}
-              onSave={(data) => handleSave('fleet', data)}
-            />
-          )}
-          {content && activeTab === 'registration' && (
-            <RegistrationTab
-              data={content.registration}
-              onSave={(data) => handleSave('registration', data)}
-            />
-          )}
-          {content && activeTab === 'contact' && (
-            <ContactTab
-              data={content.contact}
-              onSave={(data) => handleSave('contact', data)}
-            />
-          )}
-        </div>
-      </main>
-
-      {/* Change Password Modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50" onClick={() => { setShowPasswordModal(false); setPasswordError(null); setPasswordSuccess(false); }} />
-          <div className="relative w-full max-w-md bg-white rounded-xl shadow-xl p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Ubah Password</h3>
-            {passwordError && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{passwordError}</div>}
-            {passwordSuccess && <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">Password berhasil diubah!</div>}
-            <form onSubmit={handleChangePassword} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
-                <input type="password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" autoFocus />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
-                <input type="password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" placeholder="Minimal 6 karakter" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
-                <input type="password" value={passwordForm.confirmPassword} onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent" />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button type="button" onClick={() => { setShowPasswordModal(false); setPasswordError(null); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }} disabled={passwordSaving} className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50">Batal</button>
-                <button type="submit" disabled={passwordSaving} className="px-4 py-2 bg-gold text-brand-black text-sm rounded-lg font-medium hover:bg-gold-light transition-colors disabled:opacity-50">
-                  {passwordSaving ? 'Menyimpan...' : 'Ubah Password'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <Modal
+          title="Ubah password"
+          size="sm"
+          onClose={() => setShowPasswordModal(false)}
+          onSubmit={handleChangePassword}
+          error={passwordError}
+          saving={passwordSaving}
+          submitLabel="Simpan password"
+          confirmTitle="Ubah password?"
+          confirmMessage="Password baru akan dipakai untuk login berikutnya."
+        >
+          {passwordSuccess && (
+            <div className="a-alert a-ok" role="status">
+              <Ico icon={CheckmarkCircle02Icon} />
+              <span>Password berhasil diubah.</span>
+            </div>
+          )}
+          <PasswordField
+            id="current-password"
+            label="Password lama"
+            value={passwordForm.currentPassword}
+            onChange={(v) =>
+              setPasswordForm({ ...passwordForm, currentPassword: v })
+            }
+            autoComplete="current-password"
+          />
+          <PasswordField
+            id="new-password"
+            label="Password baru"
+            value={passwordForm.newPassword}
+            onChange={(v) =>
+              setPasswordForm({ ...passwordForm, newPassword: v })
+            }
+            autoComplete="new-password"
+            hint="Minimal 6 karakter."
+          />
+          <PasswordField
+            id="confirm-password"
+            label="Ulangi password baru"
+            value={passwordForm.confirmPassword}
+            onChange={(v) =>
+              setPasswordForm({ ...passwordForm, confirmPassword: v })
+            }
+            autoComplete="new-password"
+          />
+        </Modal>
       )}
     </div>
   );

@@ -1,0 +1,20 @@
+{
+  "updatedAt": "2026-11-12",
+  "sections": [
+    {
+      "id": "priv-1",
+      "title": "1. Pengumpulan Informasi",
+      "body": "Kami mengumpulkan informasi pribadi seperti nama, nomor telepon, alamat, dan data KTP/SIM hanya untuk keperluan verifikasi pendaftaran dan administrasi sewa-menyewa armada."
+    },
+    {
+      "id": "priv-2",
+      "title": "2. Penggunaan Data",
+      "body": "Data Anda tidak akan dijual atau disewakan kepada pihak ketiga. Kami hanya menggunakan data Anda untuk komunikasi terkait layanan Mahkota Drive."
+    },
+    {
+      "id": "priv-3",
+      "title": "3. Keamanan Data",
+      "body": "Kami berkomitmen menjaga keamanan data Anda dengan standar keamanan yang wajar dan tidak menyebarluaskan informasi pribadi tanpa izin Anda."
+    }
+  ]
+}

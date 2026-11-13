@@ -1,145 +1,104 @@
-'use client';
+import { HugeiconsIcon } from "@hugeicons/react";
+import { StarIcon } from "@hugeicons/core-free-icons";
+import type { Testimonial, TestimonialsData } from "@/types/content";
+import TestimonialSlider from "./TestimonialSlider";
 
-import { useState, useEffect } from 'react';
-import type { TestimonialsData, Testimonial } from '@/types/content';
-import Avatar from '@/components/ui/Avatar';
-import StarRating from '@/components/ui/StarRating';
+/** Lebih dari ini, testimoni tampil sebagai slider. */
+const MAX_GRID = 3;
 
-interface TestimonialsProps {
-  testimonials: TestimonialsData;
-}
-
-/**
- * Testimonial card component used in both carousel and grid layouts.
- */
-function TestimonialCard({ item }: { item: Testimonial }) {
+function TestimonialCard({
+  item,
+  className = "",
+}: {
+  item: Testimonial;
+  className?: string;
+}) {
   return (
-    <div className="card-dark flex flex-col">
-      {/* Header: Avatar + Name + Description */}
-      <div className="flex items-center gap-3 mb-4">
-        <Avatar
-          name={item.name}
-          photoUrl={item.photoUrl}
-          size={48}
-        />
-        <div className="min-w-0">
-          <h3 className="font-body text-base font-semibold text-white truncate">
-            {item.name}
-          </h3>
-          {item.description && (
-            <p className="text-xs text-gray-400 truncate">{item.description}</p>
+    <div
+      className={`bg-surf border border-ln rounded-[24px] p-8 flex flex-col shadow-sm hover:shadow-md transition-shadow ${className}`}
+    >
+      <div className="flex gap-1 text-y mb-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span
+            key={i}
+            className={`ms text-[18px] ${i < item.rating ? "text-y" : "text-ln"}`}
+          >
+            <HugeiconsIcon icon={StarIcon} size="1em" />
+          </span>
+        ))}
+      </div>
+      <p className="text-ink leading-relaxed italic mb-6 flex-1">
+        "{item.quote}"
+      </p>
+      <div className="flex items-center gap-4 border-t border-ln pt-6">
+        <div className="h-12 w-12 rounded-full overflow-hidden bg-bg border border-ln shrink-0 flex items-center justify-center">
+          {item.photoUrl ? (
+            <img
+              src={item.photoUrl}
+              alt={item.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <span className="text-sm font-bold text-mu">
+              {item.name
+                .split(" ")
+                .map((w) => w[0])
+                .slice(0, 2)
+                .join("")
+                .toUpperCase()}
+            </span>
           )}
         </div>
-      </div>
-      {/* Rating */}
-      <div className="mb-3">
-        <StarRating rating={item.rating} />
-      </div>
-      {/* Quote */}
-      <blockquote className="font-body text-sm leading-relaxed text-gray-300 flex-1">
-        &ldquo;{item.quote}&rdquo;
-      </blockquote>
-    </div>
-  );
-}
-
-/**
- * Static grid layout used on desktop and as fallback when Swiper fails.
- */
-function TestimonialsGrid({ items }: { items: Testimonial[] }) {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <TestimonialCard key={item.id} item={item} />
-      ))}
-    </div>
-  );
-}
-
-/**
- * Swiper carousel wrapper for mobile viewport.
- * Dynamically imports Swiper to handle load failures gracefully.
- */
-function SwiperCarousel({ items }: { items: Testimonial[] }) {
-  const [SwiperComponents, setSwiperComponents] = useState<{
-    Swiper: typeof import('swiper/react').Swiper;
-    SwiperSlide: typeof import('swiper/react').SwiperSlide;
-    Pagination: typeof import('swiper/modules').Pagination;
-  } | null>(null);
-  const [loadFailed, setLoadFailed] = useState(false);
-
-  useEffect(() => {
-    async function loadSwiper() {
-      try {
-        const [swiperReact, swiperModules] = await Promise.all([
-          import('swiper/react'),
-          import('swiper/modules'),
-        ]);
-        // Import Swiper CSS
-        await import('swiper/css');
-        await import('swiper/css/pagination');
-
-        setSwiperComponents({
-          Swiper: swiperReact.Swiper,
-          SwiperSlide: swiperReact.SwiperSlide,
-          Pagination: swiperModules.Pagination,
-        });
-      } catch {
-        setLoadFailed(true);
-      }
-    }
-    loadSwiper();
-  }, []);
-
-  // Fallback: if Swiper failed to load, show grid
-  if (loadFailed) {
-    return <TestimonialsGrid items={items} />;
-  }
-
-  // Loading state while Swiper is being imported
-  if (!SwiperComponents) {
-    return <TestimonialsGrid items={items} />;
-  }
-
-  const { Swiper, SwiperSlide, Pagination } = SwiperComponents;
-
-  return (
-    <Swiper
-      modules={[Pagination]}
-      pagination={{ clickable: true }}
-      slidesPerView={1}
-      spaceBetween={16}
-      className="testimonials-swiper"
-    >
-      {items.map((item) => (
-        <SwiperSlide key={item.id}>
-          <TestimonialCard item={item} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
-}
-
-export default function Testimonials({ testimonials }: TestimonialsProps) {
-  const { items } = testimonials;
-
-  return (
-    <div className="bg-brand-black">
-      <div className="section-container section-padding">
-        <h2 className="heading-secondary mb-10 text-center text-white">
-          Testimoni Mitra Driver
-        </h2>
-
-        {/* Mobile: Swiper carousel (hidden on md+) */}
-        <div className="md:hidden">
-          <SwiperCarousel items={items} />
-        </div>
-
-        {/* Desktop: Static grid (hidden below md) */}
-        <div className="hidden md:block">
-          <TestimonialsGrid items={items} />
+        <div>
+          <b className="block text-sm font-bold text-ink">{item.name}</b>
+          <small className="text-xs text-mu font-medium">
+            {item.description || "Mitra Driver"}
+          </small>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Testimonials({
+  testimonials,
+}: {
+  testimonials: TestimonialsData;
+}) {
+  const items = testimonials.items || [];
+  if (items.length === 0) return null;
+
+  return (
+    <section className="sec" id="testimoni">
+      <div className="w">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-[clamp(1.9rem,4vw,3.1rem)] font-extrabold leading-tight">
+            Kata <span className="y">Mitra Driver</span>
+          </h2>
+          <p className="text-mu text-lg mt-4">
+            Cerita nyata dari mereka yang telah bergabung dan bertumbuh bersama
+            kami.
+          </p>
+        </div>
+
+        {items.length > MAX_GRID ? (
+          <TestimonialSlider>
+            {items.map((item) => (
+              <TestimonialCard
+                key={item.id}
+                item={item}
+                className="snap-start shrink-0 basis-[88%] md:basis-[calc(50%-12px)] lg:basis-[calc(33.333%-16px)]"
+              />
+            ))}
+          </TestimonialSlider>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item) => (
+              <TestimonialCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

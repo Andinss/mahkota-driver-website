@@ -1,12 +1,50 @@
 {
-  "whatsappUrl": "https://wa.me/6281234567890",
-  "phone": "+62 812-3456-7890",
-  "address": "Jl. Raya Mahkota No. 123, Bekasi, Jawa Barat 17530",
+  "whatsappUrl": "https://wa.me/6289531536509",
+  "phone": "0895 3153 6509",
+  "address": "Ruko Citra Lake Sawangan, Blok B5 No.03, Kedaung, Kec. Sawangan, Kota Depok, Jawa Barat 16516",
   "socialMedia": {
     "instagram": "https://instagram.com/mahkotadrive",
     "facebook": "https://facebook.com/mahkotadrive"
   },
-  "heroDescription": "Mahkota Drive adalah penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia. Kami memahami bahwa memiliki kendaraan sendiri bukan syarat utama untuk meraih penghasilan — yang Anda butuhkan adalah akses ke armada berkualitas dengan biaya sewa yang terjangkau. Dengan pilihan skema sewa harian, mingguan, dan bulanan, kami memberikan fleksibilitas penuh bagi mitra driver untuk menjalankan aktivitas di platform ride-hailing favorit mereka. Seluruh unit armada kami dirawat secara berkala demi kenyamanan dan keselamatan di jalan. Bergabunglah bersama ratusan mitra driver yang telah mempercayakan perjalanan karier mereka kepada Mahkota Drive dan rasakan kemudahan bermitra bersama kami.",
-  "heroImageUrl": "/images/services/1781146086637-y4y9aw.jpg",
-  "appMockupUrl": "/images/services/1781146178245-qn26yu.png"
+  "heroDescription": "Penyedia jasa rental armada kendaraan terpercaya yang dirancang khusus untuk para supir taksi online di Indonesia.",
+  "heroImageUrl": "/images/services/1794450003777-99zjh5.png",
+  "appMockupUrl": "/images/app-mockup.webp",
+  "homeAboutText": "Kami memahami tantangan menjadi driver online. Karena itu, Mahkota Drive hadir sebagai mitra terpercaya dengan 3 jaminan utama: armada prima yang selalu siap jalan, layanan siaga 24/7, dan skema setoran yang meringankan.",
+  "homeAboutPoints": [
+    "Armada Prima (Unit Ga Mogokan)",
+    "Layanan Siaga 24/7",
+    "Skema Setoran Ringan"
+  ],
+  "aboutParagraphs": [
+    "Mahkota Drive dikelola secara profesional oleh PT Mahkota Nusantara Raya. Kami hadir untuk memberikan solusi mobilitas terbaik bagi para driver taksi online di Indonesia.",
+    "Fokus kami bukan sekadar menyewakan mobil, tetapi membangun kemitraan jangka panjang yang saling menguntungkan. Kami memastikan setiap unit yang diserahkan dalam kondisi prima, terawat, dan siap tempur untuk menunjang penghasilan Anda.",
+    "Dengan proses administrasi yang transparan, dukungan pelanggan 24 jam, dan skema pembayaran yang fleksibel, kami siap menjadi partner perjalanan Anda."
+  ],
+  "commitments": [
+    {
+      "title": "Armada Prima",
+      "description": "Unit selalu dirawat berkala dan bebas mogok.",
+      "icon": "directions_car"
+    },
+    {
+      "title": "Layanan Siaga",
+      "description": "CS dan bantuan darurat 24 jam siap membantu.",
+      "icon": "support_agent"
+    },
+    {
+      "title": "Setoran Ringan",
+      "description": "Skema pembayaran transparan tanpa biaya tersembunyi.",
+      "icon": "wallet"
+    }
+  ],
+  "heroHeadlines": [
+    "Narik Online\nTanpa Beli\nMobil.",
+    "Daftar Cepat,\nMulai Narik\nHari Ini.",
+    "Servis Gratis,\nArmada Siap \nDipakai."
+  ],
+  "heroSubheadlines": [
+    "Sewa armada harian, mingguan, atau bulanan. Langsung siap jalan.",
+    "Isi formulir, tanda tangan digital, lalu ambil kunci.",
+    "Armada aman, siap dipakai tanpa harus beli dulu mobil."
+  ]
 }

@@ -134,8 +134,6 @@ describe('registrationSchema', () => {
       { id: 'step-3', order: 3, title: 'Kontrak', description: 'Tanda tangan.', iconUrl: '/icon.svg' },
     ],
     estimateMinutes: 10,
-    formUrl: 'https://forms.example.com/daftar',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.example',
   };
 
   it('should pass with valid data', () => {
@@ -150,8 +148,6 @@ describe('registrationSchema', () => {
         { id: 'step-2', order: 2, title: 'Verif', description: 'Dokumen.', iconUrl: '/icon.svg' },
       ],
       estimateMinutes: 10,
-      formUrl: 'https://forms.example.com/daftar',
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=com.example',
     };
     const result = registrationSchema.safeParse(invalid);
     expect(result.success).toBe(false);
@@ -165,8 +161,6 @@ describe('registrationSchema', () => {
         { id: 'step-3', order: 3, title: 'Kontrak', description: 'TTD.', iconUrl: '/icon.svg' },
       ],
       estimateMinutes: 20,
-      formUrl: 'https://forms.example.com/daftar',
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=com.example',
     };
     const result = registrationSchema.safeParse(invalid);
     expect(result.success).toBe(false);

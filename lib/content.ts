@@ -1,9 +1,9 @@
 // lib/content.ts
 // Functions for reading and writing JSON content files per category
 
-import fs from 'fs/promises';
-import path from 'path';
-import { validateCategory } from '@/lib/validation';
+import fs from "fs/promises";
+import path from "path";
+import { validateCategory } from "@/lib/validation";
 import type {
   AllContent,
   StatisticsData,
@@ -12,16 +12,21 @@ import type {
   RegistrationData,
   ContactData,
   FleetData,
-} from '@/types/content';
+  FaqData,
+  LegalData,
+} from "@/types/content";
 
 /** Valid content categories */
 export const VALID_CATEGORIES = [
-  'statistics',
-  'testimonials',
-  'services',
-  'registration',
-  'contact',
-  'fleet',
+  "statistics",
+  "testimonials",
+  "services",
+  "registration",
+  "contact",
+  "fleet",
+  "faq",
+  "terms",
+  "privacy",
 ] as const;
 
 export type ContentCategory = (typeof VALID_CATEGORIES)[number];
@@ -34,13 +39,16 @@ type CategoryDataMap = {
   registration: RegistrationData;
   contact: ContactData;
   fleet: FleetData;
+  faq: FaqData;
+  terms: LegalData;
+  privacy: LegalData;
 };
 
 /**
  * Get the file path for a given category's JSON file.
  */
 function getCategoryPath(category: ContentCategory): string {
-  return path.join(process.cwd(), 'data', `${category}.json`);
+  return path.join(process.cwd(), "data", `${category}.json`);
 }
 
 /**
@@ -57,7 +65,7 @@ export function isValidCategory(category: string): category is ContentCategory {
  * @throws Error if file not found or JSON parse fails
  */
 export async function readCategory<T extends ContentCategory>(
-  category: T
+  category: T,
 ): Promise<CategoryDataMap[T]> {
   if (!isValidCategory(category)) {
     throw new Error(`Invalid category: ${category}`);
@@ -66,19 +74,19 @@ export async function readCategory<T extends ContentCategory>(
   const filePath = getCategoryPath(category);
 
   try {
-    const fileContent = await fs.readFile(filePath, 'utf-8');
+    const fileContent = await fs.readFile(filePath, "utf-8");
     const data = JSON.parse(fileContent) as CategoryDataMap[T];
     return data;
   } catch (error) {
     if (error instanceof SyntaxError) {
       throw new Error(
-        `Failed to parse JSON for category "${category}": ${error.message}`
+        `Failed to parse JSON for category "${category}": ${error.message}`,
       );
     }
     if (
       error instanceof Error &&
-      'code' in error &&
-      (error as NodeJS.ErrnoException).code === 'ENOENT'
+      "code" in error &&
+      (error as NodeJS.ErrnoException).code === "ENOENT"
     ) {
       throw new Error(`Data file not found for category "${category}"`);
     }
@@ -94,7 +102,7 @@ export async function readCategory<T extends ContentCategory>(
  */
 export async function writeCategory<T extends ContentCategory>(
   category: T,
-  data: unknown
+  data: unknown,
 ): Promise<{ success: true; data: CategoryDataMap[T] }> {
   if (!isValidCategory(category)) {
     throw new Error(`Invalid category: ${category}`);
@@ -104,10 +112,11 @@ export async function writeCategory<T extends ContentCategory>(
 
   if (!validationResult.success) {
     const messages = validationResult.error.issues.map(
-      (issue: { message: string; path: (string | number)[] }) => `${issue.path.join('.')}: ${issue.message}`
+      (issue: { message: string; path: (string | number)[] }) =>
+        `${issue.path.join(".")}: ${issue.message}`,
     );
     throw new Error(
-      `Validation failed for category "${category}": ${messages.join(', ')}`
+      `Validation failed for category "${category}": ${messages.join(", ")}`,
     );
   }
 
@@ -115,30 +124,42 @@ export async function writeCategory<T extends ContentCategory>(
   const jsonContent = JSON.stringify(validationResult.data, null, 2);
 
   try {
-    await fs.writeFile(filePath, jsonContent, 'utf-8');
+    await fs.writeFile(filePath, jsonContent, "utf-8");
     return { success: true, data: validationResult.data as CategoryDataMap[T] };
   } catch (error) {
     throw new Error(
-      `Failed to write data for category "${category}": ${(error as Error).message}`
+      `Failed to write data for category "${category}": ${(error as Error).message}`,
     );
   }
 }
 
 /**
- * Read all 5 content categories and return a combined AllContent object.
+ * Read all content categories and return a combined AllContent object.
  *
  * @throws Error if any category file fails to read
  */
 export async function readAllContent(): Promise<AllContent> {
-  const [statistics, testimonials, services, registration, contact, fleet] =
-    await Promise.all([
-      readCategory('statistics'),
-      readCategory('testimonials'),
-      readCategory('services'),
-      readCategory('registration'),
-      readCategory('contact'),
-      readCategory('fleet'),
-    ]);
+  const [
+    statistics,
+    testimonials,
+    services,
+    registration,
+    contact,
+    fleet,
+    faq,
+    terms,
+    privacy,
+  ] = await Promise.all([
+    readCategory("statistics"),
+    readCategory("testimonials"),
+    readCategory("services"),
+    readCategory("registration"),
+    readCategory("contact"),
+    readCategory("fleet"),
+    readCategory("faq"),
+    readCategory("terms"),
+    readCategory("privacy"),
+  ]);
 
   return {
     statistics,
@@ -147,5 +168,8 @@ export async function readAllContent(): Promise<AllContent> {
     registration,
     contact,
     fleet,
+    faq,
+    terms,
+    privacy,
   };
 }

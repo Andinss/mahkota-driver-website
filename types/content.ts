@@ -1,66 +1,103 @@
-// types/content.ts
-// TypeScript interfaces for all content data categories
-
-export interface StatisticItem {
-  id: string;
-  label: string; // 1–30 karakter
-  value: number; // integer ≥ 0 atau float 1.0–5.0
-  suffix: string;
-  decimals?: number;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string; // non-kosong
-  description?: string; // e.g. "Driver Gojek Jakarta"
-  photoUrl: string | null;
-  quote: string; // non-kosong
-  rating: number; // integer 1–5
-}
-
-export interface Service {
-  id: string;
-  name: string;
-  description: string; // ≤ 150 karakter
-  iconUrl: string;
-  iconAlt: string; // non-kosong
-}
-
-export interface Advantage {
-  id: string;
-  title: string;
-  description: string; // ≤ 100 karakter
-  iconUrl?: string;
-  iconAlt?: string;
-}
-
+// ============================================
+// Fleet (Armada)
+// ============================================
 export interface FleetVehicle {
   id: string;
-  name: string;       // nama/tipe kendaraan
-  year: number;        // tahun kendaraan
-  capacity: number;    // kapasitas penumpang
-  transmission: 'manual' | 'matic';
+  name: string;
+  year: number;
+  capacity: number;
+  transmission: "manual" | "matic";
   imageUrl?: string;
+  isBestSeller?: boolean;
+  /** Harga sewa harian (dalam Rupiah, angka saja) */
+  price?: number;
+  /** Biaya join fee / deposit (dalam Rupiah, angka saja) */
+  joinFee?: number;
+  /** Deskripsi singkat / solusi untuk driver */
+  description?: string;
+  /** List keunggulan spesifik mobil */
+  features?: string[];
 }
 
 export interface FleetData {
   vehicles: FleetVehicle[];
 }
 
-export interface RegistrationStep {
+// ============================================
+// Contact (General)
+// ============================================
+export interface ContactData {
+  whatsappUrl: string;
+  phone: string;
+  address: string;
+  socialMedia: {
+    instagram: string;
+    facebook: string;
+  };
+  heroDescription?: string;
+  heroImageUrl?: string;
+  appMockupUrl?: string;
+
+  homeAboutText?: string;
+  homeAboutPoints?: string[];
+  aboutParagraphs?: string[];
+  commitments?: { title: string; description: string; icon: string }[];
+
+  // --- TAMBAHAN UNTUK HERO DINAMIS ---
+  heroHeadlines?: string[];
+  heroSubheadlines?: string[];
+}
+
+// ============================================
+// Statistics
+// ============================================
+export interface StatisticItem {
   id: string;
-  order: number; // unik
-  title: string; // non-kosong
-  description: string; // non-kosong
-  iconUrl: string;
+  label: string;
+  value: number;
+  suffix: string;
+  decimals?: number;
 }
 
 export interface StatisticsData {
   items: StatisticItem[];
 }
 
+// ============================================
+// Testimonials
+// ============================================
+export interface Testimonial {
+  id: string;
+  name: string;
+  description?: string;
+  quote: string;
+  rating: number;
+  photoUrl: string | null;
+}
+
 export interface TestimonialsData {
   items: Testimonial[];
+}
+
+// ============================================
+// Services & Advantages
+// ============================================
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  iconAlt: string;
+  /** Hugeicons key (see ICON_MAP in components/ui/Icon.tsx). */
+  icon?: string;
+}
+
+export interface Advantage {
+  id: string;
+  title: string;
+  description: string;
+  iconAlt?: string;
+  /** Hugeicons key (see ICON_MAP in components/ui/Icon.tsx). */
+  icon?: string;
 }
 
 export interface ServicesData {
@@ -68,26 +105,59 @@ export interface ServicesData {
   advantages: Advantage[];
 }
 
+// ============================================
+// Registration (Cara Daftar)
+// ============================================
+export interface RegistrationStep {
+  id: string;
+  order: number;
+  title: string;
+  description: string;
+  /** Hugeicons key (see ICON_MAP). */
+  icon?: string;
+}
+
 export interface RegistrationData {
   steps: RegistrationStep[];
-  estimateMinutes: number; // 5–15
-  formUrl: string;
-  playStoreUrl: string;
+  /** Dipakai di kalimat "Mendaftar hanya sekitar N menit" pada bagian Cara Bergabung. */
+  estimateMinutes: number;
 }
 
-export interface ContactData {
-  whatsappUrl: string;
-  phone: string;
-  address: string;
-  socialMedia: {
-    instagram: string | null;
-    facebook: string | null;
-  };
-  heroDescription?: string;
-  heroImageUrl?: string;
-  appMockupUrl?: string;
+// ============================================
+// FAQ
+// ============================================
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
 }
 
+export interface FaqData {
+  items: FaqItem[];
+}
+
+// ============================================
+// Halaman legal (Syarat & Ketentuan, Kebijakan Privasi)
+// ============================================
+export interface LegalSection {
+  id: string;
+  title: string;
+  /**
+   * Isi bagian. Paragraf dipisah satu baris kosong; baris yang diawali "- "
+   * ditampilkan sebagai daftar poin.
+   */
+  body: string;
+}
+
+export interface LegalData {
+  /** Tanggal terakhir diubah dari admin, format YYYY-MM-DD. */
+  updatedAt: string;
+  sections: LegalSection[];
+}
+
+// ============================================
+// All Content (Gabungan)
+// ============================================
 export interface AllContent {
   statistics: StatisticsData;
   testimonials: TestimonialsData;
@@ -95,4 +165,7 @@ export interface AllContent {
   registration: RegistrationData;
   contact: ContactData;
   fleet: FleetData;
+  faq: FaqData;
+  terms: LegalData;
+  privacy: LegalData;
 }

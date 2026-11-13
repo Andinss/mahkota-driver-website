@@ -1,131 +1,124 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import type { FleetData, FleetVehicle } from '@/types/content';
+import { useState } from "react";
+import Image from "next/image";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import {
+  Car01Icon,
+  StarIcon,
+  Settings02Icon,
+  SlidersHorizontalIcon,
+  ArrowRight01Icon,
+} from "@hugeicons/core-free-icons";
+import type { FleetData, FleetVehicle } from "@/types/content";
 
-interface FleetProps {
-  fleet: FleetData;
-}
+const getWaLink = (text: string) =>
+  `https://wa.me/6289531536509?text=${encodeURIComponent(text)}`;
 
-function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
+type FilterType = "all" | "best" | "matic" | "manual";
+
+export default function Fleet({ fleet }: { fleet: FleetData }) {
+  const [filter, setFilter] = useState<FilterType>("all");
+
+  const filteredVehicles: FleetVehicle[] = fleet.vehicles.filter((car) => {
+    if (filter === "all") return true;
+    if (filter === "matic") return car.transmission === "matic";
+    if (filter === "manual") return car.transmission === "manual";
+    if (filter === "best") return car.isBestSeller === true;
+    return true;
+  });
+
+  // Gunakan IconSvgElement dari @hugeicons/react, bukan ElementType
+  const tabs: { key: FilterType; label: string; icon: IconSvgElement }[] = [
+    { key: "all", label: "Semua", icon: Car01Icon },
+    { key: "best", label: "Terlaris", icon: StarIcon },
+    { key: "matic", label: "Matic", icon: Settings02Icon },
+    { key: "manual", label: "Manual", icon: SlidersHorizontalIcon },
+  ];
+
   return (
-    <div className="bg-brand-card rounded-xl overflow-hidden border border-white/5 hover:border-gold/30 transition-all duration-200 h-full">
-      {vehicle.imageUrl ? (
-        <div className="relative h-44 w-full bg-brand-dark">
-          <Image src={vehicle.imageUrl} alt={vehicle.name} fill className="object-cover" />
+    <section className="sec nv2" id="armada">
+      <div className="w">
+        <div className="fh">
+          <h2>
+            Armada <span className="y">Terlaris</span>
+          </h2>
         </div>
-      ) : (
-        <div className="h-44 w-full bg-brand-dark flex items-center justify-center">
-          <svg className="h-16 w-16 text-gray-600" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-          </svg>
+
+        <div className="tabs">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setFilter(tab.key)}
+              aria-pressed={filter === tab.key}
+            >
+              <span className="ms">
+                <HugeiconsIcon icon={tab.icon} size="1em" />
+              </span>
+              {tab.label}
+            </button>
+          ))}
         </div>
-      )}
-      <div className="p-5">
-        <h3 className="font-heading text-lg font-bold text-white mb-3">{vehicle.name}</h3>
-        <div className="grid grid-cols-3 gap-3 text-center">
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Tahun</p>
-            <p className="text-sm font-medium text-gold">{vehicle.year}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Kapasitas</p>
-            <p className="text-sm font-medium text-gold">{vehicle.capacity} org</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Transmisi</p>
-            <p className="text-sm font-medium text-gold capitalize">{vehicle.transmission}</p>
-          </div>
+
+        <div className="grid">
+          {filteredVehicles.map((car) => (
+            <article key={car.id} className="car flex flex-col h-full">
+              {car.isBestSeller && (
+                <span className="bs">
+                  <span className="ms">
+                    <HugeiconsIcon icon={StarIcon} size="1em" />
+                  </span>
+                  Terlaris
+                </span>
+              )}
+
+              {/* Image Container */}
+              {car.imageUrl && (
+                <div className="cp relative w-full h-[200px] mb-4">
+                  <Image
+                    src={car.imageUrl}
+                    alt={car.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              )}
+
+              <div className="cf flex-col items-start gap-2 flex-1">
+                <div className="w-full">
+                  <h3 className="text-lg font-bold">{car.name}</h3>
+                  <small className="text-sm text-[#a9b4c6] capitalize">
+                    {car.transmission} · {car.capacity} Kursi · {car.year}
+                  </small>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-4 w-full">
+                <a
+                  className="btn by w-full justify-center"
+                  href={getWaLink(
+                    `Halo Mahkota Drive, saya tertarik menyewa ${car.name}. Bisa info detailnya?`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tanya Sewa
+                  <span className="ms">
+                    <HugeiconsIcon icon={ArrowRight01Icon} size="1em" />
+                  </span>
+                </a>
+              </div>
+            </article>
+          ))}
+
+          {filteredVehicles.length === 0 && (
+            <p className="col-span-full text-center py-8 text-[#a9b4c6]">
+              Belum ada armada di kategori ini.
+            </p>
+          )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function FleetGrid({ vehicles }: { vehicles: FleetVehicle[] }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {vehicles.map((vehicle) => (
-        <VehicleCard key={vehicle.id} vehicle={vehicle} />
-      ))}
-    </div>
-  );
-}
-
-function FleetCarousel({ vehicles }: { vehicles: FleetVehicle[] }) {
-  const [SwiperComponents, setSwiperComponents] = useState<{
-    Swiper: typeof import('swiper/react').Swiper;
-    SwiperSlide: typeof import('swiper/react').SwiperSlide;
-    Pagination: typeof import('swiper/modules').Pagination;
-  } | null>(null);
-  const [loadFailed, setLoadFailed] = useState(false);
-
-  useEffect(() => {
-    async function loadSwiper() {
-      try {
-        const [swiperReact, swiperModules] = await Promise.all([
-          import('swiper/react'),
-          import('swiper/modules'),
-        ]);
-        await import('swiper/css');
-        await import('swiper/css/pagination');
-        setSwiperComponents({
-          Swiper: swiperReact.Swiper,
-          SwiperSlide: swiperReact.SwiperSlide,
-          Pagination: swiperModules.Pagination,
-        });
-      } catch {
-        setLoadFailed(true);
-      }
-    }
-    loadSwiper();
-  }, []);
-
-  if (loadFailed || !SwiperComponents) {
-    return <FleetGrid vehicles={vehicles} />;
-  }
-
-  const { Swiper, SwiperSlide, Pagination } = SwiperComponents;
-
-  return (
-    <Swiper
-      modules={[Pagination]}
-      pagination={{ clickable: true }}
-      slidesPerView={1.15}
-      spaceBetween={16}
-      className="fleet-swiper"
-    >
-      {vehicles.map((vehicle) => (
-        <SwiperSlide key={vehicle.id}>
-          <VehicleCard vehicle={vehicle} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
-}
-
-export default function Fleet({ fleet }: FleetProps) {
-  return (
-    <div className="bg-brand-black">
-      <div className="section-container section-padding">
-        <div className="text-center mb-12">
-          <h2 className="heading-secondary text-white">Katalog Armada</h2>
-          <p className="mt-4 text-gray-400 font-body max-w-2xl mx-auto">
-            Pilihan kendaraan berkualitas yang siap menemani perjalanan Anda
-          </p>
-        </div>
-
-        {/* Mobile: Swiper carousel */}
-        <div className="md:hidden">
-          <FleetCarousel vehicles={fleet.vehicles} />
-        </div>
-
-        {/* Desktop: Static grid */}
-        <div className="hidden md:block">
-          <FleetGrid vehicles={fleet.vehicles} />
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
